@@ -16,6 +16,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="${contextPath}/images/optimizacion-SEO.png" rel="shortcut icon">
     <title>Web Demo | Dashboard</title>
     <base href="${contextPath}"/>
     <!-- Tell the browser to be responsive to screen width -->
