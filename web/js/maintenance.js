@@ -600,6 +600,376 @@ jQuery(document).ready( function () {
             
           }
         });
-   });     
+   });
+//--------------------------category-----------------------------------------//
+  $('#myModalNewCategory').on('show.bs.modal', function (e) { 
+        
+        console.log("myModalNewCategory");
+        
+        var btn = $(e.relatedTarget);
+        var idCategory=btn.data('id');
+       var data=null;
+       var title="Register Category";
+       var frm='#frmrRegisterCategory';
+       
+       if(btn.attr("id")==="btnViewEditCategory"){ 
+           console.log("btnViewEditCategory");
+            data={"idCategory":idCategory};
+            title="Modify Category";
+            frm='#frmModifCategory';
+       }
+        $.post(btn.attr("href"),data, function( data ) { 
+            $('#myModalLabel').html(title);
+            $('#modal-body').html(data); 
+            $(frm).validator();
+        }); 
+    });
+    
+    
+    $(document).on("submit","#frmrRegisterCategory",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmrRegisterCategory");
+       
+       var msj=$("#msjmntcategory");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmrRegisterCategory");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/categoryController/ActRegisterCategory",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"la categoria se grabo con exito");   
+                    loadDataTable("#tbCategories");
+                    frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"El categoria ya existe");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+    });
+    
+    var dataTablep = $('#tbCategories').DataTable({
+           processing: true,
+            //"serverSide": true,
+            responsive: true,
+            autoWidth: false,
+            order: [],
+            ajax:{
+                url :baseurl+"/categoryController/ActListCategories", // json datasource
+                type: "post",  // method  , by default get
+                complete: function(){
+                   table=$('#tbCategories');
+                  //alert(dataTable);
+                  //console.log(table.parent());
+                  table.parent().addClass("table-responsive");
+                 // table.parent().addClass('table-responsive');//.removeClass('col-sm-12');
+                },
+                error: function(xhr, textStatus, errorThrown){  // error handling
+                   
+                    $("#tbCategories_wrapper").html("");
+                    $("#tbCategories_wrapper").append('<div class="alert alert-danger alert-dismissable"><tr><th colspan="3">No data found in the server</th></tr></div>'); 
+                }
+            },
+            "aoColumns": [
+            { "mData": "name_category" },
+            { "mData": "date_creation","sClass": "text-center"},
+            { "mData": "date_modification","sClass": "text-center"},
+            { "mData": "ico_edit","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"}
+            //{ "sClass": "a-right", "aTargets": [ 4 ] }
+            
+            ]
+    });
+    
+    $(document).on("click","#btnDeleteCategory",function(e){    
+
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var idCategory = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/categoryController/ActDeleteCategory",
+                type: 'POST',
+                data: { idCategory:idCategory} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbCategories");
+                        ezBSAlert({ headerText:"success", messageText: "La categoria se elmino con exito", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "A ocurrido un error interno !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
+    
+    
+    $(document).on("submit","#frmModifCategory",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmModifCategory");
+       
+       var msj=$("#msjmntcategory");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmModifCategory");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/categoryController/ActModifyCategory",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"la categoria se modifico con exito");   
+                    loadDataTable("#tbCategories");
+                }else{
+                    alerts(2,msj,"No se completo el proceso.. !!!");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+      //  alert("ajax");
+    });
+
+//--------------------------category-----------------------------------------//
+
+    $('#myModalNewSupplier').on('show.bs.modal', function (e) { 
+        
+        console.log("myModalNewSupplier");
+        
+        var btn = $(e.relatedTarget);
+        var idSupplier=btn.data('id');
+       var data=null;
+       var title="Register supplier";
+       var frm='#frmrRegisterSupplier';
+       
+       if(btn.attr("id")==="btnViewEditSupplier"){ 
+           console.log("btnViewEditCategory");
+            data={"idSupplier":idSupplier};
+            title="Modify supplier";
+            frm='#frmModifSupplier';
+       }
+        $.post(btn.attr("href"),data, function( data ) { 
+            $('#myModalLabel').html(title);
+            $('#modal-body').html(data); 
+            $(frm).validator();
+        }); 
+    });
+    
+    
+    $(document).on("submit","#frmrRegisterSupplier",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmrRegisterSupplier");
+       
+       var msj=$("#msjmntsupplier");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmrRegisterSupplier");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/supplierController/ActRegisterSupplier",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"la proveedor se grabo con exito");   
+                    loadDataTable("#tbSuppliers");
+                    frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"El proveedor ya existe");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+    });
+    
+    var dataTablep = $('#tbSuppliers').DataTable({
+           processing: true,
+            //"serverSide": true,
+            responsive: true,
+            autoWidth: false,
+            order: [],
+            ajax:{
+                url :baseurl+"/supplierController/ActListSuppliers", // json datasource
+                type: "post",  // method  , by default get
+                complete: function(){
+                   table=$('#tbSuppliers');
+                  //alert(dataTable);
+                  //console.log(table.parent());
+                  table.parent().addClass("table-responsive");
+                 // table.parent().addClass('table-responsive');//.removeClass('col-sm-12');
+                },
+                error: function(xhr, textStatus, errorThrown){  // error handling
+                   
+                    $("#tbSuppliers_wrapper").html("");
+                    $("#tbSuppliers_wrapper").append('<div class="alert alert-danger alert-dismissable"><tr><th colspan="3">No data found in the server</th></tr></div>'); 
+                }
+            },
+            "aoColumns": [
+            { "mData": "code_suppliers" },
+            { "mData": "name_suppliers" },
+            { "mData": "phone_number" },
+            { "mData": "web" },
+            { "mData": "date_creation","sClass": "text-center"},
+            { "mData": "date_modification","sClass": "text-center"},
+            { "mData": "ico_edit","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"}
+            //{ "sClass": "a-right", "aTargets": [ 4 ] }
+            
+            ]
+    });
+    
+    
+    $(document).on("click","#btnDeleteSupplier",function(e){    
+
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var idSupplier = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/supplierController/ActDeleteSupplier",
+                type: 'POST',
+                data: { idSupplier:idSupplier} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbSuppliers");
+                        ezBSAlert({ headerText:"success", messageText: "El proveedor se elmino con exito", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "A ocurrido un error interno !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
+    
+    $(document).on("submit","#frmModifSupplier",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmModifSupplier");
+       
+       var msj=$("#msjmntsupplier");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmModifSupplier");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/supplierController/ActModifySupplier",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"El proveedor se modifico con exito");   
+                    loadDataTable("#tbSuppliers");
+                }else{
+                    alerts(2,msj,"No se completo el proceso.. !!!");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+      //  alert("ajax");
+    });
+    
 //-------------------------final del documento--------------------------------------------------//    
 });

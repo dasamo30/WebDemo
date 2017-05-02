@@ -7,11 +7,14 @@
 package com.webdemo.dao.inventory;
 
 import com.google.gson.Gson;
-import com.webdemo.beans.PerfilBean;
+import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.SupplierBean;
+import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
 import com.webdemo.beans.inventory.TableProductBean;
+import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -224,7 +227,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
 
     @Override
     public int registerLocation(LocationBean location) {
-        int rpta =-1;  
+      int rpta =-1;  
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
@@ -394,6 +397,366 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         }
         
         return litsLocationBean;
+    }
+
+    @Override
+    public int registerCategory(CategoryBean category) {
+        int rpta = -1;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "select register_category from inventory.register_category( :name_category, :date_creation);";
+            System.out.println("sql::" + sql);
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("name_category", category.getName_category());
+            query.setParameter("date_creation", category.getDate_creation());
+            //query.setParameter("clave", pass);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+
+            rpta = (Integer) ((HashMap) data.get(0)).get("register_category");
+            System.out.println("list::::>" + rpta);
+
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            //rpta=1;
+            e.printStackTrace();
+        } finally {
+            //session.close(); 
+            tx.commit();
+        }
+        return rpta;
+    }
+
+    @Override
+    public int modifyCategory(CategoryBean category) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select modify_category from inventory.modify_category( :id_category , :name_category , :date_modification );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_category", category.getId_category());
+         query.setParameter("name_category", category.getName_category());
+         query.setParameter("date_modification", category.getDate_modification());
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("modify_category");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
+
+    @Override
+    public CategoryBean get_Category(int category_id) {
+        Transaction tx = null;
+      CategoryBean categoryBean=new CategoryBean();
+      
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT id_category, name_category, date_creation, date_modification FROM inventory.view_categories where id_category= :category_id ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("category_id",category_id);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+          HashMap data = (HashMap) query.list().get(0);
+          //HashMap beanData=(HashMap) data.get(0);   
+          categoryBean.setId_category((Integer) data.get("id_category"));
+          categoryBean.setName_category((String) data.get("name_category"));
+          categoryBean.setDate_creation((Date)data.get("date_creation"));
+          categoryBean.setDate_modification((Date)data.get("date_modification"));
+//rpta=(Integer) ().get("register_product");
+          
+          //System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return categoryBean;
+    }
+
+    @Override
+    public int deleteCategory(int category_id) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select delete_category from inventory.delete_category( :category_id );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("category_id", category_id);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("delete_category");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
+
+    @Override
+    public ArrayList<TableCategoryBean> get_list_Categories() {
+        Transaction tx = null;
+        ArrayList<TableCategoryBean> litsCategoryBean =new ArrayList<TableCategoryBean>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT id_category, name_category, date_creation, date_modification FROM inventory.view_categories;";
+            SQLQuery query = session.createSQLQuery(sql);
+            /*query.setParameter("padre", padre);
+            query.setParameter("idPerfil", idPerfil);*/
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TableCategoryBean categoryBean= new TableCategoryBean();
+            categoryBean.setId_category((Integer)row.get("id_category"));
+            categoryBean.setName_category((String) row.get("name_category"));
+            categoryBean.setDate_creation((Date)row.get("date_creation"));
+            categoryBean.setDate_modification((Date)row.get("date_modification"));
+            
+            
+            litsCategoryBean.add(categoryBean);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsCategoryBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsCategoryBean;
+    }
+
+    @Override
+    public int registerSupplier(SupplierBean supplier) {
+        int rpta = -1;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            String sql = "select register_suppliers from inventory.register_suppliers( :code_suppliers, :name_suppliers, :phone_number, :web, :date_creation);";
+            System.out.println("sql::" + sql);
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("code_suppliers", supplier.getCode_suppliers());
+            query.setParameter("name_suppliers", supplier.getName_suppliers());
+            query.setParameter("phone_number", supplier.getPhone_number());
+            query.setParameter("web", supplier.getWeb());
+            query.setParameter("date_creation", supplier.getDate_creation());
+            //query.setParameter("clave", pass);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+
+            rpta = (Integer) ((HashMap) data.get(0)).get("register_suppliers");
+            System.out.println("list::::>" + rpta);
+
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            //rpta=1;
+            e.printStackTrace();
+        } finally {
+            //session.close(); 
+            tx.commit();
+        }
+        return rpta;
+    }
+
+    @Override
+    public int modifySupplier(SupplierBean supplier) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select modify_suppliers from inventory.modify_suppliers( :id_supplier , :code_suppliers, :name_suppliers, :phone_number, :web, :date_modification );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_supplier", supplier.getId_supplier());
+         query.setParameter("code_suppliers", supplier.getCode_suppliers());
+         query.setParameter("name_suppliers", supplier.getName_suppliers());
+         query.setParameter("phone_number", supplier.getPhone_number());
+         query.setParameter("web", supplier.getWeb());
+         query.setParameter("date_modification", supplier.getDate_modification());
+
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("modify_suppliers");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
+
+    @Override
+    public SupplierBean get_Supplier(int supplier_id) {
+        Transaction tx = null;
+      SupplierBean supplierBean=new SupplierBean();
+      
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT id_supplier, code_suppliers, name_suppliers, phone_number, web, date_creation, date_modification FROM inventory.view_suppliers where id_supplier= :supplier_id ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("supplier_id",supplier_id);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+          HashMap data = (HashMap) query.list().get(0);
+          //HashMap beanData=(HashMap) data.get(0);   
+          supplierBean.setId_supplier((Integer)data.get("id_supplier"));
+            supplierBean.setCode_suppliers((String) data.get("code_suppliers"));
+            supplierBean.setName_suppliers((String) data.get("name_suppliers"));
+            supplierBean.setPhone_number((String) data.get("phone_number"));
+            supplierBean.setWeb((String) data.get("web"));
+            supplierBean.setDate_creation((Date)data.get("date_creation"));
+            supplierBean.setDate_modification((Date)data.get("date_modification"));
+//rpta=(Integer) ().get("register_product");
+          
+          //System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return supplierBean;
+    }
+
+    @Override
+    public int deleteSupplier(int supplier_id) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select delete_suppliers from inventory.delete_suppliers( :supplier_id );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("supplier_id", supplier_id);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("delete_suppliers");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
+
+    @Override
+    public ArrayList<TableSupplierBean> get_list_Suppliers() {
+        Transaction tx = null;
+        ArrayList<TableSupplierBean> litsSupplierBean =new ArrayList<TableSupplierBean>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT id_supplier, code_suppliers, name_suppliers, phone_number, web, date_creation, date_modification FROM inventory.view_suppliers;";
+            SQLQuery query = session.createSQLQuery(sql);
+            /*query.setParameter("padre", padre);
+            query.setParameter("idPerfil", idPerfil);*/
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TableSupplierBean supplierBean= new TableSupplierBean();
+            supplierBean.setId_supplier((Integer)row.get("id_supplier"));
+            supplierBean.setCode_suppliers((String) row.get("code_suppliers"));
+            supplierBean.setName_suppliers((String) row.get("name_suppliers"));
+            supplierBean.setPhone_number((String) row.get("phone_number"));
+            supplierBean.setWeb((String) row.get("web"));
+            supplierBean.setDate_creation((Date)row.get("date_creation"));
+            supplierBean.setDate_modification((Date)row.get("date_modification"));
+            
+            
+            litsSupplierBean.add(supplierBean);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsSupplierBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsSupplierBean;
     }
     
 }

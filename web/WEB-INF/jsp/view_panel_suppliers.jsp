@@ -21,7 +21,7 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                     <!-- Link trigger modal -->
-                    <a href="${contextPath}/SupplierController/ActViewNewSupplier" data-toggle="modal" data-target="#myModalNewSupplier" data-remote="false" class="btn btn-primary">
+                    <a href="${contextPath}/supplierController/ActViewNewSupplier" data-toggle="modal" data-target="#myModalNewSupplier" data-remote="false" class="btn btn-primary">
                         New supplier
                     </a>
                         
@@ -77,30 +77,30 @@
             <div class="col-xs-12">
           <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Supplier List</h3>
+                  <h3 class="box-title">Suppliers List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="tbCategory" class="table table-bordered table-striped">
+                  <table id="tbSuppliers" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Unit cost</th>
-                        <th>registration date</th>
-                        <th>Photo</th>
+                        <th>code suppliers</th>    
+                        <th>Name suppliers</th>
+                        <th>Phone number</th>
+                        <th>Web</th>
+                        <th>Date creation</th>
+                        <th>Date modification</th>
                         <th>Edit</th>
                         <th>Delete</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Unit cost</th>
-                        <th>registration date</th>
-                        <th>Photo</th>
+                        <th>code suppliers</th>    
+                        <th>Name suppliers</th>
+                        <th>Phone number</th>
+                        <th>Web</th>
+                        <th>Date creation</th>
+                        <th>Date modification</th>
                         <th>Edit</th>
                         <th>Delete</th>
                       </tr>

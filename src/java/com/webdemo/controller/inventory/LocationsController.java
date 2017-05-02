@@ -147,7 +147,7 @@ public class LocationsController {
         java.util.Date fecha = new java.util.Date(); 
         location.setDate_modification(fecha);
         System.out.println("location:"+location.toString());
-        serviceInventory.modifyLocation(location);
-       return 0;
+        return serviceInventory.modifyLocation(location);
+        
     }
 }

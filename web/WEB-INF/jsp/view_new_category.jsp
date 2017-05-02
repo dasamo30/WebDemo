@@ -1,8 +1,9 @@
 <%-- 
-    Document   : view_new_location
-    Created on : 13-abr-2017, 23:27:10
-    Author     : dasamo
+    Document   : view_new_category
+    Created on : 01/05/2017, 03:49:51 PM
+    Author     : developer
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8" session="true"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%> 
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -19,23 +20,23 @@
                   <!--<h3 class="box-title">Registrar Usuario</h3>-->
                 </div><!-- /.box-header -->
                 <!-- form start -->
-                <form  data-toggle="validator" id="${formLocation}" role="form" enctype="multipart/form-data">
+                <form  data-toggle="validator" id="${formCategory}" role="form" enctype="multipart/form-data">
                   <div class="box-body">
                     <div class="form-group">
-                      <label for="txtNameLocation">Name Location</label>
-                      <input type="text" class="form-control" id="txtNameLocation" name="name_location" value="${LocationBean.name_location}" placeholder="Ingrese la ubicacion" required>
+                      <label for="txtNameCategory">Name Category</label>
+                      <input type="text" class="form-control" id="txtNameCategory" name="name_category" value="${CategoryBean.name_category}" placeholder="Ingrese la categoria" required>
                       <div class="help-block with-errors"></div>
                     </div>  
                   </div><!-- /.box-body -->
-                  <input type="hidden" name="id_location"  value="${LocationBean.id_location}" readonly /> 
+                  <input type="hidden" name="id_category"  value="${CategoryBean.id_category}" readonly /> 
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
                   </div>
                 </form>
-                <div id="msjmntlocation" ></div>
+                <div id="msjmntcategory" ></div>
                 <!-- /.box -->
             </div><!--/.col (left) -->
             <!-- right column -->
           </div>   <!-- /.row -->
-     <!--   </section><!-- /.content -->  
+     <!--   </section><!-- /.content -->

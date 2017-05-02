@@ -80,27 +80,21 @@
                   <h3 class="box-title">Category List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="tbCategory" class="table table-bordered table-striped">
+                  <table id="tbCategories" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Unit cost</th>
-                        <th>registration date</th>
-                        <th>Photo</th>
+                        <th>Name category</th>
+                        <th>Date creation</th>
+                        <th>Date modification</th>
                         <th>Edit</th>
                         <th>Delete</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Unit cost</th>
-                        <th>registration date</th>
-                        <th>Photo</th>
+                        <th>Name category</th>
+                        <th>Date creation</th>
+                        <th>Date modification</th>
                         <th>Edit</th>
                         <th>Delete</th>
                       </tr>
