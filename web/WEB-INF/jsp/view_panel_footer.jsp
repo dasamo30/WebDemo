@@ -230,6 +230,8 @@
     <script src="${contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
     <!--<script src="${contextPath}/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>-->
     <script src="${contextPath}/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <!-- Select2 -->
+    <script src="${contextPath}/plugins/select2/select2.full.min.js"></script>
     <!-- serializejson -->
     <script src="${contextPath}/plugins/json/jquery.serializejson.js"></script>
     <!-- blockUI -->

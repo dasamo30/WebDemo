@@ -971,5 +971,11 @@ jQuery(document).ready( function () {
       //  alert("ajax");
     });
     
+    $(".select2").select2();
+    $("#txtDate").datepicker({
+        autoclose:true,
+        todayHighlight: true
+    });
+    
 //-------------------------final del documento--------------------------------------------------//    
 });
