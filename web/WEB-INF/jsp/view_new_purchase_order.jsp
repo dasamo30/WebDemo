@@ -51,6 +51,7 @@
 	                </section>
 	                
 	            </div>
+                   <!--
                     <div class="row mb-lg">
 	            	            	
 	            	<section class="col-md-4 col-print-4">
@@ -66,7 +67,7 @@
                         
                         <fieldset>                            
                             <div class="form-group">
-	                            <input id="txtProductSellPrice" class="form-control numbersOnly" size="10" type="text" placeholder="<s:message code="purchaseorder.lbl.price.placeholder" />">
+	                            <input id="txtProductSellPrice" class="form-control numbersOnly" size="10" type="text">
                             </div>                            
                         </fieldset>
                                         	                    	
@@ -75,30 +76,13 @@
 	                <section class="col-md-3 col-print-3">
                        	<fieldset>                            
                             <div class="form-group">
-	                            <input id="txtProductAmount" class="form-control numbersOnly" size="10" type="text" placeholder="<s:message code="purchaseorder.lbl.amount.placeholder" />">                                
+	                            <input id="txtProductAmount" class="form-control numbersOnly" size="10" type="text" >                                
                                 <input id="txtProductId" type="hidden">
                                 <input id="txtProductStock" type="hidden">                                   
                             </div>                            
                         </fieldset>                    	
-	                </section>
-	                
-	                 <section class="col-md-2 col-print-2">	
-	                 
-	                 	<fieldset>       
-	                 		<button id="btnProductAdd" type="button" class="btn btn-primary btn-block">
-                                            aaaa
-	                 		</button>	                 		     
-	                    </fieldset>         	                    
-	                                      	
-               	 	</section>	                
-	                
-	            </div>
-                    <!-- Link trigger modal -->
-                    <a href="${contextPath}/purchaseOrdersController/ActViewNewPurchaseOrder"  class="btn btn-primary" >
-                        Add Purchase Order
-                    </a>
-                        
-                      <!--<button type="button" class="btn btn-danger" id="click_to_load_modal_popup">Open Popup Modal</button>-->  
+	                </section>	                
+	            </div>-->
                 </div><!-- /.box-header -->
                 <!-- form start -->
                 
@@ -122,6 +106,43 @@
                 </div>
               </div>
             </div>-->
+            <!-- Modal HTML -->
+            <div id="myModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Add Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form  data-toggle="validator" id="addRowProduct" role="form">
+                                <div class="box-body">
+                                 <div class="form-group">
+                                    <label for="txtProductSearch">Product</label>
+                                    <select  id="txtProductSearch" class="form-control select2" style="width: 100%;"  required ></select>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label for="txtPriceProduct">Price</label>
+                                    <input type="text" class="form-control" id="txtPriceProduct" name="name" placeholder="Ingrese el precio" required>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label for="txtAmountProduct">Amount</label>
+                                    <input type="text" class="form-control" id="txtAmountProduct" name="name" placeholder="Ingrese la cantidad" required>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
+                                </div><!-- /.box-body -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit"  class="btn btn-primary">Save changes</button>
+                                </div>
+                              </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
           
            <div class="row">
             <div class="col-xs-12">
@@ -130,34 +151,33 @@
                   <h3 class="box-title">Purchase Order List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                    <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    
+                    <!--<button class="btn btn-default btn-sm checkbox-toggle">Add</button>-->
+                    <a href="#myModal" class="btn btn-default btn-sm checkbox-toggle" data-toggle="modal">Add</a>
+                  </div>
                   <table id="tbPurchaseOrder" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>code suppliers</th>    
-                        <th>Name suppliers</th>
-                        <th>Phone number</th>
-                        <th>Web</th>
-                        <th>Date creation</th>
-                        <th>Date modification</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th>Product</th>    
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Sale</th>
                       </tr>
                     </thead>
-                    <tfoot>
-                      <tr>
-                        <th>code suppliers</th>    
-                        <th>Name suppliers</th>
-                        <th>Phone number</th>
-                        <th>Web</th>
-                        <th>Date creation</th>
-                        <th>Date modification</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                      </tr>
-                    </tfoot>
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
+              <div class="btn-toolbar mt-lg hidden-print print-buttons">
+		            
+		            	<button id="btnSavePurchaseOrder" type="button" class="btn btn-primary">
+							Save Changes
+						</button>
+	                    <a href="${contextPath}/purchaseOrdersController/initial" class="btn btn-github">
+	                    	Return
+	                    </a>
+		            </div>
             </div>
           </div>
     

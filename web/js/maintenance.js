@@ -977,5 +977,101 @@ jQuery(document).ready( function () {
         todayHighlight: true
     });
     
+    
+    $('#txtProductSearch').autocomplete({
+        source: function( request, response ) {
+        	 //alert("wsss");       	        	
+        	var csrf = $("#_csrf").val();
+        	var requestData = { name: request.term};
+                
+        	if (request.term.length > 1 ) {
+        	//console.log("bbbb");
+                $.post( baseurl+"/purchaseOrdersController/searchByName" , requestData, function( data ) {
+                  //  console.log("aaaaaaaaaa");
+                    //console.log("data: " + JSON.stringify(data));	        			
+        	response( $.map( data, function( item ) {
+                    	 console.log(item);
+                      return {                    	                       
+                          value			: item.name,
+                          label			: item.name,
+                          idProduct		: item.id,
+                          sellPrice		: item.unit_cost
+                      };
+                    }));
+        			
+        		});
+        	}else{
+        		//Clean the fields
+        		$("#txtProductSellPrice").val("");
+        		$("#txtProductAmount").val("");
+        		$("#txtProductId").val("");
+        		$("#txtProductStock").val("");
+        	}
+        	
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+                event.preventDefault();
+                $(this).val(ui.item.value);               
+                /*$("#txtProductSellPrice").val(ui.item.sellPrice);
+                $("#txtProductAmount").val(1);
+                $("#txtProductId").val(ui.item.idProduct);
+                $("#txtProductStock").val(ui.item.stock);
+                $("#txtProductSellPrice").focus();*/
+        }
+    });
+    
+    $('#txtProductSearch').select2({
+        placeholder: 'Select an item',
+        minimumInputLength: 2,
+        ajax: {
+          type: "POST",   
+          url: baseurl+"/purchaseOrdersController/searchByName",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+
+            var queryParameters = {
+                term: params.term
+            };
+            return queryParameters;
+        },
+        processResults: function (data) {
+            return {
+                results: $.map(data, function (item) {
+                    return {
+                        text: item.name,
+                        id: item.code,
+                        idProduct: item.id,
+                        sellPrice: item.unit_cost
+                        
+                    };
+                })
+            };
+        },
+          cache: true
+        }
+      }).on("change", function () {
+         // console.log($(this));
+        //var str = $("#s2id_search_code .select2-choice span").text();
+         var data = $(this).select2('data')[0];
+        //console.log(data); 
+         $("#txtPriceProduct").val(data.sellPrice);
+         $("#txtAmountProduct").val(1);
+         
+        
+      });
+      
+      
+      $(document).on("submit","#addRowProduct",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       console.log("addRowProduct");
+       
+      });
 //-------------------------final del documento--------------------------------------------------//    
 });

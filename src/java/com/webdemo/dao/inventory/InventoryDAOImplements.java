@@ -758,5 +758,58 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         
         return litsSupplierBean;
     }
+
+    @Override
+    public ArrayList<ProductBean> get_Product_Search(int typeSearch, String valor) {
+        Transaction tx = null;
+        ArrayList<ProductBean> litsProductBean =new ArrayList<ProductBean>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name FROM inventory.product_search( :typeSearch, :valor)";
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("typeSearch",typeSearch);
+            query.setParameter("valor",valor);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            ProductBean productBean= new ProductBean();
+            productBean.setId((Integer)row.get("product_id"));
+            productBean.setCode((String) row.get("code"));
+            productBean.setName((String)row.get("name"));
+            productBean.setDescription((String)row.get("description"));
+            /* System.out.println("---"+row.get("unit_cost").getClass().getTypeName());
+             System.out.println("---"+row.get("unit_cost"));
+             System.out.println("---"+row.get("unit_cost").getClass());*/
+            productBean.setUnit_cost(((BigDecimal)row.get("unit_cost")).doubleValue());
+            productBean.setRegistration_date((Date) row.get("registration_date"));
+            productBean.setImage_name((String)row.get("image_name"));
+            
+            
+            litsProductBean.add(productBean);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsProductBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsProductBean;
+    }
+
+    
     
 }

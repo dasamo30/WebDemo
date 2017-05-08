@@ -27,6 +27,7 @@ public interface IInventoryDAO {
     public ProductBean get_Product(int product_id);
     public int DeleteProduct(int product_id);
     public ArrayList<TableProductBean> get_list_Product();
+    public ArrayList<ProductBean> get_Product_Search(int typeSearch,String valor);
     
     public int registerLocation(LocationBean location);
     public int modifyLocation(LocationBean location); 

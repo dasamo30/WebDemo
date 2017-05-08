@@ -6,6 +6,7 @@
 
 package com.webdemo.controller.inventory;
 
+import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,6 +87,24 @@ public class PurchaseOrdersController {
         mv.addObject("listSupplier",listSupplier);
         mv.setViewName("view_new_purchase_order");
         return mv;  
+    }
+    
+    @RequestMapping(value="searchByName", method = RequestMethod.POST)
+    @ResponseBody
+    public ArrayList<ProductBean> searchByName(@ModelAttribute("term") @Validated String name, HttpServletRequest httpServletRequest)   {
+        
+        System.out.println("name"+name);
+        
+        ArrayList<ProductBean> listProductBean=serviceInventory.get_Product_Search(3, name);
+    /*
+        name
+        java.util.Date fecha = new java.util.Date(); 
+        location.setDate_creation(fecha);
+        System.out.println("location:"+location.toString());
+        return serviceInventory.registerLocation(location);*/
+        
+        return  listProductBean;
+        
     }
     
     

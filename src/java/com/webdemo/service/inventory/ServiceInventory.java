@@ -53,6 +53,8 @@ public class ServiceInventory {
         return inventoryDAO.registerLocation(location);
     
     }
+    //search
+    
     
     public ArrayList<TableLocationBean> get_list_Location(){
         return inventoryDAO.get_list_Location();
@@ -110,5 +112,9 @@ public class ServiceInventory {
 
     public ArrayList<TableSupplierBean> get_list_Suppliers() {
         return inventoryDAO.get_list_Suppliers();
+    }
+    
+    public ArrayList<ProductBean> get_Product_Search(int typeSearch, String valor){
+        return inventoryDAO.get_Product_Search(typeSearch, valor);
     }
 }
