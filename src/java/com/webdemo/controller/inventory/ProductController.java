@@ -10,6 +10,7 @@ import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableProductBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.io.ByteArrayOutputStream;
@@ -77,9 +78,12 @@ public class ProductController {
     @ResponseBody
     public  ModelAndView ActViewAddProducts() {
         //String  btnSaveEmployee = btn.crear("submit", 70, "grabar.png", "btnSaveEmployee","btnSaveEmployee", "Aceptar", "", "Aceptar");
+      ArrayList<TableCategoryBean> listCategories=serviceInventory.get_list_Categories();
+        
       ModelAndView mav = new ModelAndView();  
       mav.setViewName("view_new_product");
       mav.addObject("formHardware", "frmrRegisterProduct");
+      mav.addObject("listCategories",listCategories);
        return mav;  
     }
     
@@ -91,6 +95,9 @@ public class ProductController {
       ProductBean p=serviceInventory.get_Product(product_id);
       
       System.out.println("producto:"+p.toString());
+      
+      ArrayList<TableCategoryBean> listCategories=serviceInventory.get_list_Categories();
+      
       
        File file=new File(UPLOAD_DIRECTORY+"/"+p.getImage_name());
             String encodedString ="";
@@ -115,6 +122,7 @@ public class ProductController {
       mav.setViewName("view_new_product");
       mav.addObject("formHardware", "frmModifProduct");
       mav.addObject("imagebase64",encodedString);
+      mav.addObject("listCategories",listCategories);
       mav.addObject("productBean", p);
        return mav;  
     }
@@ -154,6 +162,17 @@ public class ProductController {
                                  if(item.getFieldName().equals("unit_cost")){
                                      p.setUnit_cost(Double.parseDouble(item.getString()));
                                  }
+                                 
+                                 if(item.getFieldName().equals("id_category")){
+                                     p.setId_category(Integer.parseInt(item.getString()));
+                                 }
+                                 
+                                 if(item.getFieldName().equals("alert_stock")){
+                                     p.setAlert_stock(Integer.parseInt(item.getString()));
+                                 }
+                                 
+                                         
+                                         
                                            
                                 
                          }else if (!item.isFormField()) {
@@ -247,6 +266,13 @@ public class ProductController {
                                  if(item.getFieldName().equals("unit_cost")){
                                      p.setUnit_cost(Double.parseDouble(item.getString()));
                                  }
+                                 if(item.getFieldName().equals("id_category")){
+                                     p.setId_category(Integer.parseInt(item.getString()));
+                                 }
+                                 
+                                 if(item.getFieldName().equals("alert_stock")){
+                                     p.setAlert_stock(Integer.parseInt(item.getString()));
+                                 }
                                            
                                 
                          }else if (!item.isFormField()) {
@@ -328,7 +354,12 @@ public class ProductController {
             p.setIco_edit("<button data-toggle=\"modal\" data-target=\"#myModalNewProduct\" data-remote=\"false\" type=\"button\" data-id=\""+p.getId()+"\" id=\"btnViewEditProduc\" class=\"btn btn-info btn-xs\" href=\""+baseurl+"/ProductController/ActViewModifProduct\" ><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></button>");
             p.setIco_delete("<button type=\"button\" data-id=\""+p.getId()+"\" id=\"btnDeletetProduct\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
             p.setIco_img("<img src=\""+encodedString+"\" class=\"img-responsive center-block\"  height=\"42\" width=\"42\">");
-            
+            if(p.getStock() <= p.getAlert_stock()){
+                p.setMsj_alert( p.getStock()+" <span class=\"label label-warning text-gray-dark\">ALERT!</span>");
+            }else{
+                p.setMsj_alert(""+p.getStock());
+            }
+                
             //p.setIco_delete("<button type=\"button\" id=\"btnDeletetProduct\" class=\"btn btn-danger btn-xs\" data-toggle=\"modal\" data-target=\"#confirmDelete\" data-remote=\"false\" ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
         }
      

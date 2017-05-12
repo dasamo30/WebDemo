@@ -9,6 +9,7 @@ package com.webdemo.service.inventory;
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
@@ -116,5 +117,9 @@ public class ServiceInventory {
     
     public ArrayList<ProductBean> get_Product_Search(int typeSearch, String valor){
         return inventoryDAO.get_Product_Search(typeSearch, valor);
+    }
+    
+    public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean){
+        return inventoryDAO.savePurchaseOrder(purchaseOrderBean);
     }
 }

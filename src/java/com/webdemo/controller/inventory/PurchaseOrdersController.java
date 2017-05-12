@@ -7,14 +7,22 @@
 package com.webdemo.controller.inventory;
 
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.PurchaseOrderBean;
+import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -107,5 +115,33 @@ public class PurchaseOrdersController {
         
     }
     
-    
+    @RequestMapping(value="ActSavePurchaseOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActSavePurchaseOrder(@ModelAttribute("data") String data,HttpServletRequest request) throws IOException   {
+        HttpSession sesion = request.getSession();
+        System.out.println("data:"+data);
+        //PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
+         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        ObjectMapper a=new ObjectMapper();
+        a.setDateFormat(df);
+         
+        PurchaseOrderBean purchaseOrderBean=a.readValue(data,PurchaseOrderBean.class);
+        
+        
+        purchaseOrderBean.setUsername(sesion.getAttribute("usuario").toString());
+        
+        System.out.println("purchaseOrderBean:"+purchaseOrderBean.toString());
+        
+        
+
+       
+        String fecha = df.format(purchaseOrderBean.getDateCreation());
+        System.out.println("fecha:"+fecha);
+
+        
+        //serviceInventory.savePurchaseOrder(purchaseOrderBean);
+
+        return 0;
+    }
+    //
 }

@@ -20,18 +20,20 @@
               <!-- general form elements -->
               <div class="box box-primary">
                 <div class="box-header with-border">
-                    	            <div class="row mb-lg">
+                <div class="row mb-lg">
+                    <form id="form_pocab">
 	                <section class="col-md-4 col-print-4">                          
                             <div class="form-group">
                             <label for="cboSupplier">Supplier</label>    
-                            <select id="cboSupplier" class="form-control select2" style="width: 100%;">
+                            <select id="cboSupplier" class="form-control select2" style="width: 100%;" required>
                            <option value=""></option>
                             <c:if test="${!empty listSupplier}">
                                 <c:forEach var="supplier" items="${listSupplier}">
                                     <option value="${supplier.id_supplier}">${supplier.name_suppliers}</option>											
                                 </c:forEach>
                             </c:if>
-                            </select>			                           	                       	                                
+                            </select>
+                            <div class="help-block with-errors"></div>
                             </div>  
 	                </section>
 	                <section class="col-md-3 col-print-3">	                    	                   
@@ -41,48 +43,17 @@
                                 <div class="input-group">
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
-                      </div>
-                      <input class="form-control pull-right" id="txtDate" type="text">
-                    </div>
-	                        
+                        </div>
+                                    <input class="form-control pull-right" id="txtDate" type="text" required >
+                        </div>
+	                    <div class="help-block with-errors"></div>    
                             </div>                            
                         </fieldset>
 	                    	
 	                </section>
-	                
+                        <input type="submit" id="submit" style="display:none;" />
+	             </form>   
 	            </div>
-                   <!--
-                    <div class="row mb-lg">
-	            	            	
-	            	<section class="col-md-4 col-print-4">
-                        <fieldset>                            
-                            <div class="form-group">
-                                <input id="txtProductSearch"  type="text" size="16" class="form-control" placeholder="<s:message code="purchaseorder.lbl.product.placeholder" />">                               
-                            </div>                           
-                        </fieldset>
-	                    	                    	                    	
-	                </section>
-	                
-	                <section class="col-md-3 col-print-3">
-                        
-                        <fieldset>                            
-                            <div class="form-group">
-	                            <input id="txtProductSellPrice" class="form-control numbersOnly" size="10" type="text">
-                            </div>                            
-                        </fieldset>
-                                        	                    	
-	                </section>
-	                
-	                <section class="col-md-3 col-print-3">
-                       	<fieldset>                            
-                            <div class="form-group">
-	                            <input id="txtProductAmount" class="form-control numbersOnly" size="10" type="text" >                                
-                                <input id="txtProductId" type="hidden">
-                                <input id="txtProductStock" type="hidden">                                   
-                            </div>                            
-                        </fieldset>                    	
-	                </section>	                
-	            </div>-->
                 </div><!-- /.box-header -->
                 <!-- form start -->
                 
@@ -132,10 +103,14 @@
                                     <input type="text" class="form-control" id="txtAmountProduct" name="name" placeholder="Ingrese la cantidad" required>
                                     <div class="help-block with-errors"></div>
                                   </div>
+                                    <div class="form-group">
+                                    <input id="txtProductId" type="hidden">
+                                    <div id="msjAddProducts" style="color:#a94442;" class="help-block with-errors">aaaaa</div>
+                                    </div>
                                 </div><!-- /.box-body -->
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="submit"  class="btn btn-primary">Save changes</button>
+                                    <button type="submit"  class="btn btn-primary">Add Product</button>
                                 </div>
                               </form>
                         </div>
@@ -155,18 +130,41 @@
                     <!-- Check all button -->
                     
                     <!--<button class="btn btn-default btn-sm checkbox-toggle">Add</button>-->
-                    <a href="#myModal" class="btn btn-default btn-sm checkbox-toggle" data-toggle="modal">Add</a>
+                    <a id="btnmyModal" class="btn btn-default btn-sm checkbox-toggle" data-toggle="modal">Add</a>
                   </div>
-                  <table id="tbPurchaseOrder" class="table table-bordered table-striped">
+                  <table id="tblProducts" class="table table-bordered table-striped">
                     <thead>
                       <tr>
                         <th>Product</th>    
                         <th>Price</th>
                         <th>Amount</th>
                         <th>Sale</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                       </tr>
                     </thead>
                   </table>
+                    <div id="msjtblProducts" style="color:#a94442;" class="help-block with-errors"></div>
+                 <div class="row">
+	                <div class="col-md-8 col-print-6">
+	                    <p></p>
+	                </div>
+	                <div class="col-md-4 col-print-6">
+	                    <div class="row text-xs-right">
+	                        <div class="col-xs-6"></div> <!-- instead of offset -->
+	                        <div class="col-xs-3">	                            
+	                            <p class="no-margin">
+									<strong>Total:</strong>
+								</p>
+	                            </div>
+	                            <div class="col-xs-3">	                                
+	                                <p class="no-margin">
+										<strong><span id="lblTotalSale">0.00</span></strong>
+									</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>   
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
               <div class="btn-toolbar mt-lg hidden-print print-buttons">

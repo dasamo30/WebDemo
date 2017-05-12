@@ -15,6 +15,7 @@ public class TableProductBean  extends ProductBean{
     private String ico_edit;
     private String ico_delete;
     private String ico_img;
+    private String msj_alert;
 
     public TableProductBean() {
         super();
@@ -47,12 +48,13 @@ public class TableProductBean  extends ProductBean{
     public void setIco_delete(String ico_delete) {
         this.ico_delete = ico_delete;
     }
-   
-    
+
     @Override
     public String toString() {
-        return super.toString()+"TableProductBean{" + "ico_edit=" + ico_edit + ", ico_delete=" + ico_delete + '}';
+        return super.toString()+"TableProductBean{" + "ico_edit=" + ico_edit + ", ico_delete=" + ico_delete + ", msj_alert=" + msj_alert + '}';
     }
+   
+     
 
     /**
      * @return the ico_img
@@ -67,5 +69,20 @@ public class TableProductBean  extends ProductBean{
     public void setIco_img(String ico_img) {
         this.ico_img = ico_img;
     }
+
+    /**
+     * @return the msj_alert
+     */
+    public String getMsj_alert() {
+        return msj_alert;
+    }
+
+    /**
+     * @param msj_alert the msj_alert to set
+     */
+    public void setMsj_alert(String msj_alert) {
+        this.msj_alert = msj_alert;
+    }
+    
     
 }

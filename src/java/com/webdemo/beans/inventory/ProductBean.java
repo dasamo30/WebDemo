@@ -22,7 +22,9 @@ public class ProductBean {
    private double unit_cost;// numeric,
    private Date registration_date;
    private String image_name;
-
+   private int stock;
+   private int alert_stock;
+   private int id_category;
     /**
      * @return the id
      */
@@ -121,11 +123,51 @@ public class ProductBean {
         this.image_name = image_name;
     }
 
-    @Override
-    public String toString() {
-        return "ProductBean{" + "id=" + id + ", code=" + code + ", name=" + name + ", description=" + description + ", unit_cost=" + unit_cost + ", registration_date=" + registration_date + ", image_name=" + image_name + '}';
+    /**
+     * @return the stock
+     */
+    public int getStock() {
+        return stock;
     }
 
+    /**
+     * @param stock the stock to set
+     */
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
+    /**
+     * @return the alert_stock
+     */
+    public int getAlert_stock() {
+        return alert_stock;
+    }
+
+    /**
+     * @param alert_stock the alert_stock to set
+     */
+    public void setAlert_stock(int alert_stock) {
+        this.alert_stock = alert_stock;
+    }
+
+    /**
+     * @return the id_category
+     */
+    public int getId_category() {
+        return id_category;
+    }
+
+    /**
+     * @param id_category the id_category to set
+     */
+    public void setId_category(int id_category) {
+        this.id_category = id_category;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductBean{" + "id=" + id + ", code=" + code + ", name=" + name + ", description=" + description + ", unit_cost=" + unit_cost + ", registration_date=" + registration_date + ", image_name=" + image_name + ", stock=" + stock + ", alert_stock=" + alert_stock + ", id_category=" + id_category + '}';
+    }
 
 }

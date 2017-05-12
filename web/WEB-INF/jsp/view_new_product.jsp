@@ -33,6 +33,17 @@
                       <div class="help-block with-errors"></div>
                     </div>
                    <div class="form-group">
+                            <label for="cboCategories">Categories</label>    
+                            <select id="cboCategories" class="form-control" name="id_category" style="width: 100%;" required > 
+                                <option value="" ></option>
+                            <c:if test="${!empty listCategories}">
+                                <c:forEach var="category" items="${listCategories}">
+                                    <option value="${category.id_category}"  ${ category.id_category==productBean.id_category ? 'selected' : ''}>${category.name_category}</option>											
+                                </c:forEach>
+                            </c:if>
+                            </select>			                           	                       	                                
+                   </div>     
+                   <div class="form-group">
                       <label for="txtnombres">Description</label>
                       <textarea class="form-control" rows="3" id="txtnombres" name="description" placeholder="Ingrese la descripcion del producto" required >${productBean.description}</textarea>
                       <div class="help-block with-errors"></div>
@@ -51,6 +62,16 @@
                         
                         <div class="help-block with-errors"></div>
                     </div>
+                    <div class="form-group has-feedback">
+                        <label for="txtStock" class="control-label">Stock</label> 
+                            <input type="text" class="form-control"  id="txtStock" readonly="" value="${ productBean.stock!=null ? productBean.stock : '0'}"  required>    
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="txtAlertStock" class="control-label">Alert stock</label> 
+                        <input type="text" class="form-control" pattern="^[1-9]\d*?$" id="txtAlertStock" name="alert_stock" value="${productBean.alert_stock}"  required>    
+                        <div class="help-block with-errors"></div>
+                    </div>     
                     <div class="form-group">
                       <label for="exampleInputFile">File input</label>
                       <div id="image_preview" class="box-body" style="display: block;">

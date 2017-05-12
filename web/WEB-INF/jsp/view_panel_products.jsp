@@ -87,7 +87,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Unit cost</th>
-                        <th>registration date</th>
+                        <th>Stock</th>
                         <th>Photo</th>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -99,7 +99,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Unit cost</th>
-                        <th>registration date</th>
+                        <th>Stock</th>
                         <th>Photo</th>
                         <th>Edit</th>
                         <th>Delete</th>

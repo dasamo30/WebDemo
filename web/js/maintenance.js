@@ -32,6 +32,12 @@ jQuery(document).ready( function () {
             $('#modal-body').html(data); 
             
             $(frm).validator();
+            //$("#cboCategories").select2();
+            $('#cboCategories').select2({
+                  placeholder: "Select a category",
+                  //allowClear: true,
+                  dropdownParent: $('#myModalNewProduct')
+                });
             /*$('#frmrRegisterProduct').validator({
                 a:{
                     validators:{
@@ -203,7 +209,7 @@ jQuery(document).ready( function () {
             { "mData": "name"},
             { "mData": "description"},
             { "mData": "unit_cost","sClass": "text-center"},
-            { "mData": "registration_date","sClass": "text-center"},
+            { "mData": "msj_alert","sClass": "text-center"},
             { "mData": "ico_img","sClass": "text-center"},
             { "mData": "ico_edit","sClass": "text-center"},
             { "mData": "ico_delete","sClass": "text-center"}
@@ -971,7 +977,9 @@ jQuery(document).ready( function () {
       //  alert("ajax");
     });
     
-    $(".select2").select2();
+    $("#cboSupplier").select2({
+                  placeholder: "Select a supplier"
+                });
     $("#txtDate").datepicker({
         autoclose:true,
         todayHighlight: true
@@ -1024,6 +1032,7 @@ jQuery(document).ready( function () {
     $('#txtProductSearch').select2({
         placeholder: 'Select an item',
         minimumInputLength: 2,
+        allowClear: true,
         ajax: {
           type: "POST",   
           url: baseurl+"/purchaseOrdersController/searchByName",
@@ -1055,13 +1064,32 @@ jQuery(document).ready( function () {
          // console.log($(this));
         //var str = $("#s2id_search_code .select2-choice span").text();
          var data = $(this).select2('data')[0];
-        //console.log(data); 
+        console.log(data); 
+         if(data){
          $("#txtPriceProduct").val(data.sellPrice);
          $("#txtAmountProduct").val(1);
-         
-        
+         $("#txtProductId").val(data.idProduct);
+         }
       });
       
+      $('#addRowProduct').validator();
+     /* $('#myModal').on('shown.bs.modal', function(e) {
+           //console.log("ssss");
+            $("#msjAddProducts").text("");
+        });*/
+        
+         $("#btnmyModal").click(function(event){
+            $("#msjAddProducts").text("");
+            $("#txtPriceProduct").val('');
+                $("#txtAmountProduct").val('');
+                $("#txtProductId").val('');
+                //$("#addRowProduct")[0].reset();
+                $('#txtProductSearch').val('').trigger('change');
+                $('#addRowProduct').trigger('reset');
+            
+             $("#myModal").modal('show');
+            
+        });
       
       $(document).on("submit","#addRowProduct",function(e){    
       
@@ -1070,8 +1098,327 @@ jQuery(document).ready( function () {
         }
        e.preventDefault();
        
+       
+       var idProduct = $("#txtProductId").val();  
+    	var duplicate = false;
+    	$("#tblProducts tbody tr").each(function (indexTr) {
+            var data = $(this).data("item");            
+            if(data.idProduct == idProduct){
+            	duplicate = true;
+            }      
+        });
+        
+        if(duplicate == true){
+            
+            $("#msjAddProducts").text("The product is already added.");
+            //alert("")
+            return;
+        }
+       
+       
+       
+       
        console.log("addRowProduct");
+       var idProduct = $("#txtProductId").val();	
+	var stock = 10;
+        var amount=$("#txtAmountProduct").val();
+        var sellPrice=$("#txtPriceProduct").val();
+       
+       var data = {'idProduct' : idProduct, 'sellPrice': sellPrice, 'amount' : amount, 'stock' : stock};
+	$("#tblProducts").append(
+			"<tr id='item-" + idProduct + "' data-item='" + JSON.stringify(data) + "'>" +
+			"	<td>" + $('#txtProductSearch').select2('data')[0].text+ "</td>" +
+			"	<td class='text-xs-right'><span id='lblSellItem" + idProduct + "'>" + (sellPrice * 1) + "</span><input id='txtSelltItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+			"	<td class='text-xs-right'><span id='lblAmountItem" + idProduct + "'>" + (amount * 1) + "</span><input id='txtAmountItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+			"	<td class='text-xs-right'><span id='lblSaleItem" + idProduct + "'>" + (amount * sellPrice * 1)  + "</span></td>" +
+			"	<td class='text-xs-right'>" +
+			"		<button id='btnEditItem" + idProduct + "' class='btn btn-info btn-xs btnEditItem' role='button' data-id='"+idProduct+"' > " +
+			"			<span class='glyphicon glyphicon-pencil'></span> " +
+			"		 </button> " +
+			"		<button id='btnSaveItem" + idProduct + "' class='btn btn-inverse btn-xs btnSaveItem' role='button' data-id='"+idProduct+"' style='display: none;'> " +
+			"			<span class='glyphicon glyphicon-ok'></span> " +
+			"		 </button> " +
+			"	</td>" +
+			"	<td class='text-xs-right'>" + 
+			"		<button id='btnDeleteItem" + idProduct + "' class='btn btn-danger btn-xs btnDeleteItem' role='button' data-id='"+idProduct+"' > " +
+			"			<span class='glyphicon glyphicon-trash'></span> " +
+			"		 </button> " +
+			"	</td>" +
+			"</tr>");
+                
+                calculateTotalTransfer();
+                $('#myModal').modal('hide');
+                //$('#txtProductSearch').select2('val','');
+                //$('#txtProductSearch').select2('data', null);
+                //$('#txtProductSearch').select2('val','');
+                $('#txtProductSearch').val('').trigger('change'); 
+                //$("#txtProductSearch").select2('data', null)
+                //$('#txtProductSearch').change();
+                //$("#txtProductSearch").empty();
+                //$("#txtProductSearch option").remove();
+                //$("#txtProductSearch").val(null).trigger("change");
+                $("#txtPriceProduct").val('');
+                $("#txtAmountProduct").val('');
+                $("#txtProductId").val('');
+                $("#addRowProduct")[0].reset();
+                $("#msjtblProducts").text("");
+
        
       });
+      
+       calculateTotalTransfer=function(){
+	
+	var totalSale = 0;
+	$("#tblProducts tbody tr").each(function (indexTr) {
+        var amout;
+        var price;        
+        
+        $(this).children("td").each(function (indexTd) 
+        {
+            switch (indexTd) 
+            {                
+                case 1: 
+                	amount = $(this).text();
+                        break;
+                case 2: 
+                	price = $(this).text();
+                        break;
+            }
+           // $(this).css("background-color", "#FFFAA8");
+        });
+        totalSale = totalSale + ((amount * 1)  * (price * 1));        
+        });
+    
+	$("#lblTotalSale").text(totalSale);
+        };
+        
+       $(document).on("click",".btnDeleteItem",function(e){
+           console.log("btnDeleteItem")
+           var id = $(this).data('id');
+               $('#tblProducts #item-' + id).remove();
+        	calculateTotalTransfer();
+           
+       });
+       
+       $(document).on("click",".btnEditItem",function(e){
+           console.log("btnEditItem")
+           var id = $(this).data('id');
+            $("#lblAmountItem" + id).hide();
+            $("#lblSellItem" + id).hide();
+            $("#btnDeleteItem" + id).hide();
+            $("#btnSaveItem" + id).show();
+            $("#btnEditItem" + id).hide();
+
+            $("#txtSelltItem" + id).val($("#lblSellItem" + id).text());	
+            $("#txtSelltItem" + id).show();
+            $("#txtAmountItem" + id).val($("#lblAmountItem" + id).text());	
+            $("#txtAmountItem" + id).show();
+           
+       });
+       
+       $(document).on("click",".btnSaveItem",function(e){
+           console.log("btnSaveItem")
+           var id = $(this).data('id');
+           var price = $("#txtSelltItem" + id).val();
+	var amount = $("#txtAmountItem" + id).val();
+           
+           
+           $("#txtSelltItem" + id).hide();		
+	$("#txtAmountItem" + id).hide();
+	
+	
+	$("#lblAmountItem" + id).text(amount * 1);
+	$("#lblAmountItem" + id).show();
+	$("#lblSellItem" + id).text(price * 1);
+	$("#lblSaleItem" + id).text(amount * price);
+	$("#lblSellItem" + id).show();
+	
+	$("#btnDeleteItem" + id).show();
+	$("#btnSaveItem" + id).hide();
+	$("#btnEditItem" + id).show();
+	calculateTotalTransfer();
+           
+       });
+       
+       //btnSavePurchaseOrder
+       $(document).on("click","#btnSavePurchaseOrder",function(e){
+          savePurchaseOrder(); 
+           
+       });
+       
+       $("#form_pocab").validator();
+       savePurchaseOrder=function(e){
+           
+           //form_pocab
+           // e.preventDefault();
+        //$("#form_pocab").submit();
+        //console.log($('#form_pocab'));
+        //console.log(":::::: "+$('#form_pocab')[0].checkValidity());
+        if(!$('#form_pocab')[0].checkValidity()){
+            $('#submit').click();
+        }
+         
+        
+        //e.preventDefault();
+        //$('input:text[required]').parent().show();
+	//$('#txtDate')	
+	//validations of information.	
+	/*if ($("#cboSupplier").val() == 0) {
+		$("#txtDialogMessage").text("Select a supplier.");
+		$("#dialogConfirm").dialog({
+	        resizable: false,
+	        height: "auto",
+	        width: 400,
+	        modal: true,
+	        buttons: {
+	          "Ok": function() {
+	        	$(this).dialog("close");	        	
+	          }
+	        }
+	    });	
+		return;
+	}
+		
+	if ($("#txtDate").val() == "") {
+		$("#txtDialogMessage").text("Select a date.");
+		$("#dialogConfirm").dialog({
+	        resizable: false,
+	        height: "auto",
+	        width: 400,
+	        modal: true,
+	        buttons: {
+	          "Ok": function() {
+	        	$(this).dialog("close");	        	
+	          }
+	        }
+	    });	
+		return;
+	}*/
+		
+	//details
+	var rows =0;
+	var dataDetails = []; 
+	$("#tblProducts tbody tr").each(function (indexTr) {
+		rows = rows + 1;
+		var item={};
+		var data =  $(this).data("item");	
+				
+		item['product'] = {id: data.idProduct};
+		item['amount'] =  data.amount;
+		item['costPrice'] = data.sellPrice; 
+		dataDetails.push(item);
+    });
+		
+	if (rows == 0) {
+		$("#msjtblProducts").text("You need to add a product.");
+                //$("#msjtblProducts").addClass("help-block has-error");
+                //class="help-block with-errors"
+                
+		/*$("#dialogConfirm").dialog({
+	        resizable: false,
+	        height: "auto",
+	        width: 400,
+	        modal: true,
+	        buttons: {
+	          "Ok": function() {
+	        	$(this).dialog("close");	        	
+	          }
+	        }
+	    });	*/
+		return;
+	}
+	
+	var csrf = $("#_csrf").val();
+	var date = $("#txtDate").val().trim();	
+	date = date.substring(6,10) + '-' + date.substring(0,2) + '-' + date.substring(3,5) ;
+	//"yyyy-MM-dd'T'HH:mm:ss.SSSZ
+	
+	
+	var purchaseOrder = {dateCreation: date, supplier: { id_supplier: $("#cboSupplier").val()}, amount: $("#lblTotalSale").text(), details: dataDetails};
+        
+        
+        console.log(JSON.stringify(purchaseOrder));
+        //return false;
+        
+           $.ajax({
+            type: "POST",
+            url: baseurl+"/purchaseOrdersController/ActSavePurchaseOrder",
+           // contentType: 'application/json; charset=utf-8',
+            data:{ data: JSON.stringify(purchaseOrder)},
+            success: function(result){
+                //alert(result);
+                if(result==0){
+                        //alerts(0,msj,"");   
+                        //loadDataTable("#tbSuppliers");
+                        ezBSAlert({ headerText:"success", messageText: "El proveedor se elmino con exito", alertType: "success"});
+                        $("#txtDate").val("");
+                	//$("#cboSupplier").val("");
+                        $('#cboSupplier').val('').trigger('change');
+                	$("#tblProducts tbody").empty();
+                        $('#form_pocab').trigger('reset');
+                        
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
+                    }
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                
+            } 
+        });
+        /*
+        $.post( baseurl+"/purchaseOrdersController/ActSavePurchaseOrder" , {_csrf: '577as', data: JSON.stringify(purchaseOrder)}, function( data ) {    			
+                
+                $("#txtDialogMessage").text(data.description);
+                if (data.state == 201 || data.state == 200) {
+                	//clean the fields
+                	$("#txtDate").val("");
+                	$("#lblTotalSale").text("0.00");
+                	$("#cboSupplier").val("0");
+                	$("#tblProducts tbody").empty();
+                	
+				}
+    		});*/
+	
+	/*$("#txtDialogMessage").text("You want to save the purchase order?");
+	$("#dialogConfirm").dialog({    	
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        buttons: {
+          "Ok": function() {
+        	$(this).dialog("close");
+        	//Save the transfer by ajax.
+        	
+        	        	
+        	
+          },
+          "Cancel": function() {
+            $(this).dialog("close");
+          }
+        }
+      });*/
+	
+}
+      /*
+    
+    editItem=function(id) {
+		
+	$("#lblAmountItem" + id).hide();
+	$("#lblSellItem" + id).hide();
+	$("#btnDeleteItem" + id).hide();
+	$("#btnSaveItem" + id).show();
+	$("#btnEditItem" + id).hide();
+	
+	$("#txtSelltItem" + id).val($("#lblSellItem" + id).text());	
+	$("#txtSelltItem" + id).show();
+	$("#txtAmountItem" + id).val($("#lblAmountItem" + id).text());	
+	$("#txtAmountItem" + id).show();
+		
+}*/
 //-------------------------final del documento--------------------------------------------------//    
 });

@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.PurchaseOrderBean;
+import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
@@ -17,6 +19,8 @@ import com.webdemo.beans.inventory.TableProductBean;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,13 +44,15 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         String sql = "select register_product from inventory.register_product( :code , :name , :description , :unit_cost, :image_name );";
+         String sql = "select register_product from inventory.register_product( :code , :name , :description , :unit_cost, :image_name, :alert_stock, :id_category);";
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("code", product.getCode());
          query.setParameter("name", product.getName());
          query.setParameter("description", product.getDescription());
          query.setParameter("unit_cost", product.getUnit_cost());
          query.setParameter("image_name", product.getImage_name(), Hibernate.STRING);
+         query.setParameter("alert_stock", product.getAlert_stock());
+         query.setParameter("id_category", product.getId_category());
          //query.setParameter("clave", pass);
          
          query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
@@ -76,7 +82,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         try{
             tx = session.beginTransaction();
 
-            String sql = "SELECT product_id, code, name, description, unit_cost, registration_date,image_name FROM inventory.view_products;";
+            String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name,stock,alert_stock, id_category FROM inventory.view_products;";
             SQLQuery query = session.createSQLQuery(sql);
             /*query.setParameter("padre", padre);
             query.setParameter("idPerfil", idPerfil);*/
@@ -95,13 +101,12 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             productBean.setCode((String) row.get("code"));
             productBean.setName((String)row.get("name"));
             productBean.setDescription((String)row.get("description"));
-            /* System.out.println("---"+row.get("unit_cost").getClass().getTypeName());
-             System.out.println("---"+row.get("unit_cost"));
-             System.out.println("---"+row.get("unit_cost").getClass());*/
             productBean.setUnit_cost(((BigDecimal)row.get("unit_cost")).doubleValue());
             productBean.setRegistration_date((Date) row.get("registration_date"));
             productBean.setImage_name((String)row.get("image_name"));
-            
+            productBean.setStock((Integer)row.get("stock"));
+            productBean.setAlert_stock((Integer)row.get("alert_stock"));
+            productBean.setId_category((Integer)row.get("id_category"));
             
             litsProductBean.add(productBean);
          }
@@ -159,7 +164,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
       
       try{
          tx = session.beginTransaction();
-         String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name FROM inventory.view_products where product_id= :product_id ;";
+         String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name,stock,alert_stock, id_category FROM inventory.view_products where product_id= :product_id ;";
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("product_id",product_id);
          //query.setParameter("clave", pass);
@@ -174,6 +179,9 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           productBean.setUnit_cost(((BigDecimal)data.get("unit_cost")).doubleValue());
           productBean.setRegistration_date((Date) data.get("registration_date"));
           productBean.setImage_name((String)data.get("image_name"));
+          productBean.setStock((Integer)data.get("stock"));
+          productBean.setAlert_stock((Integer)data.get("alert_stock"));
+          productBean.setId_category((Integer)data.get("id_category"));
 //rpta=(Integer) ().get("register_product");
           
           //System.out.println("list::::>"+rpta);
@@ -808,6 +816,65 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         }
         
         return litsProductBean;
+    }
+
+    @Override
+    public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean) {
+        int rpta = -1;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            
+            String sql = "INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation) VALUES ( :id_supplier, :amount, :username, :date_creation) RETURNING id_purchase_order;";
+            System.out.println("sql::" + sql);
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("id_supplier", purchaseOrderBean.getSupplier().getId_supplier());
+            query.setParameter("amount", purchaseOrderBean.getAmount());
+            query.setParameter("username", purchaseOrderBean.getUsername());
+            query.setParameter("date_creation", purchaseOrderBean.getDateCreation());
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+
+            int id_purchase_order=(Integer) ((HashMap)data.get(0)).get("id_purchase_order");       
+            System.out.println("list::::>"+rpta);
+            
+            //query.setParameter("clave", pass);
+            //INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation,registration_date) VALUES (4, 50, 'dasamo', now()::date, now() ) RETURNING id_purchase_order;
+            /*
+            ResultSet generatedKeys = null;
+            int generatedKey = -1;
+            generatedKey = Integer.parseInt(readOneValue("SELECT @@IDENTITY"));
+            */
+            
+            List<PurchaseOrderDetailBean> detail=purchaseOrderBean.getDetails();
+            int rsd;
+            for (PurchaseOrderDetailBean p : detail) {
+                
+                String sqld="INSERT INTO inventory.purchase_order_detail(id_purchase_order, id_product, amount, cost_price, date_creation) VALUES ( :id_purchase_order, :id_product, :amount, :cost_price , :date_creation );";
+                SQLQuery queryd = session.createSQLQuery(sqld);
+                queryd.setParameter("id_purchase_order",id_purchase_order);
+                queryd.setParameter("id_product", p.getProduct().getId());
+                queryd.setParameter("amount", p.getAmount());
+                queryd.setParameter("cost_price", p.getCostPrice());
+                queryd.setParameter("date_creation",purchaseOrderBean.getDateCreation());            
+                rsd=queryd.executeUpdate();   
+                System.out.println("res:::"+rsd);
+            }
+            
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            //rpta=1;
+            e.printStackTrace();
+        } finally {
+            //session.close(); 
+            tx.commit();
+        }
+        return rpta;
+        
+        
+        
     }
 
     

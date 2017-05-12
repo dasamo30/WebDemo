@@ -9,6 +9,7 @@ package com.webdemo.dao.inventory;
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
 import com.webdemo.beans.inventory.ProductBean;
+import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
@@ -46,4 +47,6 @@ public interface IInventoryDAO {
     public SupplierBean get_Supplier(int supplier_id);
     public int deleteSupplier(int supplier_id);
     public ArrayList<TableSupplierBean> get_list_Suppliers();
+    
+    public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean);
 }

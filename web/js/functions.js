@@ -92,7 +92,8 @@ jQuery(document).ready( function () {
 		headerText: 'Attention',
 		messageText: 'Message',
 		alertType: 'default', //default, primary, success, info, warning, danger
-		inputFieldType: 'text' //could ask for number,email,etc
+		inputFieldType: 'text', //could ask for number,email,etc
+                backdrop: 'static'
 	};
 	$.extend(defaults, options);
   
