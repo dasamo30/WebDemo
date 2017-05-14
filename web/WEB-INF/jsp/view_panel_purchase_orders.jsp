@@ -59,26 +59,28 @@
                   <table id="tbPurchaseOrder" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>code suppliers</th>    
-                        <th>Name suppliers</th>
-                        <th>Phone number</th>
-                        <th>Web</th>
-                        <th>Date creation</th>
-                        <th>Date modification</th>
-                        <th>Edit</th>
+                        <th>Nro OC</th>    
+                        <th>Code Supplier</th>
+                        <th>Supplier</th>
+                        <th>Username</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Detail</th>
                         <th>Delete</th>
+                        <th>Print</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>code suppliers</th>    
-                        <th>Name suppliers</th>
-                        <th>Phone number</th>
-                        <th>Web</th>
-                        <th>Date creation</th>
-                        <th>Date modification</th>
-                        <th>Edit</th>
+                        <th>Nro OC</th>      
+                        <th>Supplier</th>
+                        <th>Code Supplier</th>
+                        <th>Username</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Detail</th>
                         <th>Delete</th>
+                        <th>Print</th>
                       </tr>
                     </tfoot>
                   </table>

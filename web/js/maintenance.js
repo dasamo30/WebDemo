@@ -1084,7 +1084,8 @@ jQuery(document).ready( function () {
                 $("#txtAmountProduct").val('');
                 $("#txtProductId").val('');
                 //$("#addRowProduct")[0].reset();
-                $('#txtProductSearch').val('').trigger('change');
+                //$('#txtProductSearch').val('').trigger('change');
+                $("#txtProductSearch").empty().trigger('change');
                 $('#addRowProduct').trigger('reset');
             
              $("#myModal").modal('show');
@@ -1131,14 +1132,14 @@ jQuery(document).ready( function () {
 			"	<td class='text-xs-right'><span id='lblSellItem" + idProduct + "'>" + (sellPrice * 1) + "</span><input id='txtSelltItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
 			"	<td class='text-xs-right'><span id='lblAmountItem" + idProduct + "'>" + (amount * 1) + "</span><input id='txtAmountItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
 			"	<td class='text-xs-right'><span id='lblSaleItem" + idProduct + "'>" + (amount * sellPrice * 1)  + "</span></td>" +
-			"	<td class='text-xs-right'>" +
+			/*"	<td class='text-xs-right'>" +
 			"		<button id='btnEditItem" + idProduct + "' class='btn btn-info btn-xs btnEditItem' role='button' data-id='"+idProduct+"' > " +
 			"			<span class='glyphicon glyphicon-pencil'></span> " +
 			"		 </button> " +
 			"		<button id='btnSaveItem" + idProduct + "' class='btn btn-inverse btn-xs btnSaveItem' role='button' data-id='"+idProduct+"' style='display: none;'> " +
 			"			<span class='glyphicon glyphicon-ok'></span> " +
 			"		 </button> " +
-			"	</td>" +
+			"	</td>" +*/
 			"	<td class='text-xs-right'>" + 
 			"		<button id='btnDeleteItem" + idProduct + "' class='btn btn-danger btn-xs btnDeleteItem' role='button' data-id='"+idProduct+"' > " +
 			"			<span class='glyphicon glyphicon-trash'></span> " +
@@ -1353,7 +1354,7 @@ jQuery(document).ready( function () {
                         ezBSAlert({ headerText:"success", messageText: "El proveedor se elmino con exito", alertType: "success"});
                         $("#txtDate").val("");
                 	//$("#cboSupplier").val("");
-                        $('#cboSupplier').val('').trigger('change');
+                        $("#cboSupplier").empty().trigger('change');
                 	$("#tblProducts tbody").empty();
                         $('#form_pocab').trigger('reset');
                         
@@ -1403,7 +1404,44 @@ jQuery(document).ready( function () {
         }
       });*/
 	
-}
+};
+
+         var dataTablepo = $('#tbPurchaseOrder').DataTable({
+           processing: true,
+            //"serverSide": true,
+            responsive: true,
+            autoWidth: false,
+            order: [],
+            ajax:{
+                url :baseurl+"/purchaseOrdersController/ActListPurchaseOrder", // json datasource
+                type: "post",  // method  , by default get
+                complete: function(){
+                   table=$('#tbPurchaseOrder');
+                  //alert(dataTable);
+                  //console.log(table.parent());
+                  table.parent().addClass("table-responsive");
+                 // table.parent().addClass('table-responsive');//.removeClass('col-sm-12');
+                },
+                error: function(xhr, textStatus, errorThrown){  // error handling
+                   
+                    $("#tbPurchaseOrder_wrapper").html("");
+                    $("#tbPurchaseOrder_wrapper").append('<div class="alert alert-danger alert-dismissable"><tr><th colspan="3">No data found in the server</th></tr></div>'); 
+                }
+            },
+            "aoColumns": [
+            { "mData": "id" },
+            { "mData": "code_suppliers" },
+            { "mData": "name_suppliers" },
+            { "mData": "username" },
+            { "mData": "amount"},
+            { "mData": "dateCreation","sClass": "text-center"},
+            { "mData": "ico_search","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"},
+            { "mData": "ico_print","sClass": "text-center"}
+            //{ "sClass": "a-right", "aTargets": [ 4 ] }
+            
+            ]
+    });
       /*
     
     editItem=function(id) {

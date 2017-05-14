@@ -14,6 +14,7 @@ import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
 import com.webdemo.beans.inventory.TableProductBean;
+import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.dao.DAOFactory;
 import com.webdemo.dao.inventory.IInventoryDAO;
@@ -121,5 +122,9 @@ public class ServiceInventory {
     
     public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean){
         return inventoryDAO.savePurchaseOrder(purchaseOrderBean);
+    }
+    
+    public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean() {
+        return inventoryDAO.get_list_purchaseOrderBean();
     }
 }

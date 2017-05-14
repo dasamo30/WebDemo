@@ -139,7 +139,7 @@
                         <th>Price</th>
                         <th>Amount</th>
                         <th>Sale</th>
-                        <th>Edit</th>
+                        <!--<th>Edit</th>-->
                         <th>Delete</th>
                       </tr>
                     </thead>

@@ -24,6 +24,7 @@ public class PurchaseOrderBean {
 	private Date dateCreation;
 	private String date;
 	private List<PurchaseOrderDetailBean> details;
+        private Date registration_date;
 	/*private CompanyBE company;
 	private SubsidiaryBE subsidiary;*/
 
@@ -125,11 +126,25 @@ public class PurchaseOrderBean {
         this.details = details;
     }
 
+    /**
+     * @return the registration_date
+     */
+    public Date getRegistration_date() {
+        return registration_date;
+    }
+
+    /**
+     * @param registration_date the registration_date to set
+     */
+    public void setRegistration_date(Date registration_date) {
+        this.registration_date = registration_date;
+    }
+
     @Override
     public String toString() {
-        return "PurchaseOrderBean{" + "id=" + id + ", supplier=" + supplier + ", amount=" + amount + ", username=" + username + ", dateCreation=" + dateCreation + ", date=" + date + ", details=" + details + '}';
+        return "PurchaseOrderBean{" + "id=" + id + ", supplier=" + supplier + ", amount=" + amount + ", username=" + username + ", dateCreation=" + dateCreation + ", date=" + date + ", details=" + details + ", registration_date=" + registration_date + '}';
     }
-        
-        
+
+   
     
 }

@@ -16,6 +16,7 @@ import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
 import com.webdemo.beans.inventory.TableProductBean;
+import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
@@ -860,7 +861,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 rsd=queryd.executeUpdate();   
                 System.out.println("res:::"+rsd);
             }
-            
+            rpta=0;
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
@@ -875,6 +876,54 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         
         
         
+    }
+
+    @Override
+    public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean() {
+        Transaction tx = null;
+        ArrayList<TablePurchaseOrder> litsPurchaseOrderBean =new ArrayList<TablePurchaseOrder>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT id_purchase_order, id_supplier, code_suppliers,"
+                    + " name_suppliers, amount, username, date_creation, registration_date "
+                    + "FROM inventory.view_purchase_order;";
+            SQLQuery query = session.createSQLQuery(sql);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TablePurchaseOrder purchaseOrder= new TablePurchaseOrder();
+            purchaseOrder.setId((Integer)row.get("id_purchase_order"));
+            //purchaseOrder.getSupplier().setId_supplier((Integer) row.get("id_supplier"));
+            purchaseOrder.setCode_suppliers((String)row.get("code_suppliers"));
+            purchaseOrder.setName_suppliers((String)row.get("name_suppliers"));
+            purchaseOrder.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+            purchaseOrder.setUsername((String)row.get("username"));
+            purchaseOrder.setDateCreation((Date) row.get("date_creation"));
+            purchaseOrder.setRegistration_date((Date) row.get("registration_date"));
+            
+            litsPurchaseOrderBean.add(purchaseOrder);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsPurchaseOrderBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsPurchaseOrderBean;
     }
 
     

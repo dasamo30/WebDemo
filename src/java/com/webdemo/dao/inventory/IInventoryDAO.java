@@ -14,6 +14,7 @@ import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
 import com.webdemo.beans.inventory.TableProductBean;
+import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import java.util.ArrayList;
 
@@ -49,4 +50,6 @@ public interface IInventoryDAO {
     public ArrayList<TableSupplierBean> get_list_Suppliers();
     
     public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean);
+    
+    public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean();
 }

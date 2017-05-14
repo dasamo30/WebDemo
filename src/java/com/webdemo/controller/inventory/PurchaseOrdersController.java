@@ -6,18 +6,19 @@
 
 package com.webdemo.controller.inventory;
 
+import DataTableObject.DataTableObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
-import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
+import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,10 +139,37 @@ public class PurchaseOrdersController {
         String fecha = df.format(purchaseOrderBean.getDateCreation());
         System.out.println("fecha:"+fecha);
 
-        
-        //serviceInventory.savePurchaseOrder(purchaseOrderBean);
-
-        return 0;
+        return serviceInventory.savePurchaseOrder(purchaseOrderBean);
     }
-    //
+    //ActListPurchaseOrder
+    @RequestMapping(value="/ActListPurchaseOrder",method = RequestMethod.POST)
+    @ResponseBody 
+    public String ActListPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
+        String baseurl = request.getContextPath();
+    
+        ArrayList<TablePurchaseOrder> listPurchaseOrder=serviceInventory.get_list_purchaseOrderBean();
+        DataTableObject dataTableObject = new DataTableObject();
+        
+        for (TablePurchaseOrder l : listPurchaseOrder) {
+            
+            //l.setDate_modification("");
+           // p.setIco_edit("<a id=\""+p.getId()+"\" class=\"view_edit_produc\" href=\"#\"><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></a>");
+            l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalNewSupplier\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewEditSupplier\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/supplierController/ActViewModifSupplier\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
+            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
+            l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
+           
+        }
+     
+        dataTableObject.setAaData(listPurchaseOrder);
+        dataTableObject.setiTotalDisplayRecords(listPurchaseOrder.size());
+        dataTableObject.setiTotalRecords(listPurchaseOrder.size());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
+        String json = gson.toJson(dataTableObject);
+        
+        //out.print(json);
+        
+        return json;
+        
+    }
 }
