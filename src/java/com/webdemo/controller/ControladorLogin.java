@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -64,7 +65,7 @@ public class ControladorLogin {
     
     //@RequestMapping("/validatelogin")
     @RequestMapping(value = "/validatelogin", method = RequestMethod.POST)
-    public ModelAndView validatelogin(HttpServletRequest request,HttpServletResponse res) {
+    public ModelAndView validatelogin(HttpServletRequest request,HttpServletResponse res, RedirectAttributes redir) {
         HttpSession sesion = request.getSession();
         System.out.println("validatelogin");
         //accesoDao=(IAccesosDAO) DAOFactory.getDAOFactory(DAOFactory.POSTGRES);
@@ -126,7 +127,9 @@ public class ControladorLogin {
             mv = new ModelAndView("redirect:panel/home");
         }else{
             mv = new ModelAndView("redirect:login");
-            mv.addObject("rpta","Credenciales no validas");
+            redir.addFlashAttribute("rpta","Credenciales no validas");
+            //mv.addObject("rpta","Credenciales no validas");
+            
         }
 
         return mv;    

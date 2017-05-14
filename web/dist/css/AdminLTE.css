@@ -2660,6 +2660,12 @@ table.text-center th {
 .table.align td {
   text-align: right;
 }
+
+table.table-bordered.dataTable{
+    border-collapse: collapse !important;
+    
+}
+
 /*
  * Component: Label
  * ----------------

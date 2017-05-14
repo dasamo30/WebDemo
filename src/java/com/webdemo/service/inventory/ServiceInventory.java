@@ -10,6 +10,7 @@ import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
+import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
@@ -126,5 +127,13 @@ public class ServiceInventory {
     
     public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean() {
         return inventoryDAO.get_list_purchaseOrderBean();
+    }
+    
+    public PurchaseOrderBean get_purchaseOrderBean(int id_purchase_order) {
+        return inventoryDAO.get_purchaseOrderBean(id_purchase_order);
+    }
+    
+    public ArrayList<PurchaseOrderDetailBean> get_list_purchaseOrderDetailBean(int id_purchase_order) {
+        return inventoryDAO.get_list_purchaseOrderDetailBean(id_purchase_order);
     }
 }

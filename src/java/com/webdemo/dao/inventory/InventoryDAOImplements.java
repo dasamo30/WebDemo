@@ -20,8 +20,6 @@ import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -924,6 +922,118 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         }
         
         return litsPurchaseOrderBean;
+    }
+
+    @Override
+    public PurchaseOrderBean get_purchaseOrderBean(int id_purchase_order) {
+        Transaction tx = null;
+      PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
+      
+        System.out.println("get_purchaseOrderBean_id_purchase_order:"+id_purchase_order);
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT id_purchase_order, id_supplier, amount, username, date_creation, registration_date FROM inventory.purchase_order where id_purchase_order = :id_purchase_order ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_purchase_order",id_purchase_order);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+          HashMap data = (HashMap) query.list().get(0);
+          //HashMap beanData=(HashMap) data.get(0);   
+          
+          purchaseOrderBean.setId((Integer)data.get("id_purchase_order"));
+          purchaseOrderBean.setUsername((String) data.get("username"));
+          purchaseOrderBean.setDateCreation((Date)data.get("date_creation"));
+          purchaseOrderBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+          
+          /*
+          ArrayList<PurchaseOrderDetailBean> details=new ArrayList<PurchaseOrderDetailBean>();
+          
+           String sqld="SELECT id_purchase_order, id_product, amount, cost_price, date_creation FROM inventory.purchase_order_detail where id_purchase_order= :id ;";
+           SQLQuery queryd = session.createSQLQuery(sqld);
+           queryd.setParameter("id", id_purchase_order);
+           
+           queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+           List dataList = queryd.list();
+           
+           System.out.println("List data::"+dataList.size());
+           
+           for (Object object : dataList) {
+               Map row = (Map)object;
+               
+               PurchaseOrderDetailBean purchaseOrderDetailBean=new PurchaseOrderDetailBean();
+               purchaseOrderDetailBean.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+               purchaseOrderDetailBean.setCostPrice(((BigDecimal)row.get("cost_price")).doubleValue());
+               purchaseOrderDetailBean.setDateCreation((Date)row.get("date_creation"));
+               
+               ProductBean product=this.get_Product((Integer)row.get("id_product"));
+               purchaseOrderDetailBean.setProduct(product);
+               
+              details.add(purchaseOrderDetailBean);
+          }
+
+          purchaseOrderBean.setDetails(details);*/
+                  
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return purchaseOrderBean;
+    }
+
+    @Override
+    public ArrayList<PurchaseOrderDetailBean> get_list_purchaseOrderDetailBean(int id_purchase_order) {
+        Transaction tx = null;
+        ArrayList<PurchaseOrderDetailBean> ListPurchaseOrderDetail=new ArrayList<PurchaseOrderDetailBean>();
+        try{
+            tx = session.beginTransaction();
+
+            
+          
+           String sqld="SELECT id_purchase_order, id_product, amount, cost_price, date_creation FROM inventory.purchase_order_detail where id_purchase_order= :id ;";
+           SQLQuery queryd = session.createSQLQuery(sqld);
+           queryd.setParameter("id", id_purchase_order);
+           
+           queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+           List dataList = queryd.list();
+           
+           System.out.println("List data::"+dataList.size());
+           
+           for (Object object : dataList) {
+               Map row = (Map)object;
+               
+               PurchaseOrderDetailBean purchaseOrderDetailBean=new PurchaseOrderDetailBean();
+               purchaseOrderDetailBean.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+               purchaseOrderDetailBean.setCostPrice(((BigDecimal)row.get("cost_price")).doubleValue());
+               purchaseOrderDetailBean.setDateCreation((Date)row.get("date_creation"));
+               
+               ProductBean product=new ProductBean();
+               product.setId((Integer)row.get("id_product"));
+               purchaseOrderDetailBean.setProduct(product);
+               
+              ListPurchaseOrderDetail.add(purchaseOrderDetailBean);
+          }
+
+          
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            ListPurchaseOrderDetail=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return ListPurchaseOrderDetail;
     }
 
     

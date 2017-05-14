@@ -9,8 +9,10 @@ package com.webdemo.controller.inventory;
 import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.webdemo.beans.AjaxResponseBE;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
+import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
@@ -29,6 +31,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -154,7 +157,7 @@ public class PurchaseOrdersController {
             
             //l.setDate_modification("");
            // p.setIco_edit("<a id=\""+p.getId()+"\" class=\"view_edit_produc\" href=\"#\"><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></a>");
-            l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalNewSupplier\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewEditSupplier\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/supplierController/ActViewModifSupplier\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
+            l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailOrders\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailOrders\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/purchaseOrdersController/ActViewDetailOrders\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
             l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
             l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
            
@@ -171,5 +174,37 @@ public class PurchaseOrdersController {
         
         return json;
         
+    }
+    //ActViewDetailOrders
+    @RequestMapping(value = "ActViewDetailOrders", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResponseBE ActViewDetailOrders(@RequestParam("idPurchaseOrder") int idPurchaseOrder,
+            HttpServletRequest request){
+       
+        
+        
+      PurchaseOrderBean purchaseOrderBean=serviceInventory.get_purchaseOrderBean(idPurchaseOrder);
+      
+      ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(idPurchaseOrder);
+        
+                
+        for (PurchaseOrderDetailBean pd : detail) {
+            ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
+            pd.setProduct(product);
+        }      
+      purchaseOrderBean.setDetails(detail);
+      
+      
+      AjaxResponseBE ajaxResponseBE;
+      ajaxResponseBE = new AjaxResponseBE();
+      ajaxResponseBE.setState("200");
+      ajaxResponseBE.setMessage("Request processed correctly.");
+      ajaxResponseBE.setDescription("The transfer has been successfully finded.");
+      ajaxResponseBE.setData(purchaseOrderBean);
+      
+      System.out.println("idPurchaseOrder:"+idPurchaseOrder);
+      
+ 
+       return ajaxResponseBE;  
     }
 }

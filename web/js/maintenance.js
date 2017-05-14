@@ -1442,7 +1442,62 @@ jQuery(document).ready( function () {
             
             ]
     });
+    
+    $("#myModalDetailOrders").on("show.bs.modal", function(e) {
+       $("#tblPurchaseOrderView > tbody").remove();
+       var btn = $(e.relatedTarget);
+        var link = $(e.relatedTarget);
+         var idPurchaseOrder=btn.data('id');
+        //var data=response;
+        var data={"idPurchaseOrder":idPurchaseOrder};
+       // $(this).find(".modal-body").load(link.attr("href"));
+        //alert("sssssss");
+        $.post(btn.attr("href"),data, function( response ) {
+            //$('#modal-body').html(response);
+            console.log(response);
+            var total = 0;
+            
+            response.data.details.forEach(function(detail) {
+                    var subtotal =  detail.amount * detail.costPrice;
+
+                $("#tblPurchaseOrderView").append(            		
+                                    "<tr>" +        			
+                                    "	<td>" + detail.product.name + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.amount + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.costPrice + "</td>" +
+                                    "	<td class='text-xs-right'>" + subtotal.toFixed(2) + "</td>" +        			
+                                    "</tr>"); 
+                total = total + (detail.amount * detail.costPrice);            
+            });
+            $("#lblTotalSale").text(total);
+            $("#txtDialogData").text(response.description);
+        });
+    });
+    
+    
       /*
+       * 
+       * $('#myModalNewLocation').on('show.bs.modal', function (e) { 
+        
+        //console.log(e);
+        var btn = $(e.relatedTarget);
+        var idLocation=btn.data('id');
+       var data=null;
+       var title="Register Location";
+       var frm='#frmrRegisterLocation';
+       
+       if(btn.attr("id")==="btnViewEditLocation"){ 
+           console.log("btnViewEditLocation");
+            data={"location_id":idLocation};
+            title="Modify Location";
+            frm='#frmModifLocation';
+       }
+        $.post(btn.attr("href"),data, function( data ) { 
+            $('#myModalLabel').html(title);
+            $('#modal-body').html(data); 
+            $(frm).validator();
+        }); 
+    });
     
     editItem=function(id) {
 		

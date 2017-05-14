@@ -308,9 +308,9 @@
                   </li>
                 </ul>
               </li>
-              <!-- Control Sidebar Toggle Button -->
+              <!-- Control Sidebar Toggle Button href="#" data-toggle="control-sidebar" -->
               <li>
-                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                <a ><i class="fa fa-user"></i></a>
               </li>
             </ul>
           </div>

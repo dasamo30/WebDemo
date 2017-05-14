@@ -26,35 +26,44 @@
     <link rel="stylesheet"type="text/css" href="${contextPath}/dist/css/AdminLTE.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/iCheck/square/blue.css">
+    <!-- animate -->
+    <link rel="stylesheet"type="text/css" href="${contextPath}/dist/css/animate.css">
+    <!-- login -->
+    <link rel="stylesheet"type="text/css" href="${contextPath}/css/login.css">
     </head>
  <body class="hold-transition login-page">
-    <div class="login-box">
-      <div class="login-logo">
-          <a><b>CTAC - Inventory</b></a><br/>
+    <div class="login-box animated fadeInUp">
+      <div>
+          <h3 class="widget-login-logo">
+                    <i class="fa fa-circle text-black"></i>
+                    Inventory CTAC
+                    <i class="fa fa-circle text-warning"></i>
+                </h3>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Inicia sesión para ingresar</p>
-        <form action="validatelogin" method="post">
+        <form action="validatelogin" method="post" data-toggle="validator">
           <div class="form-group has-feedback">
-              <input type="text" class="form-control" placeholder="Usuario" name="usuario">
+              <input type="text" class="form-control" placeholder="Usuario" name="usuario" required >
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            <div class="help-block with-errors"></div>
           </div>
           <div class="form-group has-feedback">
-              <input type="password" class="form-control" placeholder="Contraseña" name="clave">
+              <input type="password" class="form-control" placeholder="Contraseña" name="clave" required >
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <div class="help-block with-errors"></div>
           </div>
           <div class="row">
             <div class="col-xs-8">
               <div class="checkbox icheck">
-                <label>
-                    <%=(request.getParameter("rpta")==null)?"": request.getParameter("rpta")%>
+                  <label style="color:#a94442;">
+                    ${rpta}
                  <!-- <input type="checkbox"> Remember Me -->
                 </label>
               </div>
             </div><!-- /.col -->
             <div class="col-xs-4">
-                 ${rpta}
-              <button type="submit" class="btn btn-primary btn-block btn-flat">Ingresar</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat btn-sm">Ingresar</button>
             </div><!-- /.col -->
           </div>
         </form>
@@ -71,6 +80,9 @@
         <a href="register.html" class="text-center">Register a new membership</a>-->
 
       </div><!-- /.login-box-body -->
+      <div class="login-footer">
+                   2017 &copy; Inventory CTAC.
+      </div>
     </div><!-- /.login-box -->
 
     <!-- jQuery 2.1.4 -->
@@ -79,13 +91,18 @@
     <script src="${contextPath}/bootstrap/js/bootstrap.min.js"></script>
     <!-- iCheck -->
     <script src="${contextPath}/plugins/iCheck/icheck.min.js"></script>
+     <!-- validator -->
+    <script src="${contextPath}/plugins/validator/validator.js"></script>
     <script>
       $(function () {
-        $('input').iCheck({
+        /*$('input').iCheck({
           checkboxClass: 'icheckbox_square-blue',
           radioClass: 'iradio_square-blue',
           increaseArea: '20%' // optional
         });
+        */
+         $("#validatelogin").validator();
+         //$("#validatelogin")[0].reset();
       });
     </script>
   </body>
