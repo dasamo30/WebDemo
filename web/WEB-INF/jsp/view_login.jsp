@@ -81,7 +81,7 @@
 
       </div><!-- /.login-box-body -->
       <div class="login-footer">
-                   2017 &copy; Inventory CTAC.
+                   ${datefooter} &copy; Inventory CTAC.
       </div>
     </div><!-- /.login-box -->
 

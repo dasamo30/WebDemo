@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -47,6 +48,12 @@ public class ControladorLogin {
         String usuario=request.getParameter("usuario");  
         String clave=request.getParameter("clave"); 
         */
+        Date dNow = new Date();
+        SimpleDateFormat ft =
+        new SimpleDateFormat ("yyyy");
+        String datefooter = ft.format(dNow);
+        
+        
         HttpSession sesionOk = request.getSession();    
             System.out.println("carga la vista del login");
 
@@ -55,6 +62,7 @@ public class ControladorLogin {
         if (sesionOk.getAttribute("usuario") == null) {
             mv=new ModelAndView();
             mv.setViewName("view_login");
+            mv.addObject("datefooter",datefooter);
         }else{
             mv = new ModelAndView("redirect:panel/home");
         }
