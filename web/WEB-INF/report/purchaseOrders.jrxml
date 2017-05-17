@@ -3,30 +3,64 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="a33d913f-2d5e-4548-90cd-c670cc7117ef"/>
+	<parameter name="code" class="java.lang.String"/>
+	<parameter name="supplier" class="java.lang.String"/>
 	<field name="code" class="java.lang.String"/>
 	<field name="product" class="java.lang.String"/>
 	<field name="amount" class="java.lang.Double"/>
-	<field name="costPrice" class="java.lang.Boolean"/>
-	<field name="total" class="java.lang.Boolean"/>
+	<field name="costPrice" class="java.lang.Double"/>
+	<variable name="TOTAL_PURCHASE_ORDER" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}*$F{costPrice}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="20" splitType="Stretch">
+		<band height="55" splitType="Stretch">
 			<staticText>
-				<reportElement x="208" y="0" width="100" height="20" uuid="edd715f6-fd24-4038-834e-2c5092594909"/>
+				<reportElement x="0" y="0" width="555" height="20" uuid="edd715f6-fd24-4038-834e-2c5092594909"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Purchase Order]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="30" width="63" height="20" uuid="5e9ce2d6-62bc-4902-a0c9-ed9553528194"/>
+				<textFieldExpression><![CDATA[$P{code}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="83" y="30" width="40" height="20" uuid="9156d1cc-059b-4642-9b3f-ba238acc2032"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Purchase Orders]]></text>
+				<text><![CDATA[Code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="231" y="30" width="52" height="20" uuid="0e4d72d1-ac61-4d56-bf74-da6350440d7c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="283" y="30" width="66" height="20" uuid="3a9ab9cf-f6c6-470d-99e0-95a195e0b0a0"/>
+				<textFieldExpression><![CDATA[$P{supplier}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="372" y="26" width="72" height="20" forecolor="#3333FF" uuid="d071b1f5-934b-412b-824b-57b628ebc705"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Created by:]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="27" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="22" splitType="Stretch">
+		<band height="29" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="20" uuid="f35e5f0f-8691-4656-be4a-8389484bc0f4"/>
 				<textElement>
@@ -62,10 +96,13 @@
 				</textElement>
 				<text><![CDATA[Cost Price]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="22" width="555" height="1" uuid="53d0911b-9930-4b44-8eff-692f6f0609af"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="38" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="497906dc-cca2-46b8-8e4b-d659668d1f6f"/>
 				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
@@ -79,12 +116,12 @@
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="400" y="0" width="100" height="20" uuid="57c9f867-94f9-4739-a0e0-faf0942c85e0"/>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<reportElement x="300" y="0" width="95" height="20" uuid="c9332a16-6ecf-45da-a8cb-4726e6ab7a4c"/>
+				<textFieldExpression><![CDATA[$F{costPrice}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="100" height="20" uuid="f1b2caf0-4ed7-433b-be74-d3ae3804db84"/>
-				<textFieldExpression><![CDATA[$F{costPrice}]]></textFieldExpression>
+				<reportElement x="399" y="0" width="100" height="20" uuid="ddc5f422-d8b0-430b-8e54-bdc776cd6c29"/>
+				<textFieldExpression><![CDATA[$F{costPrice}*$F{amount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -95,6 +132,11 @@
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="42" splitType="Stretch">
+			<textField pattern="###0.000">
+				<reportElement x="400" y="3" width="100" height="20" uuid="595185de-56ce-4064-8438-4769fe94550e"/>
+				<textFieldExpression><![CDATA[$V{TOTAL_PURCHASE_ORDER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>

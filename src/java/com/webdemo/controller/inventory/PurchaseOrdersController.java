@@ -10,6 +10,7 @@ import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webdemo.beans.AjaxResponseBE;
+import com.webdemo.reports.PurchaseOrderDS;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
@@ -176,7 +177,7 @@ public class PurchaseOrdersController {
             l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailOrders\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailOrders\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/purchaseOrdersController/ActViewDetailOrders\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
             l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeletePurchaseOrder\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
             //l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
-            l.setIco_print("<a href=\""+request.getContextPath()+"/purchaseOrdersController/ActPrintPurchaseOrders?id="+l.getId()+"\" target=\"_blank\" class=\"btn btn-info btn-xs\"><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></a>");
+            l.setIco_print("<a target=\"_blank\" href=\""+request.getContextPath()+"/purchaseOrdersController/ActPrintPurchaseOrders?id="+l.getId()+"\"  class=\"btn btn-info btn-xs\"><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></a>");
            
         }
      
@@ -243,27 +244,42 @@ public class PurchaseOrdersController {
         
         
         try {
+            //response.setContentType("application/pdf");
+            //response.setHeader("Content-Disposition", "attachment; filename=\"purchase_order_"+id_purchase_order+".pdf\"");
             
             String pathFilePDf = "";
-            File fileReport = new File(request.getServletContext().getRealPath("/WEB-INF/report/reporte.jasper"));
+            File fileReport = new File(request.getServletContext().getRealPath("/WEB-INF/report/purchaseOrders.jasper"));
             System.out.println("Path purchase order: " + fileReport.getPath());
             
             System.out.println("id_purchase_order:"+id_purchase_order);
             JasperReport jrPurchaseOrder = (JasperReport) JRLoader.loadObject(fileReport);
             Map<String,Object> params=new HashMap<String, Object>();
+             params.put("code", "0001");
+             params.put("supplier", "microsof");
+             
+             
+             ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(id_purchase_order);
+             
+             for (PurchaseOrderDetailBean pd : detail) {
+                ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
+                pd.setProduct(product);
+             }
+             
+             PurchaseOrderDS purchaseOrderDS = new PurchaseOrderDS();
+             purchaseOrderDS.setPurchaseOrderDetails(detail);
             
             
             // Management of the report
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jrPurchaseOrder,params,new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jrPurchaseOrder,params,purchaseOrderDS);
             
-            //response.setContentType("application/pdf");
+            
             //response.setHeader("Content-disposition", "inline; filename=helloWorldReport.pdf");
-            response.setHeader("Content-type", "application/pdf");
-            response.setHeader("Content-Disposition","attachment; filename=\"recibo.pdf\"");
-            
+            //response.setHeader("Content-type", "application/pdf");
+            //response.setHeader("Content-Disposition","attachment; filename=\"recibo.pdf\"");
+            /*
             File pdfFile = File.createTempFile("purchase_order", ".pdf");
             pathFilePDf = pdfFile.getAbsolutePath();
-            System.out.println("PDF File: " + pathFilePDf);
+            System.out.println("PDF File: " + pathFilePDf);*/
             
             //final OutputStream outStream = response.getOutputStream();
             //JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
@@ -271,6 +287,8 @@ public class PurchaseOrdersController {
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
+            //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME ,pathFilePDf);
+            //response.setContentType("application/pdf");
             exporter.exportReport();
             
             
