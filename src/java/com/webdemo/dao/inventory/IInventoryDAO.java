@@ -55,5 +55,6 @@ public interface IInventoryDAO {
     public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean();
     public PurchaseOrderBean get_purchaseOrderBean(int id_purchase_order);
     public ArrayList<PurchaseOrderDetailBean> get_list_purchaseOrderDetailBean(int id_purchase_order);
+     public int deletePurchaseOrderBean(int id_purchase_order);
     
 }

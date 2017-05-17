@@ -136,4 +136,8 @@ public class ServiceInventory {
     public ArrayList<PurchaseOrderDetailBean> get_list_purchaseOrderDetailBean(int id_purchase_order) {
         return inventoryDAO.get_list_purchaseOrderDetailBean(id_purchase_order);
     }
+    
+    public int deletePurchaseOrderBean(int id_purchase_order) {
+        return inventoryDAO.deletePurchaseOrderBean(id_purchase_order);
+    }
 }

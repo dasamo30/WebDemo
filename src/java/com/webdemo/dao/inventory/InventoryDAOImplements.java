@@ -1036,6 +1036,37 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         return ListPurchaseOrderDetail;
     }
 
+    @Override
+    public int deletePurchaseOrderBean(int id_purchase_order) {
+      int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select delete_purchase_order from inventory.delete_purchase_order( :id_purchase_order );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_purchase_order", id_purchase_order);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("delete_purchase_order");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+        
+    }
+
     
     
 }

@@ -16,15 +16,27 @@ import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -158,8 +170,9 @@ public class PurchaseOrdersController {
             //l.setDate_modification("");
            // p.setIco_edit("<a id=\""+p.getId()+"\" class=\"view_edit_produc\" href=\"#\"><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></a>");
             l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailOrders\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailOrders\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/purchaseOrdersController/ActViewDetailOrders\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
-            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
-            l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
+            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeletePurchaseOrder\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
+            //l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
+            l.setIco_print("<a href=\""+request.getContextPath()+"/purchaseOrdersController/ActPrintPurchaseOrders?id="+l.getId()+"\" target=\"_blank\" class=\"btn btn-info btn-xs\"><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></a>");
            
         }
      
@@ -207,4 +220,49 @@ public class PurchaseOrdersController {
  
        return ajaxResponseBE;  
     }
+    
+    //ActDeletePurchaseOrder
+    @RequestMapping(value="ActDeletePurchaseOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActDeletePurchaseOrder(@RequestParam("id_purchase_order") int id_purchase_order){
+        
+        System.out.println(":::"+id_purchase_order);
+        int rpta=serviceInventory.deletePurchaseOrderBean(id_purchase_order);
+     
+        return rpta;
+    }
+    
+    @RequestMapping(value = "ActPrintPurchaseOrders", method = RequestMethod.GET) 
+    @ResponseBody
+    public void ActPrintPurchaseOrders(@RequestParam("id") int id_purchase_order,
+                HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+       /*
+        
+        try {
+             String pathFilePDf = "";
+            File fileReport = new File(httpServletRequest.getServletContext().getRealPath("/WEB-INF/report/purchaseorder.jasper"));
+            System.out.println("Path purchase order: " + fileReport.getPath());
+        
+            System.out.println("id_purchase_order:"+id_purchase_order);
+            JasperReport jrPurchaseOrder = (JasperReport) JRLoader.loadObject(fileReport);
+            
+            // Management of the report
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jrPurchaseOrder,null);
+
+            File pdfFile = File.createTempFile("purchase_order", ".pdf");
+            pathFilePDf = pdfFile.getAbsolutePath();
+            System.out.println("PDF File: " + pathFilePDf);
+
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
+            exporter.exportReport();
+            
+            
+        } catch (JRException ex) {
+            Logger.getLogger(PurchaseOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }
+    
 }

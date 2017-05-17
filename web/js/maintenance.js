@@ -1351,7 +1351,7 @@ jQuery(document).ready( function () {
                 if(result==0){
                         //alerts(0,msj,"");   
                         //loadDataTable("#tbSuppliers");
-                        ezBSAlert({ headerText:"success", messageText: "El proveedor se elmino con exito", alertType: "success"});
+                        ezBSAlert({ headerText:"success", messageText: "Purchase order successfully registered.", alertType: "success"});
                         $("#txtDate").val("");
                 	//$("#cboSupplier").val("");
                         $("#cboSupplier").empty().trigger('change');
@@ -1469,11 +1469,51 @@ jQuery(document).ready( function () {
                                     "</tr>"); 
                 total = total + (detail.amount * detail.costPrice);            
             });
-            $("#lblTotalSale").text(total);
+            $("#lblTotalSale").text(total.toFixed(3));
             $("#txtDialogData").text(response.description);
         });
     });
     
+    
+    $(document).on("click","#btnDeletePurchaseOrder",function(e){    
+
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var id_purchase_order = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/purchaseOrdersController/ActDeletePurchaseOrder",
+                type: 'POST',
+                data: { id_purchase_order:id_purchase_order} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbPurchaseOrder");
+                        ezBSAlert({ headerText:"success", messageText: "The purchase order was successfully deleted", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "The process was not completed .. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
     
       /*
        * 
