@@ -18,8 +18,10 @@ import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +30,17 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -235,25 +239,35 @@ public class PurchaseOrdersController {
     @RequestMapping(value = "ActPrintPurchaseOrders", method = RequestMethod.GET) 
     @ResponseBody
     public void ActPrintPurchaseOrders(@RequestParam("id") int id_purchase_order,
-                HttpServletRequest request, HttpServletResponse response) throws IOException {
+                HttpServletRequest request, HttpServletResponse response)  {
         
-       /*
         
         try {
-             String pathFilePDf = "";
-            File fileReport = new File(httpServletRequest.getServletContext().getRealPath("/WEB-INF/report/purchaseorder.jasper"));
+            
+            String pathFilePDf = "";
+            File fileReport = new File(request.getServletContext().getRealPath("/WEB-INF/report/reporte.jasper"));
             System.out.println("Path purchase order: " + fileReport.getPath());
-        
+            
             System.out.println("id_purchase_order:"+id_purchase_order);
             JasperReport jrPurchaseOrder = (JasperReport) JRLoader.loadObject(fileReport);
+            Map<String,Object> params=new HashMap<String, Object>();
+            
             
             // Management of the report
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jrPurchaseOrder,null);
-
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jrPurchaseOrder,params,new JREmptyDataSource());
+            
+            //response.setContentType("application/pdf");
+            //response.setHeader("Content-disposition", "inline; filename=helloWorldReport.pdf");
+            response.setHeader("Content-type", "application/pdf");
+            response.setHeader("Content-Disposition","attachment; filename=\"recibo.pdf\"");
+            
             File pdfFile = File.createTempFile("purchase_order", ".pdf");
             pathFilePDf = pdfFile.getAbsolutePath();
             System.out.println("PDF File: " + pathFilePDf);
-
+            
+            //final OutputStream outStream = response.getOutputStream();
+            //JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+             
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
@@ -262,7 +276,11 @@ public class PurchaseOrdersController {
             
         } catch (JRException ex) {
             Logger.getLogger(PurchaseOrdersController.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        } catch (IOException ex) {
+            Logger.getLogger(PurchaseOrdersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+       
     }
     
 }

@@ -93,7 +93,7 @@ public class SecurityFilter implements Filter {
     }else if( uri.indexOf("/font") > 0){
         chain.doFilter(request, response);
     }*/
-        if(uri.matches(".*(css|jpg|png|gif|js|svg|eot|ttf|woff|woff2)")){
+        if(uri.matches(".*(css|jpg|png|gif|js|svg|eot|ttf|woff|woff2|pdf|jasper)")){
             chain.doFilter(request, response);
             return;
          }
