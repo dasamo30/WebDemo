@@ -19,10 +19,8 @@ import com.webdemo.beans.inventory.TableSupplierBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +29,9 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -176,8 +172,8 @@ public class PurchaseOrdersController {
            // p.setIco_edit("<a id=\""+p.getId()+"\" class=\"view_edit_produc\" href=\"#\"><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></a>");
             l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailOrders\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailOrders\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/purchaseOrdersController/ActViewDetailOrders\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
             l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeletePurchaseOrder\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
-            //l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteSupplier\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
-            l.setIco_print("<a target=\"_blank\" href=\""+request.getContextPath()+"/purchaseOrdersController/ActPrintPurchaseOrders?id="+l.getId()+"\"  class=\"btn btn-info btn-xs\"><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></a>");
+            l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnPrintPurchaseOrder\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
+            //l.setIco_print("<a target=\"_blank\" href=\""+request.getContextPath()+"/purchaseOrdersController/ActPrintPurchaseOrders?id="+l.getId()+"\"  class=\"btn btn-info btn-xs\"><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></a>");
            
         }
      
@@ -239,13 +235,17 @@ public class PurchaseOrdersController {
     
     @RequestMapping(value = "ActPrintPurchaseOrders", method = RequestMethod.GET) 
     @ResponseBody
-    public void ActPrintPurchaseOrders(@RequestParam("id") int id_purchase_order,
+    public void ActPrintPurchaseOrders(@RequestParam("id_purchase_order") int id_purchase_order,
                 HttpServletRequest request, HttpServletResponse response)  {
         
+        PurchaseOrderBean purchaseOrderBean=serviceInventory.get_purchaseOrderBean(id_purchase_order);
         
+        purchaseOrderBean.setSupplier(serviceInventory.get_Supplier(purchaseOrderBean.getSupplier().getId_supplier()));
+        
+        System.out.println("controller:"+purchaseOrderBean.toString());
         try {
-            //response.setContentType("application/pdf");
-            //response.setHeader("Content-Disposition", "attachment; filename=\"purchase_order_"+id_purchase_order+".pdf\"");
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=\"purchase_order_"+id_purchase_order+".pdf\"");
             
             String pathFilePDf = "";
             File fileReport = new File(request.getServletContext().getRealPath("/WEB-INF/report/purchaseOrders.jasper"));
@@ -254,8 +254,13 @@ public class PurchaseOrdersController {
             System.out.println("id_purchase_order:"+id_purchase_order);
             JasperReport jrPurchaseOrder = (JasperReport) JRLoader.loadObject(fileReport);
             Map<String,Object> params=new HashMap<String, Object>();
-             params.put("code", "0001");
-             params.put("supplier", "microsof");
+             params.put("code", ""+purchaseOrderBean.getId());
+             params.put("supplier",purchaseOrderBean.getSupplier().getName_suppliers());
+             params.put("amount",""+purchaseOrderBean.getAmount() );
+             params.put("username",purchaseOrderBean.getUsername());
+             params.put("dateCreation",""+purchaseOrderBean.getDateCreation() );
+             File fileLogo = new File(request.getServletContext().getRealPath("/images/ctasitelogo.png"));
+             params.put("logo", fileLogo.getPath());
              
              
              ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(id_purchase_order);

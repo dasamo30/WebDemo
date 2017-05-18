@@ -1,4 +1,10 @@
 <%-- 
+    Document   : view_panel_merchandise_income
+    Created on : 18-may-2017, 15:51:00
+    Author     : dasamo
+--%>
+
+<%-- 
     Document   : view_panel_purchase_orders
     Created on : 02-may-2017, 11:45:10
     Author     : dasamo
@@ -20,7 +26,7 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                     <!-- Link trigger modal -->
-                    <a href="${contextPath}/purchaseOrdersController/ActViewNewPurchaseOrder"  class="btn btn-primary" >
+                    <a href="${contextPath}/merchandiseIncomeController/ActViewNewPurchaseOrder"  class="btn btn-primary" >
                         Add Purchase Order
                     </a>
                         

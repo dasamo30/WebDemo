@@ -3202,7 +3202,7 @@ table.table-bordered.dataTable{
 .login-box,
 .register-box {
   width: 360px;
-  margin: 7% auto;
+  margin: 12% auto;
 }
 @media (max-width: 768px) {
   .login-box,

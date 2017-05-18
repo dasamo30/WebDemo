@@ -23,7 +23,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" type="text/css" href="${contextPath}/bootstrap/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet"type="text/css" href="${contextPath}/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet"type="text/css" href="${contextPath}/dist/css/AdminLTE.css">
     <!-- iCheck -->
     <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/iCheck/square/blue.css">
     <!-- animate -->

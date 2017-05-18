@@ -1514,7 +1514,25 @@ jQuery(document).ready( function () {
           }
         });
    });
-    
+   
+   //btnPrintPurchaseOrder
+    $(document).on("click","#btnPrintPurchaseOrder",function(e){
+       var obj = this; 
+       var id_purchase_order = $(obj).data('id');
+       //alert(id_purchase_order);
+       $('#divpdfreport').empty();
+       blockUI();
+       var paramsms = {id_purchase_order: id_purchase_order };
+      //  window.location=baseurl+'/purchaseOrdersController/ActPrintPurchaseOrders?'+$.param(paramsms);
+        //$('#divContenidosms').html('<iframe id="myframe" src="'+baseurl+'/reporteSms/ActGenerarReporteSmsCsv?'+$.param(paramsms)+'" width="100%" height="auto" onload="jQuery.unblockUI();"></iframe>');
+        $('<iframe />', {
+            name: 'myframe',
+            id:   'myframe',
+            src: baseurl+'/purchaseOrdersController/ActPrintPurchaseOrders?'+$.param(paramsms),
+            onload : $.unblockUI()
+        }).appendTo('#divpdfreport');
+        
+    });
       /*
        * 
        * $('#myModalNewLocation').on('show.bs.modal', function (e) { 

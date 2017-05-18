@@ -940,10 +940,14 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           HashMap data = (HashMap) query.list().get(0);
           //HashMap beanData=(HashMap) data.get(0);   
           
+          SupplierBean sp=new SupplierBean();
+          sp.setId_supplier((Integer)data.get("id_supplier"));
+          
           purchaseOrderBean.setId((Integer)data.get("id_purchase_order"));
           purchaseOrderBean.setUsername((String) data.get("username"));
           purchaseOrderBean.setDateCreation((Date)data.get("date_creation"));
           purchaseOrderBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+          purchaseOrderBean.setSupplier(sp);
           
           /*
           ArrayList<PurchaseOrderDetailBean> details=new ArrayList<PurchaseOrderDetailBean>();
