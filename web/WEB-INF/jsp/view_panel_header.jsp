@@ -16,7 +16,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="${contextPath}/images/optimizacion-SEO.png" rel="shortcut icon">
+    <link href="${contextPath}/images/ctasitelogo.png" rel="shortcut icon">
     <title>Web Demo | Dashboard</title>
     <base href="${contextPath}"/>
     <!-- Tell the browser to be responsive to screen width -->
@@ -65,7 +65,7 @@
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>A</b>LT</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>Web</b>APP</span>
+          <span class="logo-lg"><b>Inventory</b>CTAC</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">

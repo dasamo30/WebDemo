@@ -10,11 +10,11 @@ import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webdemo.beans.AjaxResponseBE;
-import com.webdemo.beans.inventory.MerchandiseIncomeBean;
-import com.webdemo.beans.inventory.MerchandiseIncomeDetailBean;
 import com.webdemo.beans.inventory.ProductBean;
-import com.webdemo.beans.inventory.TableMerchandiseIncome;
-import com.webdemo.beans.inventory.TableSupplierBean;
+import com.webdemo.beans.inventory.TableLocationBean;
+import com.webdemo.beans.inventory.TableTransferBean;
+import com.webdemo.beans.inventory.TransferBean;
+import com.webdemo.beans.inventory.TransferDetailBean;
 import com.webdemo.service.inventory.ServiceInventory;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -38,15 +38,16 @@ import org.springframework.web.servlet.ModelAndView;
  *
  * @author dasamo
  */
+
 @Controller
-@RequestMapping("/merchandiseIncomeController")
-public class MerchandiseIncomeController {
+@RequestMapping("/transferController")
+public class TransferController {
     private ServiceInventory serviceInventory=new ServiceInventory();
     
     @RequestMapping("/initial")
-    public ModelAndView  ViewPanelMerchandiseIncome(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView  ViewPanelTransfer(HttpServletRequest request, HttpServletResponse response) {
         HttpSession sesion=request.getSession();
-        String namemenu="Merchandise Income";
+        String namemenu="Transfer";
         String titlemenu="initial";
 
         Map route = new HashMap<Integer, String>();
@@ -54,7 +55,7 @@ public class MerchandiseIncomeController {
         route.put(2,namemenu);
         //route.put(3,"Alumno");
 
-        String opmnu="#lim_11:#lim_12";
+        String opmnu="#lim_11:#lim_13";
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("menus",sesion.getAttribute("lmemus"));
@@ -64,27 +65,26 @@ public class MerchandiseIncomeController {
         mv.addObject("funtion","<script src=\""+request.getContextPath()+"/js/maintenance.js\" type=\"text/javascript\" ></script>");
         mv.addObject("route",route);
         mv.addObject("opmnu",opmnu);
-        mv.setViewName("view_panel_merchandise_income");
+        mv.setViewName("view_panel_transfer");
         return mv;    
     }
     
-    
-    @RequestMapping(value = "ActViewNewPurchaseOrder", method = RequestMethod.GET)
+    @RequestMapping(value = "ActViewNewTransfer", method = RequestMethod.GET)
     @ResponseBody
-    public  ModelAndView ActViewNewPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
+    public  ModelAndView ActViewNewTransfer(HttpServletRequest request, HttpServletResponse response) {
       HttpSession sesion=request.getSession();
-        String namemenu="New Merchandise Income";
+        String namemenu="New Transfer";
         String titlemenu="Information";
 
         Map route = new HashMap<Integer, String>();
         route.put(1,"Inventory");
-        route.put(2,"Merchandise Income");
+        route.put(2,"Transfer");
         route.put(3,namemenu);
         
-        String opmnu="#lim_11:#lim_12";
+        String opmnu="#lim_11:#lim_13";
         
         
-        ArrayList<TableSupplierBean> listSupplier=serviceInventory.get_list_Suppliers();
+        ArrayList<TableLocationBean> listLocation=serviceInventory.get_list_Location();
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("menus",sesion.getAttribute("lmemus"));
@@ -94,12 +94,13 @@ public class MerchandiseIncomeController {
         mv.addObject("funtion","<script src=\""+request.getContextPath()+"/js/maintenance.js\" type=\"text/javascript\" ></script>");
         mv.addObject("route",route);
         mv.addObject("opmnu",opmnu);
-        mv.addObject("listSupplier",listSupplier);
-        mv.setViewName("view_new_merchandise_income");
+        mv.addObject("listLocation",listLocation);
+        mv.setViewName("view_new_transfer");
         return mv;  
     }
     
-    @RequestMapping(value="ActSaveMerchandiseIncome", method = RequestMethod.POST)
+    
+    @RequestMapping(value="ActSaveTransfer", method = RequestMethod.POST)
     @ResponseBody
     public int ActSaveMerchandiseIncome(@ModelAttribute("data") String data,HttpServletRequest request) throws IOException   {
         HttpSession sesion = request.getSession();
@@ -109,44 +110,44 @@ public class MerchandiseIncomeController {
         ObjectMapper a=new ObjectMapper();
         a.setDateFormat(df);
          
-        MerchandiseIncomeBean merchandiseIncomeBean=a.readValue(data,MerchandiseIncomeBean.class);
+        TransferBean transferBean=a.readValue(data,TransferBean.class);
         
         
-        merchandiseIncomeBean.setUsername(sesion.getAttribute("usuario").toString());
+        transferBean.setUsername(sesion.getAttribute("usuario").toString());
         
-        System.out.println("merchandiseIncomeBean:"+merchandiseIncomeBean.toString());
+        System.out.println("transferBean:"+transferBean.toString());
         
         
 
        
-        String fecha = df.format(merchandiseIncomeBean.getDateCreation());
+        String fecha = df.format(transferBean.getDateCreation());
         System.out.println("fecha:"+fecha);
 
-        return serviceInventory.saveMerchandiseIncome(merchandiseIncomeBean);
+        return serviceInventory.saveTransfer(transferBean);
     }
     
     
-    //ActListMerchandiseIncome
-    @RequestMapping(value="/ActListMerchandiseIncome",method = RequestMethod.POST)
+    //ActListTransfer
+    @RequestMapping(value="/ActListTransfer",method = RequestMethod.POST)
     @ResponseBody 
-    public String ActListMerchandiseIncome(HttpServletRequest request, HttpServletResponse response) {
+    public String ActListTransfer(HttpServletRequest request, HttpServletResponse response) {
         String baseurl = request.getContextPath();
     
-        ArrayList<TableMerchandiseIncome> listMerchandiseIncome=serviceInventory.get_list_merchandiseIncomeBean();
+        ArrayList<TableTransferBean> listTransferBean=serviceInventory.get_list_transferBean();
         DataTableObject dataTableObject = new DataTableObject();
         
-        for (TableMerchandiseIncome l : listMerchandiseIncome) {
+        for (TableTransferBean l : listTransferBean) {
           
-            l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailIncomes\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailIncomes\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/merchandiseIncomeController/ActViewDetailIncomes\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
-            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteMerchandiseIncome\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
+            l.setIco_search("<button data-toggle=\"modal\" data-target=\"#myModalDetailTransfer\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId()+"\" id=\"btnViewDetailTransfer\" class=\"btn bg-olive btn-xs\" href=\""+baseurl+"/transferController/ActViewDetailTransfer\" ><i style=\"font-size: 18px;\" class=\"fa fa-search\"></i></button>");
+            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnDeleteTransfer\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
             //l.setIco_print("<button type=\"button\" data-id=\""+l.getId()+"\" id=\"btnPrintPurchaseOrder\" class=\"btn btn-info btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-print\"></i></button>");
             
            
         }
      
-        dataTableObject.setAaData(listMerchandiseIncome);
-        dataTableObject.setiTotalDisplayRecords(listMerchandiseIncome.size());
-        dataTableObject.setiTotalRecords(listMerchandiseIncome.size());
+        dataTableObject.setAaData(listTransferBean);
+        dataTableObject.setiTotalDisplayRecords(listTransferBean.size());
+        dataTableObject.setiTotalRecords(listTransferBean.size());
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
         String json = gson.toJson(dataTableObject);
@@ -159,23 +160,23 @@ public class MerchandiseIncomeController {
     
     
     //ActViewDetailIncomes
-    @RequestMapping(value = "ActViewDetailIncomes", method = RequestMethod.POST)
+    @RequestMapping(value = "ActViewDetailTransfer", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResponseBE ActViewDetailIncomes(@RequestParam("id_merchandise_income") int id_merchandise_income,
+    public AjaxResponseBE ActViewDetailTransfer(@RequestParam("id_transfer") int id_transfer,
             HttpServletRequest request){
        
         
         
-      MerchandiseIncomeBean merchandiseIncomeBean=serviceInventory.get_MerchandiseIncomeBean(id_merchandise_income);
+      TransferBean transferBean=serviceInventory.get_TransferBean(id_transfer);
       
-      ArrayList<MerchandiseIncomeDetailBean> detail=serviceInventory.get_list_merchandiseIncomeDetailBean(id_merchandise_income);
+      ArrayList<TransferDetailBean> detail=serviceInventory.get_list_transferDetailBean(id_transfer);
         
                 
-        for (MerchandiseIncomeDetailBean pd : detail) {
+        for (TransferDetailBean pd : detail) {
             ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
             pd.setProduct(product);
         }      
-      merchandiseIncomeBean.setDetails(detail);
+      transferBean.setDetails(detail);
       
       
       AjaxResponseBE ajaxResponseBE;
@@ -183,24 +184,23 @@ public class MerchandiseIncomeController {
       ajaxResponseBE.setState("200");
       ajaxResponseBE.setMessage("Request processed correctly.");
       ajaxResponseBE.setDescription("The transfer has been successfully finded.");
-      ajaxResponseBE.setData(merchandiseIncomeBean);
+      ajaxResponseBE.setData(transferBean);
       
-      System.out.println("idPurchaseOrder:"+id_merchandise_income);
+      System.out.println("id_transfer:"+id_transfer);
       
  
        return ajaxResponseBE;  
     }
     
     //ActDeletePurchaseOrder
-    @RequestMapping(value="ActDeleteMerchandiseIncome", method = RequestMethod.POST)
+    @RequestMapping(value="ActDeleteTransfer", method = RequestMethod.POST)
     @ResponseBody
-    public int ActDeleteMerchandiseIncome(@RequestParam("id_merchandise_income") int id_merchandise_income){
+    public int ActDeleteTransfer(@RequestParam("id_transfer") int id_transfer){
         
-        System.out.println("ActDeleteMerchandiseIncome:::"+id_merchandise_income);
-        int rpta=serviceInventory.deleteMerchandiseIncomeBean(id_merchandise_income);
+        System.out.println("ActDeleteTransfer:::"+id_transfer);
+        int rpta=serviceInventory.deleteTransferBean(id_transfer);
      
         return rpta;
     }
-    
-    
+
 }

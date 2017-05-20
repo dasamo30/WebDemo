@@ -1,14 +1,9 @@
 <%-- 
-    Document   : view_panel_merchandise_income
-    Created on : 18-may-2017, 15:51:00
+    Document   : view_panel_transfer
+    Created on : 20-may-2017, 1:44:13
     Author     : dasamo
 --%>
 
-<%-- 
-    Document   : view_panel_purchase_orders
-    Created on : 02-may-2017, 11:45:10
-    Author     : dasamo
---%>
 <%@include file="view_panel_header.jsp" %>
         <!-- Main content -->
         <section class="content">
@@ -26,8 +21,8 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                     <!-- Link trigger modal -->
-                    <a href="${contextPath}/merchandiseIncomeController/ActViewNewPurchaseOrder"  class="btn btn-primary" >
-                        Add Merchandise Income
+                    <a href="${contextPath}/transferController/ActViewNewTransfer"  class="btn btn-primary" >
+                        Add Transfer
                     </a>
                         
                       <!--<button type="button" class="btn btn-danger" id="click_to_load_modal_popup">Open Popup Modal</button>-->  
@@ -41,19 +36,19 @@
           </div>   <!-- /.row -->
           <div id="divpdfreport" style="display: none;"></div>
           <!-- Default bootstrap modal example -->
-            <div class="modal" id="myModalDetailIncomes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal" id="myModalDetailTransfer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Merchandise Income</h4>
+                    <h4 class="modal-title" id="myModalLabel">Transfer</h4>
                   </div>
                     <div class="modal-body" id="modal-body">
                       <div class="row">
                         <div class="col-xs-12">
                         <div class="box"> 
                         <div class="mt">
-                            <table id="tblMerchandiseIncomeView" class="table table-striped table-hover">
+                            <table id="tblTransferView" class="table table-striped table-hover">
                                 <thead>
                                 <tr>		                            
                                  <th>Product</th>									
@@ -90,15 +85,15 @@
             <div class="col-xs-12">
           <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Merchandise Income List</h3>
+                  <h3 class="box-title">Transfer List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="tbMerchandiseIncome" class="table table-bordered table-striped">
+                  <table id="tbTransfer" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                        <th>Nro OC</th>    
+                        <th>Nro Transfer</th>    
                         <th>Code Supplier</th>
-                        <th>Supplier</th>
+                        <th>Location</th>
                         <th>Username</th>
                         <th>Amount</th>
                         <th>Date</th>
@@ -109,9 +104,9 @@
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Nro Income</th>      
+                        <th>Nro OC</th>      
                         <th>Supplier</th>
-                        <th>Code Supplier</th>
+                        <th>Location</th>
                         <th>Username</th>
                         <th>Amount</th>
                         <th>Date</th>

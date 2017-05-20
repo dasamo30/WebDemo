@@ -1,6 +1,6 @@
 <%-- 
-    Document   : view_new_purchase_orders
-    Created on : 02-may-2017, 12:03:15
+    Document   : view_new_transfer
+    Created on : 20-may-2017, 1:44:48
     Author     : dasamo
 --%>
 
@@ -21,15 +21,15 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                 <div class="row mb-lg">
-                    <form id="form_pocab">
+                    <form id="form_tranfcab">
 	                <section class="col-md-4 col-print-4">                          
                             <div class="form-group">
-                            <label for="cboSupplier">Supplier</label>    
-                            <select id="cboSupplier" class="form-control select2" style="width: 100%;" required>
+                            <label for="cboLocation">Location</label>    
+                            <select id="cboLocation" class="form-control select2" style="width: 100%;" required>
                            <option value=""></option>
-                            <c:if test="${!empty listSupplier}">
-                                <c:forEach var="supplier" items="${listSupplier}">
-                                    <option value="${supplier.id_supplier}">${supplier.name_suppliers}</option>											
+                            <c:if test="${!empty listLocation}">
+                                <c:forEach var="location" items="${listLocation}">
+                                    <option value="${location.id_location}">${location.name_location}</option>											
                                 </c:forEach>
                             </c:if>
                             </select>
@@ -62,22 +62,7 @@
             </div><!--/.col (left) -->
             <!-- right column -->
           </div>   <!-- /.row -->
-          
-          <!-- Default bootstrap modal example 
-            <div class="modal fade" id="myModalNewSupplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                  </div>
-                    <div class="modal-body" id="modal-body">
-                    
-                  </div>
-                </div>
-              </div>
-            </div>-->
-            <!-- Modal HTML -->
+
             <div id="myModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -105,7 +90,7 @@
                                   </div>
                                     <div class="form-group">
                                     <input id="txtProductId" type="hidden">
-                                    <div id="msjAddProducts" style="color:#a94442;" class="help-block with-errors">aaaaa</div>
+                                    <div id="msjAddProducts" style="color:#a94442;" class="help-block with-errors"></div>
                                     </div>
                                 </div><!-- /.box-body -->
                                 <div class="modal-footer">
@@ -123,7 +108,7 @@
             <div class="col-xs-12">
           <div class="box">
                 <div class="box-header">
-                  <h3 class="box-title">Purchase Order List</h3>
+                  <h3 class="box-title">Transfer List</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="mailbox-controls">
@@ -152,8 +137,8 @@
                     </tfoot>
                   </table>
                     <div id="msjtblProducts" style="color:#a94442;" class="help-block with-errors"></div>
-                <!--
-                <div class="row">
+                 <!--
+                    <div class="row">
 	                <div class="col-md-8 col-print-6">
 	                    <p></p>
 	                </div>
@@ -172,15 +157,15 @@
 	                            </div>
 	                        </div>
 	                    </div>
-	                </div>   -->
+	                </div>-->   
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
               <div class="btn-toolbar mt-lg hidden-print print-buttons">
 		            
-		            	<button id="btnSavePurchaseOrder" type="button" class="btn btn-primary">
+		            	<button id="btnSaveTransfer" type="button" class="btn btn-primary">
 							Save Changes
 						</button>
-	                    <a href="${contextPath}/purchaseOrdersController/initial" class="btn btn-github">
+	                    <a href="${contextPath}/transferController/initial" class="btn btn-github">
 	                    	Return
 	                    </a>
 		            </div>

@@ -16,7 +16,9 @@
         <div class="pull-right hidden-xs">
           <b>Version</b> 2.3.0
         </div>
-        <strong>Copyright &copy; <%=currentDate%> <a href="#">DASAMO</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; <%=currentDate%> 
+            <!--<a href="#">DASAMO</a>-->
+            .</strong> Todos los derechos reservados.
       </footer>
 
       <!-- Control Sidebar -->

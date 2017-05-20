@@ -4741,3 +4741,11 @@ table.table-bordered.dataTable{
     white-space: normal!important;
   }
 }
+
+.post-content{
+    /*background: none repeat scroll 0 0 #FFFFFF;*/
+    opacity: 0.5;
+     margin-left: 35px;
+    margin-top: 30px;
+    position: absolute;
+}

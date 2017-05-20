@@ -60,7 +60,7 @@ public class PurchaseOrdersController {
     
     
     @RequestMapping("/initial")
-    public ModelAndView  ViewPanelCategories(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView  ViewPanelPurchaseOrders(HttpServletRequest request, HttpServletResponse response) {
         HttpSession sesion=request.getSession();
         String namemenu="Purchase Orders";
         String titlemenu="initial";

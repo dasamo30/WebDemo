@@ -1249,54 +1249,11 @@ jQuery(document).ready( function () {
        
        $("#form_pocab").validator();
        savePurchaseOrder=function(e){
-           
-           //form_pocab
-           // e.preventDefault();
-        //$("#form_pocab").submit();
-        //console.log($('#form_pocab'));
-        //console.log(":::::: "+$('#form_pocab')[0].checkValidity());
+
         if(!$('#form_pocab')[0].checkValidity()){
             $('#submit').click();
         }
-         
-        
-        //e.preventDefault();
-        //$('input:text[required]').parent().show();
-	//$('#txtDate')	
-	//validations of information.	
-	/*if ($("#cboSupplier").val() == 0) {
-		$("#txtDialogMessage").text("Select a supplier.");
-		$("#dialogConfirm").dialog({
-	        resizable: false,
-	        height: "auto",
-	        width: 400,
-	        modal: true,
-	        buttons: {
-	          "Ok": function() {
-	        	$(this).dialog("close");	        	
-	          }
-	        }
-	    });	
-		return;
-	}
-		
-	if ($("#txtDate").val() == "") {
-		$("#txtDialogMessage").text("Select a date.");
-		$("#dialogConfirm").dialog({
-	        resizable: false,
-	        height: "auto",
-	        width: 400,
-	        modal: true,
-	        buttons: {
-	          "Ok": function() {
-	        	$(this).dialog("close");	        	
-	          }
-	        }
-	    });	
-		return;
-	}*/
-		
-	//details
+
 	var rows =0;
 	var dataDetails = []; 
 	$("#tblProducts tbody tr").each(function (indexTr) {
@@ -1533,43 +1490,408 @@ jQuery(document).ready( function () {
         }).appendTo('#divpdfreport');
         
     });
-      /*
-       * 
-       * $('#myModalNewLocation').on('show.bs.modal', function (e) { 
-        
-        //console.log(e);
-        var btn = $(e.relatedTarget);
-        var idLocation=btn.data('id');
-       var data=null;
-       var title="Register Location";
-       var frm='#frmrRegisterLocation';
+    
+ //----------------------Merchandise Income Managment----------------------// 
+
+        //btnSaveMerchandiseIncome
+       $(document).on("click","#btnSaveMerchandiseIncome",function(e){
+          saveMerchandiseIncome(); 
+           
+       });
        
-       if(btn.attr("id")==="btnViewEditLocation"){ 
-           console.log("btnViewEditLocation");
-            data={"location_id":idLocation};
-            title="Modify Location";
-            frm='#frmModifLocation';
-       }
-        $.post(btn.attr("href"),data, function( data ) { 
-            $('#myModalLabel').html(title);
-            $('#modal-body').html(data); 
-            $(frm).validator();
-        }); 
+       $("#form_micab").validator();
+       saveMerchandiseIncome=function(e){
+
+        if(!$('#form_micab')[0].checkValidity()){
+            $('#submit').click();
+        }
+
+	var rows =0;
+	var dataDetails = []; 
+	$("#tblProducts tbody tr").each(function (indexTr) {
+		rows = rows + 1;
+		var item={};
+		var data =  $(this).data("item");	
+				
+		item['product'] = {id: data.idProduct};
+		item['amount'] =  data.amount;
+		item['costPrice'] = data.sellPrice; 
+		dataDetails.push(item);
+        });
+		
+	if (rows == 0) {
+		$("#msjtblProducts").text("You need to add a product.");
+                //$("#msjtblProducts").addClass("help-block has-error");
+                //class="help-block with-errors"
+                
+		/*$("#dialogConfirm").dialog({
+	        resizable: false,
+	        height: "auto",
+	        width: 400,
+	        modal: true,
+	        buttons: {
+	          "Ok": function() {
+	        	$(this).dialog("close");	        	
+	          }
+	        }
+	    });	*/
+		return;
+	}
+	
+	var csrf = $("#_csrf").val();
+	var date = $("#txtDate").val().trim();	
+	date = date.substring(6,10) + '-' + date.substring(0,2) + '-' + date.substring(3,5) ;
+	//"yyyy-MM-dd'T'HH:mm:ss.SSSZ
+	
+	
+	var merchandiseIncome = {dateCreation: date, supplier: { id_supplier: $("#cboSupplier").val()}, amount: $("#lblTotalSale").text(), details: dataDetails};
+        
+        
+        console.log(JSON.stringify(merchandiseIncome));
+        //return false;
+        
+           $.ajax({
+            type: "POST",
+            url: baseurl+"/merchandiseIncomeController/ActSaveMerchandiseIncome",
+           // contentType: 'application/json; charset=utf-8',
+            data:{ data: JSON.stringify(merchandiseIncome)},
+            success: function(result){
+                //alert(result);
+                if(result==0){
+                        //alerts(0,msj,"");   
+                        //loadDataTable("#tbSuppliers");
+                        ezBSAlert({ headerText:"success", messageText: "Merchandise Income successfully registered.", alertType: "success"});
+                        $("#txtDate").val("");
+                	//$("#cboSupplier").val("");
+                        $("#cboSupplier").empty().trigger('change');
+                	$("#tblProducts tbody").empty();
+                        $('#form_micab').trigger('reset');
+                        
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
+                    }
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                
+            } 
+        });
+    };
+    
+    var dataTablemi = $('#tbMerchandiseIncome').DataTable({
+           processing: true,
+            //"serverSide": true,
+            responsive: true,
+            autoWidth: false,
+            order: [],
+            ajax:{
+                url :baseurl+"/merchandiseIncomeController/ActListMerchandiseIncome", // json datasource
+                type: "post",  // method  , by default get
+                complete: function(){
+                   table=$('#tbMerchandiseIncome');
+                  //alert(dataTable);
+                  //console.log(table.parent());
+                  table.parent().addClass("table-responsive");
+                 // table.parent().addClass('table-responsive');//.removeClass('col-sm-12');
+                },
+                error: function(xhr, textStatus, errorThrown){  // error handling
+                   
+                    $("#tbMerchandiseIncome_wrapper").html("");
+                    $("#tbMerchandiseIncome_wrapper").append('<div class="alert alert-danger alert-dismissable"><tr><th colspan="3">No data found in the server</th></tr></div>'); 
+                }
+            },
+            "aoColumns": [
+            { "mData": "id" },
+            { "mData": "code_suppliers" },
+            { "mData": "name_suppliers" },
+            { "mData": "username" },
+            { "mData": "amount"},
+            { "mData": "dateCreation","sClass": "text-center"},
+            { "mData": "ico_search","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"}
+            //{ "mData": "ico_print","sClass": "text-center"}
+            //{ "sClass": "a-right", "aTargets": [ 4 ] }
+            
+            ]
     });
     
-    editItem=function(id) {
+    //btnDeleteMerchandiseIncome
+    $(document).on("click","#btnDeleteMerchandiseIncome",function(e){    
+
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var id_merchandise_income = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/merchandiseIncomeController/ActDeleteMerchandiseIncome",
+                type: 'POST',
+                data: { id_merchandise_income:id_merchandise_income} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbMerchandiseIncome");
+                        ezBSAlert({ headerText:"success", messageText: "The merchandise income was successfully deleted", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "The process was not completed .. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
+   
+   //myModalDetailIncomes
+   $("#myModalDetailIncomes").on("show.bs.modal", function(e) {
+       $("#tblMerchandiseIncomeView > tbody").remove();
+       var btn = $(e.relatedTarget);
+        var link = $(e.relatedTarget);
+         var id_merchandise_income=btn.data('id');
+        //var data=response;
+        var data={"id_merchandise_income":id_merchandise_income};
+       // $(this).find(".modal-body").load(link.attr("href"));
+        //alert("sssssss");
+        $.post(btn.attr("href"),data, function( response ) {
+            //$('#modal-body').html(response);
+            console.log(response);
+            var total = 0;
+            
+            response.data.details.forEach(function(detail) {
+                    var subtotal =  detail.amount * detail.costPrice;
+
+                $("#tblMerchandiseIncomeView").append(            		
+                                    "<tr>" +        			
+                                    "	<td>" + detail.product.name + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.amount + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.costPrice + "</td>" +
+                                    "	<td class='text-xs-right'>" + subtotal.toFixed(2) + "</td>" +        			
+                                    "</tr>"); 
+                total = total + (detail.amount * detail.costPrice);            
+            });
+            $("#lblTotalSale").text(total.toFixed(3));
+            $("#txtDialogData").text(response.description);
+        });
+    });
+    
+
+//-----------------------Transfer-------------------------------------------------//    
+ $("#cboLocation").select2({
+    placeholder: "Select a location"
+  });   
+  
+  $(document).on("click","#btnSaveTransfer",function(e){
+          saveTransfer(); 
+           
+       });
+       
+       $("#form_tranfcab").validator();
+       saveTransfer=function(e){
+
+        if(!$('#form_tranfcab')[0].checkValidity()){
+            $('#submit').click();
+        }
+
+	var rows =0;
+	var dataDetails = []; 
+	$("#tblProducts tbody tr").each(function (indexTr) {
+		rows = rows + 1;
+		var item={};
+		var data =  $(this).data("item");	
+				
+		item['product'] = {id: data.idProduct};
+		item['amount'] =  data.amount;
+		item['sell_price'] = data.sellPrice; 
+		dataDetails.push(item);
+        });
 		
-	$("#lblAmountItem" + id).hide();
-	$("#lblSellItem" + id).hide();
-	$("#btnDeleteItem" + id).hide();
-	$("#btnSaveItem" + id).show();
-	$("#btnEditItem" + id).hide();
+	if (rows == 0) {
+		$("#msjtblProducts").text("You need to add a product.");
+                //$("#msjtblProducts").addClass("help-block has-error");
+                //class="help-block with-errors"
+                
+		/*$("#dialogConfirm").dialog({
+	        resizable: false,
+	        height: "auto",
+	        width: 400,
+	        modal: true,
+	        buttons: {
+	          "Ok": function() {
+	        	$(this).dialog("close");	        	
+	          }
+	        }
+	    });	*/
+		return;
+	}
 	
-	$("#txtSelltItem" + id).val($("#lblSellItem" + id).text());	
-	$("#txtSelltItem" + id).show();
-	$("#txtAmountItem" + id).val($("#lblAmountItem" + id).text());	
-	$("#txtAmountItem" + id).show();
-		
-}*/
+	var csrf = $("#_csrf").val();
+	var date = $("#txtDate").val().trim();	
+	date = date.substring(6,10) + '-' + date.substring(0,2) + '-' + date.substring(3,5) ;
+	//"yyyy-MM-dd'T'HH:mm:ss.SSSZ
+	
+	
+	var transfer = {dateCreation: date, location: { id_location: $("#cboLocation").val()}, amount: $("#lblTotalSale").text(), details: dataDetails};
+        
+        
+        console.log(JSON.stringify(transfer));
+        //return false;
+        
+           $.ajax({
+            type: "POST",
+            url: baseurl+"/transferController/ActSaveTransfer",
+           // contentType: 'application/json; charset=utf-8',
+            data:{ data: JSON.stringify(transfer)},
+            success: function(result){
+                //alert(result);
+                if(result==0){
+                        //alerts(0,msj,"");   
+                        //loadDataTable("#tbSuppliers");
+                        ezBSAlert({ headerText:"success", messageText: "Transfer successfully registered.", alertType: "success"});
+                        $("#txtDate").val("");
+                        $("#cboLocation").empty().trigger('change');
+                	$("#tblProducts tbody").empty();
+                        $('#form_tranfcab').trigger('reset');
+                        
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "The process was not completed.. !!!", alertType: "danger"});
+                    }
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                
+            } 
+        });
+    };
+    //tbTransfer
+    
+    var dataTabletrasf = $('#tbTransfer').DataTable({
+           processing: true,
+            //"serverSide": true,
+            responsive: true,
+            autoWidth: false,
+            order: [],
+            ajax:{
+                url :baseurl+"/transferController/ActListTransfer", // json datasource
+                type: "post",  // method  , by default get
+                complete: function(){
+                   table=$('#tbTransfer');
+                  //alert(dataTable);
+                  //console.log(table.parent());
+                  table.parent().addClass("table-responsive");
+                 // table.parent().addClass('table-responsive');//.removeClass('col-sm-12');
+                },
+                error: function(xhr, textStatus, errorThrown){  // error handling
+                   
+                    $("#tbTransfer_wrapper").html("");
+                    $("#tbTransfer_wrapper").append('<div class="alert alert-danger alert-dismissable"><tr><th colspan="3">No data found in the server</th></tr></div>'); 
+                }
+            },
+            "aoColumns": [
+            { "mData": "id" },
+            { "mData": "id_location" },
+            { "mData": "name_location" },
+            { "mData": "username" },
+            { "mData": "amount"},
+            { "mData": "dateCreation","sClass": "text-center"},
+            { "mData": "ico_search","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"}
+            //{ "mData": "ico_print","sClass": "text-center"}
+            //{ "sClass": "a-right", "aTargets": [ 4 ] }
+            
+            ]
+    });
+  
+  //myModalDetailTransfer
+  $("#myModalDetailTransfer").on("show.bs.modal", function(e) {
+       $("#tblTransferView > tbody").remove();
+       var btn = $(e.relatedTarget);
+        var link = $(e.relatedTarget);
+         var id_transfer=btn.data('id');
+        //var data=response;
+        var data={"id_transfer":id_transfer};
+       // $(this).find(".modal-body").load(link.attr("href"));
+        //alert("sssssss");
+        $.post(btn.attr("href"),data, function( response ) {
+            //$('#modal-body').html(response);
+            console.log(response);
+            var total = 0;
+            
+            response.data.details.forEach(function(detail) {
+                    var subtotal =  detail.amount * detail.sell_price;
+
+                $("#tblTransferView").append(            		
+                                    "<tr>" +        			
+                                    "	<td>" + detail.product.name + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.amount + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.sell_price + "</td>" +
+                                    "	<td class='text-xs-right'>" + subtotal.toFixed(2) + "</td>" +        			
+                                    "</tr>"); 
+                total = total + (detail.amount * detail.sell_price);            
+            });
+            $("#lblTotalSale").text(total.toFixed(3));
+            $("#txtDialogData").text(response.description);
+        });
+    });
+    
+    //btnDeleteMerchandiseIncome
+    $(document).on("click","#btnDeleteTransfer",function(e){    
+
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var id_transfer = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/transferController/ActDeleteTransfer",
+                type: 'POST',
+                data: { id_transfer:id_transfer} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbTransfer");
+                        ezBSAlert({ headerText:"success", messageText: "The transfer was successfully deleted", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "The process was not completed .. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
 //-------------------------final del documento--------------------------------------------------//    
 });

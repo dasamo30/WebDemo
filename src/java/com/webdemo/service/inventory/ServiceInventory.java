@@ -8,15 +8,21 @@ package com.webdemo.service.inventory;
 
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeDetailBean;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
+import com.webdemo.beans.inventory.TableMerchandiseIncome;
 import com.webdemo.beans.inventory.TableProductBean;
 import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
+import com.webdemo.beans.inventory.TableTransferBean;
+import com.webdemo.beans.inventory.TransferBean;
+import com.webdemo.beans.inventory.TransferDetailBean;
 import com.webdemo.dao.DAOFactory;
 import com.webdemo.dao.inventory.IInventoryDAO;
 import java.util.ArrayList;
@@ -139,5 +145,46 @@ public class ServiceInventory {
     
     public int deletePurchaseOrderBean(int id_purchase_order) {
         return inventoryDAO.deletePurchaseOrderBean(id_purchase_order);
+    }
+    
+    public int saveMerchandiseIncome(MerchandiseIncomeBean merchandiseIncomeBean) {
+        return inventoryDAO.saveMerchandiseIncome(merchandiseIncomeBean);
+    
+    }
+    
+    public ArrayList<TableMerchandiseIncome> get_list_merchandiseIncomeBean(){
+        return inventoryDAO.get_list_merchandiseIncomeBean();
+    }
+    
+    public MerchandiseIncomeBean get_MerchandiseIncomeBean(int id_merchandise_income){
+        return inventoryDAO.get_MerchandiseIncomeBean(id_merchandise_income);
+    }
+    
+    public ArrayList<MerchandiseIncomeDetailBean> get_list_merchandiseIncomeDetailBean(int id_merchandise_income){
+        return inventoryDAO.get_list_merchandiseIncomeDetailBean(id_merchandise_income);
+    }
+    
+    public int deleteMerchandiseIncomeBean(int id_merchandise_income){
+        return inventoryDAO.deleteMerchandiseIncomeBean(id_merchandise_income);
+    }
+    
+    public int saveTransfer(TransferBean transferBean){
+        return inventoryDAO.saveTransfer(transferBean);
+    } 
+    
+    public ArrayList<TableTransferBean> get_list_transferBean(){
+        return inventoryDAO.get_list_transferBean();
+    }
+    
+    public TransferBean get_TransferBean(int id_transfer){
+        return inventoryDAO.get_TransferBean(id_transfer);
+    }
+    
+    public ArrayList<TransferDetailBean> get_list_transferDetailBean(int id_transfer){
+        return inventoryDAO.get_list_transferDetailBean(id_transfer);
+    }
+    
+    public int deleteTransferBean(int id_transfer){
+        return inventoryDAO.deleteTransferBean(id_transfer);
     }
 }

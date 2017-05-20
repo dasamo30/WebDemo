@@ -8,15 +8,21 @@ package com.webdemo.dao.inventory;
 
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeDetailBean;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
+import com.webdemo.beans.inventory.TableMerchandiseIncome;
 import com.webdemo.beans.inventory.TableProductBean;
 import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
+import com.webdemo.beans.inventory.TableTransferBean;
+import com.webdemo.beans.inventory.TransferBean;
+import com.webdemo.beans.inventory.TransferDetailBean;
 import java.util.ArrayList;
 
 /**
@@ -51,10 +57,21 @@ public interface IInventoryDAO {
     public ArrayList<TableSupplierBean> get_list_Suppliers();
     
     public int savePurchaseOrder(PurchaseOrderBean purchaseOrderBean);
-    
     public ArrayList<TablePurchaseOrder> get_list_purchaseOrderBean();
     public PurchaseOrderBean get_purchaseOrderBean(int id_purchase_order);
     public ArrayList<PurchaseOrderDetailBean> get_list_purchaseOrderDetailBean(int id_purchase_order);
      public int deletePurchaseOrderBean(int id_purchase_order);
+     
+    public int saveMerchandiseIncome(MerchandiseIncomeBean merchandiseIncomeBean);  
+    public ArrayList<TableMerchandiseIncome> get_list_merchandiseIncomeBean();
+    public MerchandiseIncomeBean get_MerchandiseIncomeBean(int id_merchandise_income);
+    public ArrayList<MerchandiseIncomeDetailBean> get_list_merchandiseIncomeDetailBean(int id_merchandise_income);
+    public int deleteMerchandiseIncomeBean(int id_merchandise_income);
+    
+    public int saveTransfer(TransferBean transferBean);  
+    public ArrayList<TableTransferBean> get_list_transferBean();
+    public TransferBean get_TransferBean(int id_transfer);
+    public ArrayList<TransferDetailBean> get_list_transferDetailBean(int id_transfer);
+    public int deleteTransferBean(int id_transfer);
     
 }

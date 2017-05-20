@@ -9,15 +9,21 @@ package com.webdemo.dao.inventory;
 import com.google.gson.Gson;
 import com.webdemo.beans.inventory.CategoryBean;
 import com.webdemo.beans.inventory.LocationBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeBean;
+import com.webdemo.beans.inventory.MerchandiseIncomeDetailBean;
 import com.webdemo.beans.inventory.ProductBean;
 import com.webdemo.beans.inventory.PurchaseOrderBean;
 import com.webdemo.beans.inventory.PurchaseOrderDetailBean;
 import com.webdemo.beans.inventory.SupplierBean;
 import com.webdemo.beans.inventory.TableCategoryBean;
 import com.webdemo.beans.inventory.TableLocationBean;
+import com.webdemo.beans.inventory.TableMerchandiseIncome;
 import com.webdemo.beans.inventory.TableProductBean;
 import com.webdemo.beans.inventory.TablePurchaseOrder;
 import com.webdemo.beans.inventory.TableSupplierBean;
+import com.webdemo.beans.inventory.TableTransferBean;
+import com.webdemo.beans.inventory.TransferBean;
+import com.webdemo.beans.inventory.TransferDetailBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -870,10 +876,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             //session.close(); 
             tx.commit();
         }
-        return rpta;
-        
-        
-        
+        return rpta;    
     }
 
     @Override
@@ -1070,7 +1073,456 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         return rpta;
         
     }
-
     
+    @Override
+    public int saveMerchandiseIncome(MerchandiseIncomeBean merchandiseIncomeBean) {
+        int rpta = -1;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            
+            String sql = "INSERT INTO inventory.merchandise_income( id_supplier, amount, username, date_creation) VALUES ( :id_supplier, :amount, :username, :date_creation) RETURNING id_merchandise_income;";
+            System.out.println("sql::" + sql);
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("id_supplier", merchandiseIncomeBean.getSupplier().getId_supplier());
+            query.setParameter("amount", merchandiseIncomeBean.getAmount());
+            query.setParameter("username", merchandiseIncomeBean.getUsername());
+            query.setParameter("date_creation", merchandiseIncomeBean.getDateCreation());
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+
+            int id_merchandise_income=(Integer) ((HashMap)data.get(0)).get("id_merchandise_income");       
+            System.out.println("list::::>"+rpta);
+            
+            //query.setParameter("clave", pass);
+            //INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation,registration_date) VALUES (4, 50, 'dasamo', now()::date, now() ) RETURNING id_purchase_order;
+            /*
+            ResultSet generatedKeys = null;
+            int generatedKey = -1;
+            generatedKey = Integer.parseInt(readOneValue("SELECT @@IDENTITY"));
+            */
+            
+            List<MerchandiseIncomeDetailBean> detail=merchandiseIncomeBean.getDetails();
+            int rsd;
+            int rss;
+            for (MerchandiseIncomeDetailBean p : detail) {
+                
+                String sqld="INSERT INTO inventory.merchandise_income_detail(id_merchandise_income, id_product, amount, cost_price, date_creation) VALUES ( :id_merchandise_income, :id_product, :amount, :cost_price , :date_creation );";
+                SQLQuery queryd = session.createSQLQuery(sqld);
+                queryd.setParameter("id_merchandise_income",id_merchandise_income);
+                queryd.setParameter("id_product", p.getProduct().getId());
+                queryd.setParameter("amount", p.getAmount());
+                queryd.setParameter("cost_price", p.getCostPrice());
+                queryd.setParameter("date_creation",merchandiseIncomeBean.getDateCreation());            
+                rsd=queryd.executeUpdate();   
+                System.out.println("res:::"+rsd);
+                
+                //update inventory.products set stock=? where product_id=0
+                String sqls="update inventory.products set stock=(stock + :pamount) where product_id=:product_id ;";
+                SQLQuery querys = session.createSQLQuery(sqls);
+                querys.setParameter("pamount", p.getAmount());
+                querys.setParameter("product_id", p.getProduct().getId());
+                rss=querys.executeUpdate();
+                System.out.println("rss:::"+rss);
+            }
+            rpta=0;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            //rpta=1;
+            e.printStackTrace();
+        } finally {
+            //session.close(); 
+            tx.commit();
+        }
+        return rpta;
+        
+    }
+
+    @Override
+    public ArrayList<TableMerchandiseIncome> get_list_merchandiseIncomeBean() {
+        Transaction tx = null;
+        ArrayList<TableMerchandiseIncome> litsMerchandiseIncomeBean =new ArrayList<TableMerchandiseIncome>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT id_merchandise_income, id_supplier, code_suppliers,"
+                    + " name_suppliers, amount, username, date_creation, registration_date "
+                    + "FROM inventory.view_merchandise_income;";
+            SQLQuery query = session.createSQLQuery(sql);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TableMerchandiseIncome merchandiseIncome= new TableMerchandiseIncome();
+            merchandiseIncome.setId((Integer)row.get("id_merchandise_income"));
+            //purchaseOrder.getSupplier().setId_supplier((Integer) row.get("id_supplier"));
+            merchandiseIncome.setCode_suppliers((String)row.get("code_suppliers"));
+            merchandiseIncome.setName_suppliers((String)row.get("name_suppliers"));
+            merchandiseIncome.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+            merchandiseIncome.setUsername((String)row.get("username"));
+            merchandiseIncome.setDateCreation((Date) row.get("date_creation"));
+            merchandiseIncome.setRegistration_date((Date) row.get("registration_date"));
+            
+            litsMerchandiseIncomeBean.add(merchandiseIncome);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsMerchandiseIncomeBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsMerchandiseIncomeBean;
+    }
+
+    @Override
+    public MerchandiseIncomeBean get_MerchandiseIncomeBean(int id_merchandise_income) {
+        Transaction tx = null;
+      MerchandiseIncomeBean merchandiseIncomeBean=new MerchandiseIncomeBean();
+      
+        System.out.println("get_MerchandiseIncomeBean:"+id_merchandise_income);
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT id_merchandise_income, id_supplier, amount, username, date_creation,registration_date FROM inventory.merchandise_income where id_merchandise_income = :id_merchandise_income ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_merchandise_income",id_merchandise_income);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+          HashMap data = (HashMap) query.list().get(0);
+          //HashMap beanData=(HashMap) data.get(0);   
+          
+          SupplierBean sp=new SupplierBean();
+          sp.setId_supplier((Integer)data.get("id_supplier"));
+          
+          merchandiseIncomeBean.setId((Integer)data.get("id_merchandise_income"));
+          merchandiseIncomeBean.setUsername((String) data.get("username"));
+          merchandiseIncomeBean.setDateCreation((Date)data.get("date_creation"));
+          merchandiseIncomeBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+          merchandiseIncomeBean.setSupplier(sp);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return merchandiseIncomeBean;
+    }
+
+    @Override
+    public ArrayList<MerchandiseIncomeDetailBean> get_list_merchandiseIncomeDetailBean(int id_merchandise_income) {
+        Transaction tx = null;
+        ArrayList<MerchandiseIncomeDetailBean> ListMerchandiseIncomeDetail=new ArrayList<MerchandiseIncomeDetailBean>();
+        try{
+            tx = session.beginTransaction();
+
+            
+          
+           String sqld="SELECT id_merchandise_income, id_product, amount, cost_price, date_creation FROM inventory.merchandise_income_detail where id_merchandise_income= :id ;";
+           SQLQuery queryd = session.createSQLQuery(sqld);
+           queryd.setParameter("id", id_merchandise_income);
+           
+           queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+           List dataList = queryd.list();
+           
+           System.out.println("List data::"+dataList.size());
+           
+           for (Object object : dataList) {
+               Map row = (Map)object;
+               
+               MerchandiseIncomeDetailBean merchandiseIncomeDetailBean=new MerchandiseIncomeDetailBean();
+               merchandiseIncomeDetailBean.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+               merchandiseIncomeDetailBean.setCostPrice(((BigDecimal)row.get("cost_price")).doubleValue());
+               merchandiseIncomeDetailBean.setDateCreation((Date)row.get("date_creation"));
+               
+               ProductBean product=new ProductBean();
+               product.setId((Integer)row.get("id_product"));
+               merchandiseIncomeDetailBean.setProduct(product);
+               
+              ListMerchandiseIncomeDetail.add(merchandiseIncomeDetailBean);
+          }
+
+          
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            ListMerchandiseIncomeDetail=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return ListMerchandiseIncomeDetail;
+    }
+
+    @Override
+    public int deleteMerchandiseIncomeBean(int id_merchandise_income) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select delete_merchandise_income from inventory.delete_merchandise_income( :id_merchandise_income );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_merchandise_income", id_merchandise_income);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("delete_merchandise_income");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }  
+
+    @Override
+    public int saveTransfer(TransferBean transferBean) {
+        int rpta = -1;
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            
+            String sql = "INSERT INTO inventory.transfer( id_location, amount, username, date_creation) VALUES ( :id_location, :amount, :username, :date_creation) RETURNING id_transfer;";
+            System.out.println("sql::" + sql);
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("id_location", transferBean.getLocation().getId_location());
+            query.setParameter("amount", transferBean.getAmount());
+            query.setParameter("username", transferBean.getUsername());
+            query.setParameter("date_creation", transferBean.getDateCreation());
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+
+            int id_transfer=(Integer) ((HashMap)data.get(0)).get("id_transfer");       
+            System.out.println("list::::>"+rpta);
+  
+            List<TransferDetailBean> detail=transferBean.getDetails();
+            int rsd;
+            int rss;
+            for (TransferDetailBean p : detail) {
+                
+                String sqld="INSERT INTO inventory.transfer_detail(id_transfer, id_product, amount, sell_price, date_creation) VALUES ( :id_transfer, :id_product, :amount, :sell_price , :date_creation );";
+                SQLQuery queryd = session.createSQLQuery(sqld);
+                queryd.setParameter("id_transfer",id_transfer);
+                queryd.setParameter("id_product", p.getProduct().getId());
+                queryd.setParameter("amount", p.getAmount());
+                queryd.setParameter("sell_price", p.getSell_price());
+                queryd.setParameter("date_creation",transferBean.getDateCreation());            
+                rsd=queryd.executeUpdate();   
+                System.out.println("res:::"+rsd);
+                
+                //update inventory.products set stock=? where product_id=0
+                String sqls="update inventory.products set stock=(stock - :pamount) where product_id=:product_id ;";
+                SQLQuery querys = session.createSQLQuery(sqls);
+                querys.setParameter("pamount", p.getAmount());
+                querys.setParameter("product_id", p.getProduct().getId());
+                rss=querys.executeUpdate();
+                System.out.println("rss:::"+rss);
+            }
+            rpta=0;
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            //rpta=1;
+            e.printStackTrace();
+        } finally {
+            //session.close(); 
+            tx.commit();
+        }
+        return rpta;
+    }
+
+    @Override
+    public ArrayList<TableTransferBean> get_list_transferBean() {
+        Transaction tx = null;
+        ArrayList<TableTransferBean> litsTransferBean =new ArrayList<TableTransferBean>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "SELECT id_transfer, id_location, name_location, amount, username, date_creation, registration_date FROM inventory.view_transfer;";
+            SQLQuery query = session.createSQLQuery(sql);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TableTransferBean transfer= new TableTransferBean();
+            transfer.setId((Integer)row.get("id_transfer"));
+            //purchaseOrder.getSupplier().setId_supplier((Integer) row.get("id_supplier"));
+            transfer.setId_location((Integer)row.get("id_location"));
+            transfer.setName_location((String)row.get("name_location"));
+            transfer.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+            transfer.setUsername((String)row.get("username"));
+            transfer.setDateCreation((Date) row.get("date_creation"));
+            transfer.setRegistration_date((Date) row.get("registration_date"));
+            
+            litsTransferBean.add(transfer);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsTransferBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return litsTransferBean;
+    }
+
+    @Override
+    public TransferBean get_TransferBean(int id_transfer) {
+        Transaction tx = null;
+      TransferBean transferBean=new TransferBean();
+      
+        System.out.println("get_TransferBean:"+id_transfer);
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT id_transfer, id_location, amount, username, date_creation, registration_date, id_company FROM inventory.transfer where id_transfer = :id ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id",id_transfer);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+          HashMap data = (HashMap) query.list().get(0);
+          //HashMap beanData=(HashMap) data.get(0);   
+          
+          LocationBean lc=new LocationBean();
+          lc.setId_location((Integer)data.get("id_location"));
+          
+          transferBean.setId((Integer)data.get("id_location"));
+          transferBean.setUsername((String) data.get("username"));
+          transferBean.setDateCreation((Date)data.get("date_creation"));
+          transferBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+          transferBean.setLocation(lc);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return transferBean;
+    }
+
+    @Override
+    public ArrayList<TransferDetailBean> get_list_transferDetailBean(int id_transfer) {
+        Transaction tx = null;
+        ArrayList<TransferDetailBean> ListTransferDetail=new ArrayList<TransferDetailBean>();
+        try{
+            tx = session.beginTransaction();
+
+            
+          
+           String sqld="SELECT id_transfer, id_product, amount, sell_price, date_creation FROM inventory.transfer_detail where id_transfer= :id ;";
+           SQLQuery queryd = session.createSQLQuery(sqld);
+           queryd.setParameter("id", id_transfer);
+           
+           queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+           List dataList = queryd.list();
+           
+           System.out.println("List data::"+dataList.size());
+           
+           for (Object object : dataList) {
+               Map row = (Map)object;
+               
+               TransferDetailBean transferDetailBean=new TransferDetailBean();
+               transferDetailBean.setAmount(((BigDecimal)row.get("amount")).doubleValue());
+               transferDetailBean.setSell_price(((BigDecimal)row.get("sell_price")).doubleValue());
+               transferDetailBean.setDateCreation((Date)row.get("date_creation"));
+               
+               ProductBean product=new ProductBean();
+               product.setId((Integer)row.get("id_product"));
+               transferDetailBean.setProduct(product);
+               
+              ListTransferDetail.add(transferDetailBean);
+          }
+
+          
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            ListTransferDetail=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        return ListTransferDetail;
+    }
+
+    @Override
+    public int deleteTransferBean(int id_transfer) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select delete_transfer from inventory.delete_transfer( :id_transfer );";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("id_transfer", id_transfer);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("delete_transfer");       
+          System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
     
 }
