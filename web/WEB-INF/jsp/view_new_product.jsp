@@ -20,7 +20,9 @@
                 </div><!-- /.box-header -->
                 <!-- form start -->
                 <form  data-toggle="validator" id="${formHardware}" role="form" enctype="multipart/form-data">
+                    
                   <div class="box-body">
+                  <div class="col-md-6">    
                    <div class="form-group">
                       <input type="hidden" name="id"  value="${productBean.id}" readonly /> 
                       <label for="txtCodeProduct">Code Product</label>
@@ -48,11 +50,13 @@
                       <textarea class="form-control" rows="3" id="txtnombres" name="description" placeholder="Ingrese la descripcion del producto" required >${productBean.description}</textarea>
                       <div class="help-block with-errors"></div>
                     </div>
+                  </div> 
                       <!--
                     <div class="form-group">
                       <label for="txtunitCost">Unit Cost</label>
                           <input type="text" class="form-control" id="txtunitCost" name="unit_cost" value="${productBean.unit_cost}" placeholder="Ingrese costo unitario" required>
                     </div>-->
+                    <div class="col-md-6">  
                     <div class="form-group has-feedback">
                         <label for="txtunitCost" class="control-label">Unit Cost</label> 
                         <div class="input-group">
@@ -82,7 +86,9 @@
                       <div class="help-block with-errors"></div>
                       <!--<h4 id='loading' >loading..</h4>-->
                       <div id="message"></div>
-                    </div>    
+                    </div>
+                      
+                    </div>   
                   </div><!-- /.box-body -->
                   
                   <div class="modal-footer">

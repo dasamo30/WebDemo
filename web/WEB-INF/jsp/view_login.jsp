@@ -42,9 +42,9 @@
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Inicia sesión para ingresar</p>
-        <form action="validatelogin" method="post" data-toggle="validator">
+        <form action="validatelogin" name="usuarioBean" method="post" data-toggle="validator">
           <div class="form-group has-feedback">
-              <input type="text" class="form-control" placeholder="Usuario" name="usuario" required >
+              <input type="text" class="form-control" placeholder="Usuario" name="login" required >
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
             <div class="help-block with-errors"></div>
           </div>

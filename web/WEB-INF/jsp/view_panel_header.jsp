@@ -310,7 +310,7 @@
               </li>
               <!-- Control Sidebar Toggle Button href="#" data-toggle="control-sidebar" -->
               <li>
-                <a ><i class="fa fa-user"></i></a>
+                <a ><i class="fa fa-chevron-down"></i></a>
               </li>
             </ul>
           </div>

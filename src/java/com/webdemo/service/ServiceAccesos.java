@@ -9,6 +9,7 @@ package com.webdemo.service;
 import com.webdemo.beans.InfoUserBean;
 import com.webdemo.beans.MenuPerfil;
 import com.webdemo.beans.PerfilBean;
+import com.webdemo.beans.TableUsuarioBean;
 import com.webdemo.dao.DAOFactory;
 import com.webdemo.dao.IAccesosDAO;
 import java.util.ArrayList;
@@ -23,10 +24,10 @@ public class ServiceAccesos {
     private DAOFactory fabrica=DAOFactory.getDAOFactory(DAOFactory.POSTGRES);
     private IAccesosDAO accesoDao=fabrica.getAccesosDAO();
     
-    public int ValidaLogin(String usr,String pass){
+    public int ValidaLogin(InfoUserBean usuarioBean){
         System.out.println("ServiceAccesos.ValidaLogin");
         //return "sssss";
-        return accesoDao.validadUsuario(usr, pass);
+        return accesoDao.validadUsuario(usuarioBean);
     }
     
     public InfoUserBean getUserInfo(String usuario){
@@ -45,7 +46,7 @@ public class ServiceAccesos {
     
     }
     
-    public ArrayList<InfoUserBean> get_list_usuarios(){
+    public ArrayList<TableUsuarioBean> get_list_usuarios(){
         return accesoDao.get_list_usuarios();
         
     }
@@ -54,7 +55,31 @@ public class ServiceAccesos {
         return accesoDao.registraUsuarios(usuario);
     }
     
+    public int eliminaUsuario(int idUsuario){
+        return accesoDao.eliminaUsuario(idUsuario);
+    }
+    
+    public int modificarUsuario(InfoUserBean usuario){
+        return accesoDao.modificarUsuario(usuario);
+    }
+    
+    public InfoUserBean get_usuario(int idUsuario){
+        return accesoDao.get_usuario(idUsuario);
+    }
+    
     public ArrayList<PerfilBean> get_list_perfiles(){
         return accesoDao.get_list_perfiles();
+    }
+    
+     public int registraPerfil(PerfilBean perfil){
+         return accesoDao.registraPerfil(perfil);
+     }
+     
+    public PerfilBean get_perfil(int idPerfil){
+        return accesoDao.get_perfil(idPerfil);
+    }
+    
+    public int modificarPerfil(PerfilBean perfil){
+        return accesoDao.modificarPerfil(perfil);
     }
 }

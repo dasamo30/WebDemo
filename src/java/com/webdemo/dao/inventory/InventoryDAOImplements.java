@@ -210,7 +210,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         String sql = "select modify_product from inventory.modify_product( :product_id , :code , :name , :description , :unit_cost, :image_name );";
+         String sql = "select modify_product from inventory.modify_product( :product_id , :code , :name , :description , :unit_cost, :image_name, :alert_stock, :id_category );";
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("product_id", product.getId());
          query.setParameter("code", product.getCode());
@@ -218,6 +218,8 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          query.setParameter("description", product.getDescription());
          query.setParameter("unit_cost", product.getUnit_cost());
          query.setParameter("image_name", product.getImage_name(), Hibernate.STRING);
+         query.setParameter("alert_stock", product.getAlert_stock());
+         query.setParameter("id_category", product.getId_category());        
          
          query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
          List data = query.list();
@@ -939,48 +941,24 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("id_purchase_order",id_purchase_order);
          
-         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-          HashMap data = (HashMap) query.list().get(0);
-          //HashMap beanData=(HashMap) data.get(0);   
           
-          SupplierBean sp=new SupplierBean();
-          sp.setId_supplier((Integer)data.get("id_supplier"));
+          query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
           
-          purchaseOrderBean.setId((Integer)data.get("id_purchase_order"));
-          purchaseOrderBean.setUsername((String) data.get("username"));
-          purchaseOrderBean.setDateCreation((Date)data.get("date_creation"));
-          purchaseOrderBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
-          purchaseOrderBean.setSupplier(sp);
-          
-          /*
-          ArrayList<PurchaseOrderDetailBean> details=new ArrayList<PurchaseOrderDetailBean>();
-          
-           String sqld="SELECT id_purchase_order, id_product, amount, cost_price, date_creation FROM inventory.purchase_order_detail where id_purchase_order= :id ;";
-           SQLQuery queryd = session.createSQLQuery(sqld);
-           queryd.setParameter("id", id_purchase_order);
-           
-           queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-           List dataList = queryd.list();
-           
-           System.out.println("List data::"+dataList.size());
-           
-           for (Object object : dataList) {
-               Map row = (Map)object;
-               
-               PurchaseOrderDetailBean purchaseOrderDetailBean=new PurchaseOrderDetailBean();
-               purchaseOrderDetailBean.setAmount(((BigDecimal)row.get("amount")).doubleValue());
-               purchaseOrderDetailBean.setCostPrice(((BigDecimal)row.get("cost_price")).doubleValue());
-               purchaseOrderDetailBean.setDateCreation((Date)row.get("date_creation"));
-               
-               ProductBean product=this.get_Product((Integer)row.get("id_product"));
-               purchaseOrderDetailBean.setProduct(product);
-               
-              details.add(purchaseOrderDetailBean);
-          }
+          if(query.list().size()>0){
+            HashMap data = (HashMap) query.list().get(0);
+            //HashMap beanData=(HashMap) data.get(0);   
 
-          purchaseOrderBean.setDetails(details);*/
-                  
-          
+            SupplierBean sp=new SupplierBean();
+            sp.setId_supplier((Integer)data.get("id_supplier"));
+
+            purchaseOrderBean.setId((Integer)data.get("id_purchase_order"));
+            purchaseOrderBean.setUsername((String) data.get("username"));
+            purchaseOrderBean.setDateCreation((Date)data.get("date_creation"));
+            purchaseOrderBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+            purchaseOrderBean.setSupplier(sp);
+          }else{
+              purchaseOrderBean=null;
+          }
       }catch (HibernateException e) {
          if (tx!=null){
              tx.rollback();

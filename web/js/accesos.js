@@ -57,12 +57,13 @@ jQuery(document).ready( function () {
             { "mData": "login" },
             { "mData": "nombres"},
             { "mData": "apellidos"},
-            { "mData": "perfil"}
+            { "mData": "perfil"},
+            { "mData": "ico_estado","sClass": "text-center"},
+            { "mData": "ico_edit","sClass": "text-center"},
+            { "mData": "ico_delete","sClass": "text-center"}
             
         ] 
     });
-    
-    
     
    /* $("#frmrRegistraUsuario").submit(function(event){
     // cancels the form submission
@@ -87,7 +88,7 @@ jQuery(document).ready( function () {
         //$('#frmrRegistraUsuario').formValidation('resetForm', true);
         
     });*/
-   
+   /*
     $('#myModal').on('show.bs.modal', function (e) { 
         var link = $(e.relatedTarget);
        // alert(link.attr("href"));
@@ -98,6 +99,29 @@ jQuery(document).ready( function () {
             
         }); 
     
+    });*/
+    
+    $('#myModalViewUsuario').on('show.bs.modal', function (e) { 
+        
+        console.log("myModalViewUsuario");
+        
+        var btn = $(e.relatedTarget);
+        var idUsuario=btn.data('id');
+       var data=null;
+       var title="Registrar usuario";
+       var frm='#frmrRegistraUsuario';
+       
+       if(btn.attr("id")==="btnViewEditUsuario"){ 
+           console.log("btnViewEditPerfil");
+            data={"idUsuario":idUsuario};
+            title="Modificar usuario";
+            frm='#frmrModificaUsuario';
+       }
+        $.post(btn.attr("href"),data, function( data ) { 
+            $('#myModalLabel').html(title);
+            $('#modal-body').html(data); 
+            $(frm).validator();
+        }); 
     });
     
     
@@ -213,10 +237,10 @@ $('#tbperfil')
             "aoColumns": [
             { "mData": "nombre" },
             { "mData": "fecha"},
-            { "mData": "tiempo_sesion"},
+            //{ "mData": "tiempo_sesion"},
             { "mData": "ico_estado","sClass": "text-center"},
-            { "mData": "ico_editar","sClass": "text-center"},
-            { "mData": "ico_permiso","sClass": "text-center"}
+            { "mData": "ico_editar","sClass": "text-center"}
+            //{ "mData": "ico_permiso","sClass": "text-center"}
             //{ "sClass": "a-right", "aTargets": [ 4 ] }
             
             ]/*,
@@ -225,7 +249,204 @@ $('#tbperfil')
             //{ className: "text-nowrap", "targets": [0,1] }
           ]*/
     });
+    
+    
+    $('#myModalViewPerfil').on('show.bs.modal', function (e) { 
+        
+        console.log("myModalViewPerfil");
+        
+        var btn = $(e.relatedTarget);
+        var idPerfil=btn.data('id');
+       var data=null;
+       var title="Registra Perfil";
+       var frm='#frmrRegisterPerfil';
+       
+       if(btn.attr("id")==="btnViewEditPerfil"){ 
+           console.log("btnViewEditPerfil");
+            data={"idPerfil":idPerfil};
+            title="Modifica perfil";
+            frm='#frmModifPerfil';
+       }
+        $.post(btn.attr("href"),data, function( data ) { 
+            $('#myModalLabel').html(title);
+            $('#modal-body').html(data); 
+            $(frm).validator();
+        }); 
+    });
+    
+    
+    
+    $(document).on("submit","#frmrRegisterPerfil",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmrRegisterPerfil");
+       
+       var msj=$("#msjmntPerfil");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmrRegisterPerfil");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/perfiles/ActRegistraPerfil",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"El perfil se grabo con exito");   
+                    loadDataTable("#tbperfil");
+                    frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"El perfil ya existe");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+      //  alert("ajax");
+    });
+    
+    $(document).on("submit","#frmModifPerfil",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmModifPerfil");
+       
+       var msj=$("#msjmntPerfil");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmModifPerfil");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/perfiles/ActModificaPerfil",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"El perfil se modifico con exito");   
+                    loadDataTable("#tbperfil");
+                    frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"No se completo el proceso.. !!!");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+      //  alert("ajax");
+    });
+    
+    
+    //btnEliminaUsuario
+    $(document).on("click","#btnEliminaUsuario",function(e){    
 
+        var obj = this;
+        ezBSAlert({
+        type: "confirm",
+        headerText:"Confirm",
+        messageText: "Are you sure about this ?",
+        alertType: "warning"
+        }).done(function (e) {
+          var idUsuario = $(obj).data('id');
+          //console.log("confirma::"+idProduct);
+          //var url =baseurl+"/usuarios/ActEliminarUsuario";
+          if(e){
+              $.ajax({
+                url: baseurl+"/usuarios/ActEliminaUsuario",
+                type: 'POST',
+                data: { idUsuario:idUsuario} ,
+                //contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    if(result==0){
+                        //alerts(0,msj,"");   
+                        loadDataTable("#tbusuario");
+                        ezBSAlert({ headerText:"success", messageText: "El usuario se elmino con exito", alertType: "success"});
+                    }else{
+                       // alerts(2,msj,"No se completo el proceso.. !!!");
+                        ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
+                    }
+
+
+                },
+                error: function () {
+                    //alerts(3,msj,"A ocurrido un error interno !!!");
+                    ezBSAlert({ headerText:"Error",messageText: "A ocurrido un error interno !!!", alertType: "danger"});
+                }
+              });
+            
+          }
+        });
+   });
+    
+    //btnViewEditUsuario
+    $(document).on("submit","#frmrModificaUsuario",function(e){    
+      
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+       e.preventDefault();
+       
+       frm=$("#frmrModificaUsuario");
+       
+       var msj=$("#msjregusu");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        console.log(":::frmrModificaUsuario");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/usuarios/ActModificaUsuario",
+            contentType: 'application/json',
+            data:JSON.stringify(frm.serializeJSON()),
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"El usuario se modifico con exito");   
+                    loadDataTable("#tbusuario");
+                    //frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"No se completo el proceso.. !!!");
+                }
+                
+                
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+      //  alert("ajax");
+    });
 });
 
   

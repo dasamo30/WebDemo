@@ -12,6 +12,7 @@ import com.conciliacion.beans.accesos.Tab_Usuarios;*/
 import com.webdemo.beans.InfoUserBean;
 import com.webdemo.beans.MenuPerfil;
 import com.webdemo.beans.PerfilBean;
+import com.webdemo.beans.TableUsuarioBean;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -21,17 +22,23 @@ import java.util.Map;
  */
 public interface IAccesosDAO {
     
-    public int validadUsuario(String usr,String pass); 
-    
+    public int validadUsuario(InfoUserBean userBean); 
     public InfoUserBean getUserInfo(String usuario);
     
     public ArrayList<MenuPerfil> get_menus_accesos_perfiles(int padre,int idPerfil);
-    
     public ArrayList<MenuPerfil> get_permisos_menus_accesos(int padre,int idPerfil);
-    public ArrayList<InfoUserBean> get_list_usuarios();
+    
+    public ArrayList<TableUsuarioBean> get_list_usuarios();
     public int registraUsuarios(InfoUserBean usuario);
+     public int eliminaUsuario(int idUsuario);
+     public int modificarUsuario(InfoUserBean usuario);
+     public InfoUserBean get_usuario(int idUsuario);
    
     public ArrayList<PerfilBean> get_list_perfiles();
+    public int registraPerfil(PerfilBean perfil);
+    public PerfilBean get_perfil(int idPerfil);
+    public int modificarPerfil(PerfilBean perfil);
+    
   /* public Map<String, String> getUserInfo(String login);
    
    public ArrayList<MenuPerfil> get_menus_accesos_perfiles(int padre,int idPerfil);

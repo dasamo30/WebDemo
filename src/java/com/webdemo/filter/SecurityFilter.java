@@ -67,47 +67,21 @@ public class SecurityFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        //logger.debug("doFilter()");
-        //System.out.println("=======> "+filterConfig.getInitParameter("parametro1"));
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
         String servletPath = req.getServletPath();
         HttpSession session = req.getSession();
 
         currTime = System.currentTimeMillis() / 1000;
-        //System.out.println("=======> aca revienta");
-       // System.out.println("=======> "+session.getAttribute("usuario"));
         
         
         String uri = ((HttpServletRequest)request).getRequestURI();
-        
 
-    /*if ( uri.indexOf("/css") > 0){
-        chain.doFilter(request, response);
-    }
-    else if( uri.indexOf("/images") > 0){
-        chain.doFilter(request, response);
-    }
-    else if( uri.indexOf("/js") > 0){
-        chain.doFilter(request, response);
-    }else if( uri.indexOf("/font") > 0){
-        chain.doFilter(request, response);
-    }*/
-        if(uri.matches(".*(css|jpg|png|gif|js|svg|eot|ttf|woff|woff2|pdf|jasper)")){
+        if(uri.matches(".*(css|jpg|png|gif|js|svg|eot|ttf|woff|woff2)")){
             chain.doFilter(request, response);
             return;
          }
-        
-        // Allow access to login functionality.
-        /*
-         Estados de seguridad de Sesion para la variable expiryTime:
-         0: Antes de iniciar sesion
-         -1: Sesion expirada
-         -2: Sesion no iniciada
-         >0: Sesion iniciada
-         */
-        //servletPath.equals("/login") || 
-        
+
         System.out.println("SecurityFilter");
         
         if (servletPath.equals("/login") || servletPath.equals("/index.html") || servletPath.equals("/validatelogin")) {
@@ -152,6 +126,11 @@ public class SecurityFilter implements Filter {
                     if (session.getAttribute("usuario") != null) {
                         expiryTime = currTime + session.getMaxInactiveInterval();
                         System.out.println("existe");
+                        /*
+                        if((Integer)session.getAttribute("pestado")==0){
+                            request.getRequestDispatcher("/WebDemo/panel/home").forward(request, response);
+                            return;
+                        }*/
                     } else {
                         session.setAttribute("err", "Usted no ha iniciado sesion");
                         // Request is not authorized.

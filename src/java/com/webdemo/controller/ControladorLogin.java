@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -73,33 +75,38 @@ public class ControladorLogin {
     
     //@RequestMapping("/validatelogin")
     @RequestMapping(value = "/validatelogin", method = RequestMethod.POST)
-    public ModelAndView validatelogin(HttpServletRequest request,HttpServletResponse res, RedirectAttributes redir) {
+    public ModelAndView validatelogin(@ModelAttribute("usuarioBean") InfoUserBean usuarioBean ,HttpServletRequest request,HttpServletResponse res, RedirectAttributes redir) {
         HttpSession sesion = request.getSession();
-        System.out.println("validatelogin");
-        //accesoDao=(IAccesosDAO) DAOFactory.getDAOFactory(DAOFactory.POSTGRES);
-        //accesoDao.validadUsuario("", "");
-            //getServiceAccesos().ValidaLogin();
+        System.out.println("XXXXXXXXXXXX:"+usuarioBean.toString());
+
         ModelAndView mv=null;
 
-        String usuario=request.getParameter("usuario");  
-        String clave=request.getParameter("clave"); 
-
-        int rpta=serviceAccesos.ValidaLogin(usuario, clave);
+        int rpta=serviceAccesos.ValidaLogin(usuarioBean);
         if(rpta==0){
             
-            InfoUserBean bean=serviceAccesos.getUserInfo(usuario);
+            InfoUserBean bean=serviceAccesos.getUserInfo(usuarioBean.getLogin());
             System.out.println("getUserInfo"+bean.toString());
             
-            sesion.setAttribute("usuario","dasamo");
+            sesion.setAttribute("usuario",bean.getLogin());
             sesion.setMaxInactiveInterval(1000);
-            System.out.println("usuario:"+usuario+"  clave:"+clave);
-            Menu_recursivo menus=new Menu_recursivo();
-            String listado =menus.muestra_menu_familias(request.getContextPath(),bean.getId_perfil());
+            //System.out.println("usuario:"+usuario+"  clave:"+clave);
+            
+            
+            String listado=null;
+            
+            
+            if(bean.getPestado()==1){
+                Menu_recursivo menus=new Menu_recursivo();
+                listado =menus.muestra_menu_familias(request.getContextPath(),bean.getId_perfil());
+            }
+            
+            
+            
             sesion.setAttribute("lmemus",listado);
-            System.out.println("listado:"+listado);
+            //System.out.println("listado:"+listado);
             
             //carga foto
-        File file=new File("/opt/apps/dist/fotos/"+bean.getFoto());
+        File file=new File("/opt/apps/dist/fotos/user/"+bean.getFoto());
         String encodedString = null;
         try {
             FileInputStream fis=new FileInputStream(file);
@@ -126,6 +133,7 @@ public class ControladorLogin {
             sesion.setAttribute("foto",encodedString);
             sesion.setAttribute("nombre",bean.getNombres()+" "+bean.getApellidos());
             sesion.setAttribute("perfil",bean.getPerfil());
+            sesion.setAttribute("pestado",bean.getPestado());
             
             Date fecha = new Date();
             DateFormat df=DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale("ES"));
@@ -135,7 +143,20 @@ public class ControladorLogin {
             mv = new ModelAndView("redirect:panel/home");
         }else{
             mv = new ModelAndView("redirect:login");
-            redir.addFlashAttribute("rpta","Credenciales no validas");
+            String msjlogin;
+            
+            switch (rpta) {
+            case 1:  msjlogin = "el usuario no exite";
+                     break;
+            case 2:  msjlogin = "La ontraseña  es incorrecta";
+                     break;
+            case 3:  msjlogin = "Usuario inactivo";
+                     break;    
+            default: msjlogin = "Error!!!";
+                     break;
+            }
+            
+            redir.addFlashAttribute("rpta",msjlogin);
             //mv.addObject("rpta","Credenciales no validas");
             
         }

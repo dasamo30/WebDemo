@@ -22,6 +22,26 @@
                 <div class="box-header with-border">
                 <div class="row mb-lg">
                     <form id="form_micab">
+                        <section class="col-md-2 col-print-2">
+                             <label>Nro Doc.</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="nroDocument" name="nroDocument" required >
+                              <span class="input-group-btn" id="spanSearchDoc" style="display: none;">
+                                  <button type="button" id="searchOC" class="btn btn-primary btn-flat"><i class="fa fa-search"></i></button>
+                              </span>
+                          </div>
+                             <div class="help-block with-errors"></div>
+                        </section>
+                        <section class="col-md-3 col-print-3">                          
+                            <div class="form-group">
+                            <label for="cboReason">Reason</label>    
+                            <select id="cboReason" class="form-control" required>
+                                <option value="1" selected >Direct Income</option>
+                                <option value="2">By purchase order</option>											
+                            </select>
+                            <div class="help-block with-errors"></div>
+                            </div>  
+	                </section>
 	                <section class="col-md-4 col-print-4">                          
                             <div class="form-group">
                             <label for="cboSupplier">Supplier</label>    

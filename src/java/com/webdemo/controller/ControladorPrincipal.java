@@ -8,20 +8,12 @@ package com.webdemo.controller;
 
 
 import com.webdemo.libraries.Menu_recursivo;
-import com.webdemo.service.ServiceAccesos;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,10 +37,10 @@ public class ControladorPrincipal {
     String usuario=request.getParameter("usuario");  
     String clave=request.getParameter("clave"); 
     */
-    Menu_recursivo menus=new Menu_recursivo();
-    String listado =menus.muestra_menu_familias(request.getContextPath(),1);
+    //Menu_recursivo menus=new Menu_recursivo();
+    //String listado =menus.muestra_menu_familias(request.getContextPath(),1);
             
-    System.out.println("listado:"+listado);
+    //System.out.println("listado:"+listado);
     System.out.println("carga la vista del home");
     
     String namemenu="Panel Principal";

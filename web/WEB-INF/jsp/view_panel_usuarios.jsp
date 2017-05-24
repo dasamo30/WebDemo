@@ -21,7 +21,7 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                     <!-- Link trigger modal -->
-                    <a href="${contextPath}/usuarios/ActViewUsuario" data-toggle="modal" data-target="#myModal" data-remote="false" class="btn btn-primary">
+                    <a href="${contextPath}/usuarios/ActViewUsuario" data-toggle="modal" data-target="#myModalViewUsuario" data-remote="false" class="btn btn-primary">
                         Nuevo usuario
                     </a>
                 </div><!-- /.box-header -->
@@ -34,14 +34,14 @@
           </div>   <!-- /.row -->
           
           <!-- Default bootstrap modal example -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="myModalViewUsuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"> Registrar Usuario</h4>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
                   </div>
-                  <div class="modal-body">
+                    <div class="modal-body" id="modal-body">
                     
                   </div>
                   <!--<div class="modal-footer">
@@ -66,6 +66,9 @@
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Perfil</th>
+                        <th>Estado</th>
+                        <th>Editar</th>
+                        <th>Elminar</th>
                       </tr>
                     </thead>
                     <tfoot>
@@ -74,6 +77,9 @@
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Perfil</th>
+                        <th>Estado</th>
+                        <th>Editar</th>
+                        <th>Elminar</th>
                       </tr>
                     </tfoot>
                   </table>

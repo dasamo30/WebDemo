@@ -568,6 +568,7 @@ jQuery(document).ready( function () {
             //{ className: "text-nowrap", "targets": [0,1] }
           ]*/
     });
+    
     $(document).on("click","#btnDeletetLocation",function(e){    
 
         var obj = this;
@@ -1692,6 +1693,54 @@ jQuery(document).ready( function () {
     });
     
 
+    //cboReason
+    $('#cboReason').on('change', function() {
+        //alert( this.value );
+        if(this.value==1){
+           $('#spanSearchDoc').hide(); 
+        }else{
+           $('#spanSearchDoc').show(); 
+        }
+    });
+
+    //searchOC
+    $('#searchOC').on('click', function() {
+        
+        console.log("buscar orde de compra");
+        
+        var id_order=$('#nroDocument').val();
+        
+        $.ajax({
+            type: "POST",
+            url: baseurl+"/purchaseOrdersController/ActSearchPurchaseOrders",
+            //contentType: 'application/json',
+            data:{ id_order:id_order},
+            success: function(response){
+                
+               console.log("id_supplier:"+response.data.supplier.id_supplier);
+              // $("#cboSupplier").val(response.data.supplier.id_supplier).trigger("change");
+               $("#cboSupplier").select2("val", response.data.supplier.id_supplier);
+               
+               response.data.details.forEach(function(detail) {
+                   // var subtotal =  detail.amount * detail.sell_price;
+                   console.log(detail);
+                /*$("#tblTransferView").append(            		
+                                    "<tr>" +        			
+                                    "	<td>" + detail.product.name + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.amount + "</td>" +
+                                    "	<td class='text-xs-right'>" + detail.sell_price + "</td>" +
+                                    "	<td class='text-xs-right'>" + subtotal.toFixed(2) + "</td>" +        			
+                                    "</tr>"); 
+                total = total + (detail.amount * detail.sell_price);*/            
+            });
+                
+            },
+            error: function() {
+                ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});
+            } 
+        });
+        
+    });
 //-----------------------Transfer-------------------------------------------------//    
  $("#cboLocation").select2({
     placeholder: "Select a location"

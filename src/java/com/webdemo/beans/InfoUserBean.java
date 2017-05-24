@@ -29,6 +29,7 @@ public class InfoUserBean {
     private String correo;
     private int id_perfil;
     private String perfil;
+    private int pestado;
 
     /**
      * @return the id_usuario
@@ -240,9 +241,22 @@ public class InfoUserBean {
         this.perfil = perfil;
     }
 
+    /**
+     * @return the pestado
+     */
+    public int getPestado() {
+        return pestado;
+    }
+
+    /**
+     * @param pestado the pestado to set
+     */
+    public void setPestado(int pestado) {
+        this.pestado = pestado;
+    }
+
     @Override
     public String toString() {
-        return "InfoUserBean{" + "id_usuario=" + id_usuario + ", login=" + login + ", clave=" + clave + ", estado=" + estado + ", fecha_reg=" + fecha_reg + ", nro_sesion=" + nro_sesion + ", sesion_activa=" + sesion_activa + ", nombres=" + nombres + ", apellidos=" + apellidos + ", foto=" + foto + ", genero=" + genero + ", dni=" + dni + ", correo=" + correo + ", id_perfil=" + id_perfil + ", perfil=" + perfil + '}';
+        return "InfoUserBean{" + "id_usuario=" + id_usuario + ", login=" + login + ", clave=" + clave + ", estado=" + estado + ", fecha_reg=" + fecha_reg + ", nro_sesion=" + nro_sesion + ", sesion_activa=" + sesion_activa + ", nombres=" + nombres + ", apellidos=" + apellidos + ", foto=" + foto + ", genero=" + genero + ", dni=" + dni + ", correo=" + correo + ", id_perfil=" + id_perfil + ", perfil=" + perfil + ", pestado=" + pestado + '}';
     }
-    
 }

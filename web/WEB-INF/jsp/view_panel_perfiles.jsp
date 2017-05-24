@@ -21,8 +21,8 @@
               <div class="box box-primary">
                 <div class="box-header with-border">
                     <!-- Link trigger modal -->
-                    <a href="${contextPath}/usuarios/ActViewPerfil" data-toggle="modal" data-target="#ModalPefil" data-remote="false" class="btn btn-primary">
-                        Nuevo usuario
+                    <a href="${contextPath}/perfiles/ActViewNewPerfil" data-toggle="modal" data-target="#myModalViewPerfil" data-remote="false" class="btn btn-primary">
+                        Nuevo Perfil
                     </a>
                 </div><!-- /.box-header -->
                 <!-- form start -->
@@ -34,14 +34,14 @@
           </div>   <!-- /.row -->
           
           <!-- Default bootstrap modal example -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="myModalViewPerfil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"> Registrar Perfil</h4>
                   </div>
-                  <div class="modal-body">
+                    <div class="modal-body" id="modal-body">
                     
                   </div>
                   <!--<div class="modal-footer">
@@ -62,22 +62,22 @@
                   <table id="tbperfil" class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
-                          <th>Nombre</th>
+                        <th>Nombre</th>
                         <th>fecha</th>
-                        <th>Tiempo sesion</th>
+                        <!--<th>Tiempo sesion</th>-->
                         <th>Estado</th>
                         <th>Editar</th>
-                        <th>Permisos</th>
+                        <!--<th>Permisos</th>-->
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
                         <th>Nombre</th>
                         <th>fecha</th>
-                        <th>Tiempo sesion</th>
+                        <!--<th>Tiempo sesion</th>-->
                         <th>Estado</th>
                         <th>Editar</th>
-                        <th>Permisos</th>
+                        <!--<th>Permisos</th>-->
                       </tr>
                     </tfoot>
                   </table>

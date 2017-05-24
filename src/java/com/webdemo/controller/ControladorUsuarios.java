@@ -10,6 +10,8 @@ import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.webdemo.beans.InfoUserBean;
+import com.webdemo.beans.PerfilBean;
+import com.webdemo.beans.TableUsuarioBean;
 import com.webdemo.service.ServiceAccesos;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -67,9 +70,20 @@ public class ControladorUsuarios {
     @RequestMapping(value="/ActlistaUsuarios",method = RequestMethod.POST)
     @ResponseBody 
     public String ActlistaUsuarios(HttpServletRequest request, HttpServletResponse response) {
+        String baseurl = request.getContextPath();
     
-    
-        ArrayList<InfoUserBean> listUsuarios=serviceAccesos.get_list_usuarios();
+        ArrayList<TableUsuarioBean> listUsuarios=serviceAccesos.get_list_usuarios();
+        
+        for (TableUsuarioBean l : listUsuarios) {
+            
+         String icono =(l.getEstado()==1)? "<span class=\"label label-success\">A</span>":"<span class=\"label label-danger\">D</span>";
+            l.setIco_estado(icono);
+            l.setIco_edit("<button data-toggle=\"modal\" data-target=\"#myModalViewUsuario\" data-remote=\"false\" type=\"button\" data-id=\""+l.getId_usuario()+"\" id=\"btnViewEditUsuario\" class=\"btn btn-info btn-xs\" href=\""+baseurl+"/usuarios/ActViewModifUsuario\" ><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></button>");
+            l.setIco_delete("<button type=\"button\" data-id=\""+l.getId_usuario()+"\" id=\"btnEliminaUsuario\" class=\"btn btn-danger btn-xs\"  ><i style=\"font-size: 18px;\" class=\"fa fa-trash\"></i></button>");
+        
+            
+        }
+        
         DataTableObject dataTableObject = new DataTableObject();
         
         dataTableObject.setAaData(listUsuarios);
@@ -85,30 +99,26 @@ public class ControladorUsuarios {
         
     }
     //ActViewUsuario
-    @RequestMapping(value = "ActViewUsuario", method = RequestMethod.GET)
+    @RequestMapping(value = "ActViewUsuario", method = RequestMethod.POST)
     @ResponseBody
-    public  ModelAndView ActViewAddEmployee() {
-        //String  btnSaveEmployee = btn.crear("submit", 70, "grabar.png", "btnSaveEmployee","btnSaveEmployee", "Aceptar", "", "Aceptar");
+    public  ModelAndView ActViewUsuario() {
+        
+        
+      ArrayList<PerfilBean>  listPerfil=serviceAccesos.get_list_perfiles();
+
       ModelAndView mav = new ModelAndView();  
       mav.setViewName("view_nuevo_usuario");
+      mav.addObject("listPerfil", listPerfil);
+      mav.addObject("formUsuario", "frmrRegistraUsuario");
        return mav;  
     }
     
     @RequestMapping(value="ActRegistraUsuario", method = RequestMethod.POST)
     @ResponseBody
-    public int ActRegistraUsuario(@RequestBody InfoUserBean usuarios){
-        
-       //String rta ="clave="+usuarios.getClave();// this.getAdminservice().saveUsr(usr, usrpass, perfil);
-       /* String response_msg = "";
-        switch (rta) {
-            case "1":
-                response_msg = "El usuario se guardo con exito.";
-                break;
-            case "2":
-                response_msg = "El usuario ya existe.";
-                break;
-        }*/
-        int rpta=serviceAccesos.registraUsuarios(usuarios);
+    public int ActRegistraUsuario(@RequestBody InfoUserBean usuario){
+    
+ 
+        int rpta=serviceAccesos.registraUsuarios(usuario);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
@@ -116,17 +126,44 @@ public class ControladorUsuarios {
         }
         return rpta;
     }
-      /*  
-    @RequestMapping(value = "viewConsultaListasActivas", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "ActViewModifUsuario", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView viewConsultaListasActivas() {
+    public  ModelAndView ActViewModifUsuario(@RequestParam("idUsuario") int idUsuario,HttpServletRequest request) {
         
-        String btnsgamcla=btn.crear("submit", 80, "btn_run.png", "btnsgamcla", "btnsgamcla", "Consultar", "", "Consultar");
-        ModelAndView mav = new ModelAndView();
-       // mav.addObject("btnsgapr", btnsgapr);
-        mav.addObject("btnsgamcla", btnsgamcla);
-       // mav.addObject("cbosccl", opciones);
-        mav.setViewName("../../view_sga_movil_tab_consulta_listas_activas.htm");
-        return mav;
-    }*/
+        
+      ArrayList<PerfilBean>  listPerfil=serviceAccesos.get_list_perfiles();
+      InfoUserBean usuarioBean=serviceAccesos.get_usuario(idUsuario);
+      
+      ModelAndView mav = new ModelAndView();  
+      mav.setViewName("view_nuevo_usuario");
+      mav.addObject("listPerfil", listPerfil);
+      mav.addObject("usuarioBean", usuarioBean);
+      mav.addObject("formUsuario", "frmrModificaUsuario");
+       return mav;  
+    }
+    
+    
+    @RequestMapping(value="ActModificaUsuario", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActModificaUsuario(@RequestBody InfoUserBean usuario)   {
+    
+
+        
+        System.out.println("ActModificaUsuario:"+usuario.toString());
+        return serviceAccesos.modificarUsuario(usuario);
+        
+        
+    }
+ 
+    @RequestMapping(value="ActEliminaUsuario", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActEliminaUsuario(@RequestParam("idUsuario") int idUsuario){
+        
+        System.out.println(":::"+idUsuario);
+        int rpta=serviceAccesos.eliminaUsuario(idUsuario);
+        //int rpta=serviceAccesos.registraUsuarios(usuarios);
+     
+        return rpta;
+    }
 }

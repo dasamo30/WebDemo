@@ -233,6 +233,40 @@ public class PurchaseOrdersController {
         return rpta;
     }
     
+    //ActSearchPurchaseOrders
+    @RequestMapping(value="ActSearchPurchaseOrders", method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxResponseBE ActSearchPurchaseOrders(@RequestParam("id_order") int id_order){
+        
+        System.out.println(":::"+id_order);
+        
+        PurchaseOrderBean purchaseOrderBean=serviceInventory.get_purchaseOrderBean(id_order);
+        System.out.println("purchaseOrderBean:"+purchaseOrderBean);
+        
+        
+        
+        if(purchaseOrderBean!=null){
+            ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(id_order);
+            
+            for (PurchaseOrderDetailBean pd : detail) {
+                ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
+                pd.setProduct(product);
+            }      
+             purchaseOrderBean.setDetails(detail);
+            
+            purchaseOrderBean.setDetails(detail);
+        }
+        
+        AjaxResponseBE ajaxResponseBE;
+        ajaxResponseBE = new AjaxResponseBE();
+        ajaxResponseBE.setState("200");
+        ajaxResponseBE.setMessage("Request processed correctly.");
+        ajaxResponseBE.setDescription("The transfer has been successfully finded.");
+        ajaxResponseBE.setData(purchaseOrderBean);
+        
+        return ajaxResponseBE;
+    }
+    
     @RequestMapping(value = "ActPrintPurchaseOrders", method = RequestMethod.GET) 
     @ResponseBody
     public void ActPrintPurchaseOrders(@RequestParam("id_purchase_order") int id_purchase_order,
