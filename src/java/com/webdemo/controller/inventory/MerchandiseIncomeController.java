@@ -105,22 +105,19 @@ public class MerchandiseIncomeController {
         HttpSession sesion = request.getSession();
         System.out.println("data:"+data);
         //PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
-         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ObjectMapper a=new ObjectMapper();
         a.setDateFormat(df);
          
         MerchandiseIncomeBean merchandiseIncomeBean=a.readValue(data,MerchandiseIncomeBean.class);
         
-        
-        merchandiseIncomeBean.setUsername(sesion.getAttribute("usuario").toString());
-        
+        merchandiseIncomeBean.setUsername(sesion.getAttribute("usuario").toString());        
         System.out.println("merchandiseIncomeBean:"+merchandiseIncomeBean.toString());
-        
-        
 
-       
+
+       /*
         String fecha = df.format(merchandiseIncomeBean.getDateCreation());
-        System.out.println("fecha:"+fecha);
+        System.out.println("fecha:"+fecha);*/
 
         return serviceInventory.saveMerchandiseIncome(merchandiseIncomeBean);
     }

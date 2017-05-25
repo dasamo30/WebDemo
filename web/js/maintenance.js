@@ -1093,6 +1093,7 @@ jQuery(document).ready( function () {
             
         });
       
+      
       $(document).on("submit","#addRowProduct",function(e){    
       
         if (e.isDefaultPrevented()) {
@@ -1253,6 +1254,7 @@ jQuery(document).ready( function () {
 
         if(!$('#form_pocab')[0].checkValidity()){
             $('#submit').click();
+            return;
         }
 
 	var rows =0;
@@ -1505,6 +1507,7 @@ jQuery(document).ready( function () {
 
         if(!$('#form_micab')[0].checkValidity()){
             $('#submit').click();
+            return;
         }
 
 	var rows =0;
@@ -1523,29 +1526,18 @@ jQuery(document).ready( function () {
 	if (rows == 0) {
 		$("#msjtblProducts").text("You need to add a product.");
                 //$("#msjtblProducts").addClass("help-block has-error");
-                //class="help-block with-errors"
-                
-		/*$("#dialogConfirm").dialog({
-	        resizable: false,
-	        height: "auto",
-	        width: 400,
-	        modal: true,
-	        buttons: {
-	          "Ok": function() {
-	        	$(this).dialog("close");	        	
-	          }
-	        }
-	    });	*/
 		return;
 	}
 	
 	var csrf = $("#_csrf").val();
-	var date = $("#txtDate").val().trim();	
+	var date = $("#txtDate").val().trim();
+        var nroDocument=$("#nroDocument").val();
+        var reason=$("#cboReason :selected").text();
 	date = date.substring(6,10) + '-' + date.substring(0,2) + '-' + date.substring(3,5) ;
 	//"yyyy-MM-dd'T'HH:mm:ss.SSSZ
 	
 	
-	var merchandiseIncome = {dateCreation: date, supplier: { id_supplier: $("#cboSupplier").val()}, amount: $("#lblTotalSale").text(), details: dataDetails};
+	var merchandiseIncome = {nro_document:nroDocument ,reason:reason ,dateCreation: date, supplier: { id_supplier: $("#cboSupplier").val()}, amount: $("#lblTotalSale").text(), details: dataDetails};
         
         
         console.log(JSON.stringify(merchandiseIncome));
@@ -1563,11 +1555,11 @@ jQuery(document).ready( function () {
                         //loadDataTable("#tbSuppliers");
                         ezBSAlert({ headerText:"success", messageText: "Merchandise Income successfully registered.", alertType: "success"});
                         $("#txtDate").val("");
-                	//$("#cboSupplier").val("");
+                	$("#lblTotalSale").val("");
                         $("#cboSupplier").empty().trigger('change');
                 	$("#tblProducts tbody").empty();
                         $('#form_micab').trigger('reset');
-                        
+     
                     }else{
                        // alerts(2,msj,"No se completo el proceso.. !!!");
                         ezBSAlert({ headerText:"Error",messageText: "No se completo el proceso.. !!!", alertType: "danger"});
@@ -1575,9 +1567,7 @@ jQuery(document).ready( function () {
                 
             },
             error: function() {
-                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
-                
-                
+                 ezBSAlert({ headerText:"Error",messageText: "A ocurrido un error interno !!!", alertType: "danger"});
             } 
         });
     };
@@ -1610,6 +1600,8 @@ jQuery(document).ready( function () {
             { "mData": "name_suppliers" },
             { "mData": "username" },
             { "mData": "amount"},
+            { "mData": "nro_document"},
+            { "mData": "reason"},
             { "mData": "dateCreation","sClass": "text-center"},
             { "mData": "ico_search","sClass": "text-center"},
             { "mData": "ico_delete","sClass": "text-center"}
@@ -1707,7 +1699,7 @@ jQuery(document).ready( function () {
     $('#searchOC').on('click', function() {
         
         console.log("buscar orde de compra");
-        
+        $("#tblProducts tbody").empty();
         var id_order=$('#nroDocument').val();
         
         $.ajax({
@@ -1717,23 +1709,48 @@ jQuery(document).ready( function () {
             data:{ id_order:id_order},
             success: function(response){
                 
-               console.log("id_supplier:"+response.data.supplier.id_supplier);
-              // $("#cboSupplier").val(response.data.supplier.id_supplier).trigger("change");
-               $("#cboSupplier").select2("val", response.data.supplier.id_supplier);
-               
-               response.data.details.forEach(function(detail) {
-                   // var subtotal =  detail.amount * detail.sell_price;
-                   console.log(detail);
-                /*$("#tblTransferView").append(            		
-                                    "<tr>" +        			
-                                    "	<td>" + detail.product.name + "</td>" +
-                                    "	<td class='text-xs-right'>" + detail.amount + "</td>" +
-                                    "	<td class='text-xs-right'>" + detail.sell_price + "</td>" +
-                                    "	<td class='text-xs-right'>" + subtotal.toFixed(2) + "</td>" +        			
-                                    "</tr>"); 
-                total = total + (detail.amount * detail.sell_price);*/            
-            });
                 
+               if(response.data){ 
+                    console.log("id_supplier:"+response.data.supplier.id_supplier);
+                    $("#cboSupplier").select2("val", response.data.supplier.id_supplier);
+                    response.data.details.forEach(function(detail) {
+                        // var subtotal =  detail.amount * detail.sell_price;
+                        console.log(detail);
+                        /***********************************************************/
+                        var idProduct=detail.product.id;
+                        var sellPrice=detail.costPrice;
+                        var amount=detail.amount;
+                        var stock=0;
+                        var product=detail.product.name;
+                        var data = {'idProduct' : idProduct, 'sellPrice': sellPrice, 'amount' : amount, 'stock' : stock};
+                         $("#tblProducts").append(
+                             "<tr id='item-" + idProduct + "' data-item='" + JSON.stringify(data) + "'>" +
+                             "	<td>" + product + "</td>" +
+                             "	<td class='text-xs-right'><span id='lblSellItem" + idProduct + "'>" + (sellPrice * 1) + "</span><input id='txtSelltItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+                             "	<td class='text-xs-right'><span id='lblAmountItem" + idProduct + "'>" + (amount * 1) + "</span><input id='txtAmountItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+                             "	<td class='text-xs-right'><span id='lblSaleItem" + idProduct + "'>" + (amount * sellPrice * 1)  + "</span></td>" +
+                             /*"	<td class='text-xs-right'>" +
+                             "		<button id='btnEditItem" + idProduct + "' class='btn btn-info btn-xs btnEditItem' role='button' data-id='"+idProduct+"' > " +
+                             "			<span class='glyphicon glyphicon-pencil'></span> " +
+                             "		 </button> " +
+                             "		<button id='btnSaveItem" + idProduct + "' class='btn btn-inverse btn-xs btnSaveItem' role='button' data-id='"+idProduct+"' style='display: none;'> " +
+                             "			<span class='glyphicon glyphicon-ok'></span> " +
+                             "		 </button> " +
+                             "	</td>" +*/
+                             "	<td class='text-xs-right'>" + 
+                             "		<button id='btnDeleteItem" + idProduct + "' class='btn btn-danger btn-xs btnDeleteItem' role='button' data-id='"+idProduct+"' > " +
+                             "			<span class='glyphicon glyphicon-trash'></span> " +
+                             "		 </button> " +
+                             "	</td>" +
+                             "</tr>");
+                        /***********************************************************/
+
+                 });
+                     calculateTotalTransfer();
+                
+                }else{
+                    ezBSAlert({ headerText:"Info",messageText: "No results found", alertType: "info"});
+                }    
             },
             error: function() {
                 ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});
@@ -1741,6 +1758,7 @@ jQuery(document).ready( function () {
         });
         
     });
+    
 //-----------------------Transfer-------------------------------------------------//    
  $("#cboLocation").select2({
     placeholder: "Select a location"
@@ -1756,6 +1774,7 @@ jQuery(document).ready( function () {
 
         if(!$('#form_tranfcab')[0].checkValidity()){
             $('#submit').click();
+            return;
         }
 
 	var rows =0;

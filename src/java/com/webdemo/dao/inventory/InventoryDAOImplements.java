@@ -1059,13 +1059,15 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         try {
             tx = session.beginTransaction();
             
-            String sql = "INSERT INTO inventory.merchandise_income( id_supplier, amount, username, date_creation) VALUES ( :id_supplier, :amount, :username, :date_creation) RETURNING id_merchandise_income;";
+            String sql = "INSERT INTO inventory.merchandise_income( id_supplier, amount, username, date_creation, nro_document, reason) VALUES ( :id_supplier, :amount, :username, :date_creation, :nro_document, :reason) RETURNING id_merchandise_income;";
             System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("id_supplier", merchandiseIncomeBean.getSupplier().getId_supplier());
             query.setParameter("amount", merchandiseIncomeBean.getAmount());
             query.setParameter("username", merchandiseIncomeBean.getUsername());
             query.setParameter("date_creation", merchandiseIncomeBean.getDateCreation());
+            query.setParameter("nro_document", merchandiseIncomeBean.getNro_document(), Hibernate.STRING);
+            query.setParameter("reason", merchandiseIncomeBean.getReason(),Hibernate.STRING);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
 
@@ -1126,7 +1128,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             tx = session.beginTransaction();
 
             String sql = "SELECT id_merchandise_income, id_supplier, code_suppliers,"
-                    + " name_suppliers, amount, username, date_creation, registration_date "
+                    + " name_suppliers, amount, username, date_creation, registration_date, nro_document, reason "
                     + "FROM inventory.view_merchandise_income;";
             SQLQuery query = session.createSQLQuery(sql);
 
@@ -1148,6 +1150,8 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             merchandiseIncome.setUsername((String)row.get("username"));
             merchandiseIncome.setDateCreation((Date) row.get("date_creation"));
             merchandiseIncome.setRegistration_date((Date) row.get("registration_date"));
+            merchandiseIncome.setNro_document((String)row.get("nro_document"));
+            merchandiseIncome.setReason((String)row.get("reason"));
             
             litsMerchandiseIncomeBean.add(merchandiseIncome);
          }
@@ -1174,7 +1178,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         System.out.println("get_MerchandiseIncomeBean:"+id_merchandise_income);
       try{
          tx = session.beginTransaction();
-         String sql = "SELECT id_merchandise_income, id_supplier, amount, username, date_creation,registration_date FROM inventory.merchandise_income where id_merchandise_income = :id_merchandise_income ;";
+         String sql = "SELECT id_merchandise_income, id_supplier, amount, username, date_creation,registration_date, nro_document, reason FROM inventory.merchandise_income where id_merchandise_income = :id_merchandise_income ;";
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("id_merchandise_income",id_merchandise_income);
          
@@ -1189,6 +1193,8 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           merchandiseIncomeBean.setUsername((String) data.get("username"));
           merchandiseIncomeBean.setDateCreation((Date)data.get("date_creation"));
           merchandiseIncomeBean.setAmount(((BigDecimal)data.get("amount")).doubleValue());
+          merchandiseIncomeBean.setNro_document((String)data.get("nro_document"));
+          merchandiseIncomeBean.setReason((String)data.get("reason"));
           merchandiseIncomeBean.setSupplier(sp);
           
       }catch (HibernateException e) {

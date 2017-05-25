@@ -19,11 +19,12 @@ public class MerchandiseIncomeBean {
     private SupplierBean supplier;
     private double amount;
     private String username;
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateCreation;
     private String date;
     private List<MerchandiseIncomeDetailBean> details;
     private Date registration_date;
+    private String nro_document;
+    private String reason;
 
     /**
      * @return the id
@@ -137,11 +138,37 @@ public class MerchandiseIncomeBean {
         this.registration_date = registration_date;
     }
 
+    /**
+     * @return the nro_document
+     */
+    public String getNro_document() {
+        return nro_document;
+    }
+
+    /**
+     * @param nro_document the nro_document to set
+     */
+    public void setNro_document(String nro_document) {
+        this.nro_document = nro_document;
+    }
+
+    /**
+     * @return the reason
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public String toString() {
-        return "MerchandiseIncomeBean{" + "id=" + id + ", supplier=" + supplier + ", amount=" + amount + ", username=" + username + ", dateCreation=" + dateCreation + ", date=" + date + ", details=" + details + ", registration_date=" + registration_date + '}';
+        return "MerchandiseIncomeBean{" + "id=" + id + ", supplier=" + supplier + ", amount=" + amount + ", username=" + username + ", dateCreation=" + dateCreation + ", date=" + date + ", details=" + details + ", registration_date=" + registration_date + ", nro_document=" + nro_document + ", reason=" + reason + '}';
     }
-    
-    
-    
+
 }

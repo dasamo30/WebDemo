@@ -101,6 +101,8 @@
                         <th>Supplier</th>
                         <th>Username</th>
                         <th>Amount</th>
+                        <th>Nro Doc</th>
+                        <th>Reason</th>
                         <th>Date</th>
                         <th>Detail</th>
                         <th>Delete</th>
