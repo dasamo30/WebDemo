@@ -79,7 +79,7 @@ public class SuppliersController {
         
         java.util.Date fecha = new java.util.Date(); 
         supplier.setDate_creation(fecha);
-        System.out.println("supplier:"+supplier.toString());
+        //System.out.println("supplier:"+supplier.toString());
         return serviceInventory.registerSupplier(supplier);
     }
     
@@ -118,7 +118,7 @@ public class SuppliersController {
     @ResponseBody
     public int ActDeleteSupplier(@RequestParam("idSupplier") int idSupplier){
         
-        System.out.println(":::"+idSupplier);
+        //System.out.println(":::"+idSupplier);
         int rpta=serviceInventory.deleteSupplier(idSupplier);
         //int rpta=serviceAccesos.registraUsuarios(usuarios);
      
@@ -134,7 +134,7 @@ public class SuppliersController {
       //String baseurl = request.getContextPath();
       SupplierBean s=serviceInventory.get_Supplier(idSupplier);
       
-      System.out.println("SupplierBean:"+s.toString());
+      //System.out.println("SupplierBean:"+s.toString());
       mav.setViewName("view_new_supplier");
       mav.addObject("formSupplier", "frmModifSupplier");
       mav.addObject("SupplierBean", s);
@@ -149,7 +149,7 @@ public class SuppliersController {
         
         java.util.Date fecha = new java.util.Date(); 
         supplier.setDate_modification(fecha);
-        System.out.println("supplier:"+supplier.toString());
+        //System.out.println("supplier:"+supplier.toString());
         return serviceInventory.modifySupplier(supplier);
        
     }

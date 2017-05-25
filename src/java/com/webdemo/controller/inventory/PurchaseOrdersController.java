@@ -118,7 +118,7 @@ public class PurchaseOrdersController {
     @ResponseBody
     public ArrayList<ProductBean> searchByName(@ModelAttribute("term") @Validated String name, HttpServletRequest httpServletRequest)   {
         
-        System.out.println("name"+name);
+        //System.out.println("name"+name);
         
         ArrayList<ProductBean> listProductBean=serviceInventory.get_Product_Search(3, name);
     /*
@@ -136,7 +136,7 @@ public class PurchaseOrdersController {
     @ResponseBody
     public int ActSavePurchaseOrder(@ModelAttribute("data") String data,HttpServletRequest request) throws IOException   {
         HttpSession sesion = request.getSession();
-        System.out.println("data:"+data);
+        //System.out.println("data:"+data);
         //PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
          DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ObjectMapper a=new ObjectMapper();
@@ -147,13 +147,13 @@ public class PurchaseOrdersController {
         
         purchaseOrderBean.setUsername(sesion.getAttribute("usuario").toString());
         
-        System.out.println("purchaseOrderBean:"+purchaseOrderBean.toString());
+        //System.out.println("purchaseOrderBean:"+purchaseOrderBean.toString());
         
         
 
        
         String fecha = df.format(purchaseOrderBean.getDateCreation());
-        System.out.println("fecha:"+fecha);
+        //System.out.println("fecha:"+fecha);
 
         return serviceInventory.savePurchaseOrder(purchaseOrderBean);
     }
@@ -216,7 +216,7 @@ public class PurchaseOrdersController {
       ajaxResponseBE.setDescription("The transfer has been successfully finded.");
       ajaxResponseBE.setData(purchaseOrderBean);
       
-      System.out.println("idPurchaseOrder:"+idPurchaseOrder);
+      //System.out.println("idPurchaseOrder:"+idPurchaseOrder);
       
  
        return ajaxResponseBE;  
@@ -227,7 +227,7 @@ public class PurchaseOrdersController {
     @ResponseBody
     public int ActDeletePurchaseOrder(@RequestParam("id_purchase_order") int id_purchase_order){
         
-        System.out.println(":::"+id_purchase_order);
+        //System.out.println(":::"+id_purchase_order);
         int rpta=serviceInventory.deletePurchaseOrderBean(id_purchase_order);
      
         return rpta;
@@ -237,32 +237,46 @@ public class PurchaseOrdersController {
     @RequestMapping(value="ActSearchPurchaseOrders", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResponseBE ActSearchPurchaseOrders(@RequestParam("id_order") int id_order){
+        AjaxResponseBE ajaxResponseBE = new AjaxResponseBE();
+        //System.out.println(":::"+id_order);
+        String state = null, message = null, description = null;
+        Object data = null;
         
-        System.out.println(":::"+id_order);
-        
-        PurchaseOrderBean purchaseOrderBean=serviceInventory.get_purchaseOrderBean(id_order);
-        System.out.println("purchaseOrderBean:"+purchaseOrderBean);
-        
-        
-        
-        if(purchaseOrderBean!=null){
-            ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(id_order);
-            
-            for (PurchaseOrderDetailBean pd : detail) {
-                ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
-                pd.setProduct(product);
-            }      
-             purchaseOrderBean.setDetails(detail);
-            
-            purchaseOrderBean.setDetails(detail);
+        int rst=serviceInventory.validateIncomePO(""+id_order);
+       
+        //System.out.println("rst:"+rst);
+        if(rst==0){
+            PurchaseOrderBean purchaseOrderBean=serviceInventory.get_purchaseOrderBean(id_order);
+            //System.out.println("purchaseOrderBean:"+purchaseOrderBean);
+
+            if(purchaseOrderBean!=null){
+                ArrayList<PurchaseOrderDetailBean> detail=serviceInventory.get_list_purchaseOrderDetailBean(id_order);
+
+                for (PurchaseOrderDetailBean pd : detail) {
+                    ProductBean product=serviceInventory.get_Product(pd.getProduct().getId());
+                    pd.setProduct(product);
+                }      
+                 purchaseOrderBean.setDetails(detail);
+
+                purchaseOrderBean.setDetails(detail);
+                
+            }
+                state="200";
+                message="Request processed correctly.";
+                description="The transfer has been successfully finded.";
+                data=purchaseOrderBean;
+        }else{
+                state="600";
+                message="Request processed correctly.";
+                description="The purchase order is already entered";
+                
         }
         
-        AjaxResponseBE ajaxResponseBE;
-        ajaxResponseBE = new AjaxResponseBE();
-        ajaxResponseBE.setState("200");
-        ajaxResponseBE.setMessage("Request processed correctly.");
-        ajaxResponseBE.setDescription("The transfer has been successfully finded.");
-        ajaxResponseBE.setData(purchaseOrderBean);
+        
+        ajaxResponseBE.setState(state);
+        ajaxResponseBE.setMessage(message);
+        ajaxResponseBE.setDescription(description);
+       ajaxResponseBE.setData(data);
         
         return ajaxResponseBE;
     }
@@ -283,9 +297,9 @@ public class PurchaseOrdersController {
             
             String pathFilePDf = "";
             File fileReport = new File(request.getServletContext().getRealPath("/WEB-INF/report/purchaseOrders.jasper"));
-            System.out.println("Path purchase order: " + fileReport.getPath());
+            //System.out.println("Path purchase order: " + fileReport.getPath());
             
-            System.out.println("id_purchase_order:"+id_purchase_order);
+            //System.out.println("id_purchase_order:"+id_purchase_order);
             JasperReport jrPurchaseOrder = (JasperReport) JRLoader.loadObject(fileReport);
             Map<String,Object> params=new HashMap<String, Object>();
              params.put("code", ""+purchaseOrderBean.getId());

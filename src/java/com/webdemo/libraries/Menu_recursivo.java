@@ -52,7 +52,7 @@ public String  muestra_menu(int padre,String nivelAnterior,String contextPath,in
      ArrayList<MenuPerfil> datamenus = serviceAccesos.get_menus_accesos_perfiles(padre,idPerfil);
     
      //HibernateUtil.getSessionFactory().close();
-        System.out.println("numero de lineas::"+datamenus.size());
+        //System.out.println("numero de lineas::"+datamenus.size());
        for(int i=0;i<datamenus.size();i++){
                    //System.out.println(datamenus.get(i).getIdMenu());
                
@@ -78,7 +78,7 @@ public String  muestra_menu(int padre,String nivelAnterior,String contextPath,in
             
          }
          
-            System.out.println(datamenus.get(i).getNombreMenu()+"   nivel::"+this.nivel+"  url::"+datamenus.get(i).getUrl());
+            //System.out.println(datamenus.get(i).getNombreMenu()+"   nivel::"+this.nivel+"  url::"+datamenus.get(i).getUrl());
             String urldb;
             urldb=("".equals(datamenus.get(i).getUrl()) || datamenus.get(i).getUrl() == null)? "javascript:void(0)" : contextPath+"/"+datamenus.get(i).getUrl();
             

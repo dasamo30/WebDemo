@@ -41,7 +41,7 @@ public class ControladorPrincipal {
     //String listado =menus.muestra_menu_familias(request.getContextPath(),1);
             
     //System.out.println("listado:"+listado);
-    System.out.println("carga la vista del home");
+    //System.out.println("carga la vista del home");
     
     String namemenu="Panel Principal";
     String titlemenu="";
@@ -62,7 +62,7 @@ public class ControladorPrincipal {
     @RequestMapping(value = "cerrar", method = RequestMethod.GET)
     @ResponseBody
     public void cerrarSesion(HttpServletRequest request, HttpServletResponse response) throws IOException  {
-      System.out.println("entro al login cerrar");
+      //System.out.println("entro al login cerrar");
         HttpSession sesionOk = request.getSession();
        // log.trace("Cierre de sesion: usuario -> " + sesionOk.getAttribute("usuario"));
         sesionOk.invalidate();

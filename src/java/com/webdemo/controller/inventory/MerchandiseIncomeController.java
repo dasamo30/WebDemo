@@ -103,7 +103,7 @@ public class MerchandiseIncomeController {
     @ResponseBody
     public int ActSaveMerchandiseIncome(@ModelAttribute("data") String data,HttpServletRequest request) throws IOException   {
         HttpSession sesion = request.getSession();
-        System.out.println("data:"+data);
+        //System.out.println("data:"+data);
         //PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ObjectMapper a=new ObjectMapper();
@@ -112,7 +112,7 @@ public class MerchandiseIncomeController {
         MerchandiseIncomeBean merchandiseIncomeBean=a.readValue(data,MerchandiseIncomeBean.class);
         
         merchandiseIncomeBean.setUsername(sesion.getAttribute("usuario").toString());        
-        System.out.println("merchandiseIncomeBean:"+merchandiseIncomeBean.toString());
+        //System.out.println("merchandiseIncomeBean:"+merchandiseIncomeBean.toString());
 
 
        /*
@@ -182,7 +182,7 @@ public class MerchandiseIncomeController {
       ajaxResponseBE.setDescription("The transfer has been successfully finded.");
       ajaxResponseBE.setData(merchandiseIncomeBean);
       
-      System.out.println("idPurchaseOrder:"+id_merchandise_income);
+      //System.out.println("idPurchaseOrder:"+id_merchandise_income);
       
  
        return ajaxResponseBE;  
@@ -193,7 +193,7 @@ public class MerchandiseIncomeController {
     @ResponseBody
     public int ActDeleteMerchandiseIncome(@RequestParam("id_merchandise_income") int id_merchandise_income){
         
-        System.out.println("ActDeleteMerchandiseIncome:::"+id_merchandise_income);
+        //System.out.println("ActDeleteMerchandiseIncome:::"+id_merchandise_income);
         int rpta=serviceInventory.deleteMerchandiseIncomeBean(id_merchandise_income);
      
         return rpta;

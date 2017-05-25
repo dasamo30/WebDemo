@@ -26,6 +26,7 @@ import com.webdemo.beans.inventory.TransferBean;
 import com.webdemo.beans.inventory.TransferDetailBean;
 import com.webdemo.dao.GenericDAO;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("register_product");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -95,7 +96,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -146,7 +147,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_product");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -189,7 +190,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           productBean.setId_category((Integer)data.get("id_category"));
 //rpta=(Integer) ().get("register_product");
           
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -225,7 +226,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modify_product");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -247,7 +248,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
       try{
          tx = session.beginTransaction();
          String sql = "select register_location from inventory.register_location( :name_location, :date_creation);";
-          System.out.println("sql::"+sql);
+          //System.out.println("sql::"+sql);
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("name_location", location.getName_location());
          query.setParameter("date_creation", location.getDate_creation());
@@ -257,7 +258,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("register_location");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -288,7 +289,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modify_location");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -324,7 +325,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           locationBean.setDate_modification((Date)data.get("date_modification"));
 //rpta=(Integer) ().get("register_product");
           
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -354,7 +355,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_location");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -384,7 +385,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -421,7 +422,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         try {
             tx = session.beginTransaction();
             String sql = "select register_category from inventory.register_category( :name_category, :date_creation);";
-            System.out.println("sql::" + sql);
+            //System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("name_category", category.getName_category());
             query.setParameter("date_creation", category.getDate_creation());
@@ -431,7 +432,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             List data = query.list();
 
             rpta = (Integer) ((HashMap) data.get(0)).get("register_category");
-            System.out.println("list::::>" + rpta);
+            //System.out.println("list::::>" + rpta);
 
         } catch (HibernateException e) {
             if (tx != null) {
@@ -462,7 +463,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modify_category");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -498,7 +499,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
           categoryBean.setDate_modification((Date)data.get("date_modification"));
 //rpta=(Integer) ().get("register_product");
           
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -528,7 +529,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_category");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -558,7 +559,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -595,7 +596,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         try {
             tx = session.beginTransaction();
             String sql = "select register_suppliers from inventory.register_suppliers( :code_suppliers, :name_suppliers, :phone_number, :web, :date_creation);";
-            System.out.println("sql::" + sql);
+            //System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("code_suppliers", supplier.getCode_suppliers());
             query.setParameter("name_suppliers", supplier.getName_suppliers());
@@ -608,7 +609,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             List data = query.list();
 
             rpta = (Integer) ((HashMap) data.get(0)).get("register_suppliers");
-            System.out.println("list::::>" + rpta);
+            //System.out.println("list::::>" + rpta);
 
         } catch (HibernateException e) {
             if (tx != null) {
@@ -642,7 +643,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modify_suppliers");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -681,7 +682,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             supplierBean.setDate_modification((Date)data.get("date_modification"));
 //rpta=(Integer) ().get("register_product");
           
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -711,7 +712,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_suppliers");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -741,7 +742,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -789,7 +790,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -833,7 +834,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             tx = session.beginTransaction();
             
             String sql = "INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation) VALUES ( :id_supplier, :amount, :username, :date_creation) RETURNING id_purchase_order;";
-            System.out.println("sql::" + sql);
+            //System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("id_supplier", purchaseOrderBean.getSupplier().getId_supplier());
             query.setParameter("amount", purchaseOrderBean.getAmount());
@@ -843,7 +844,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             List data = query.list();
 
             int id_purchase_order=(Integer) ((HashMap)data.get(0)).get("id_purchase_order");       
-            System.out.println("list::::>"+rpta);
+            //System.out.println("list::::>"+rpta);
             
             //query.setParameter("clave", pass);
             //INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation,registration_date) VALUES (4, 50, 'dasamo', now()::date, now() ) RETURNING id_purchase_order;
@@ -865,7 +866,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 queryd.setParameter("cost_price", p.getCostPrice());
                 queryd.setParameter("date_creation",purchaseOrderBean.getDateCreation());            
                 rsd=queryd.executeUpdate();   
-                System.out.println("res:::"+rsd);
+                //System.out.println("res:::"+rsd);
             }
             rpta=0;
         } catch (HibernateException e) {
@@ -896,7 +897,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -934,7 +935,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         Transaction tx = null;
       PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
       
-        System.out.println("get_purchaseOrderBean_id_purchase_order:"+id_purchase_order);
+        //System.out.println("get_purchaseOrderBean_id_purchase_order:"+id_purchase_order);
       try{
          tx = session.beginTransaction();
          String sql = "SELECT id_purchase_order, id_supplier, amount, username, date_creation, registration_date FROM inventory.purchase_order where id_purchase_order = :id_purchase_order ;";
@@ -988,7 +989,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
            queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
            List dataList = queryd.list();
            
-           System.out.println("List data::"+dataList.size());
+           //System.out.println("List data::"+dataList.size());
            
            for (Object object : dataList) {
                Map row = (Map)object;
@@ -1036,7 +1037,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_purchase_order");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -1060,7 +1061,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             tx = session.beginTransaction();
             
             String sql = "INSERT INTO inventory.merchandise_income( id_supplier, amount, username, date_creation, nro_document, reason) VALUES ( :id_supplier, :amount, :username, :date_creation, :nro_document, :reason) RETURNING id_merchandise_income;";
-            System.out.println("sql::" + sql);
+            //System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("id_supplier", merchandiseIncomeBean.getSupplier().getId_supplier());
             query.setParameter("amount", merchandiseIncomeBean.getAmount());
@@ -1072,7 +1073,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             List data = query.list();
 
             int id_merchandise_income=(Integer) ((HashMap)data.get(0)).get("id_merchandise_income");       
-            System.out.println("list::::>"+rpta);
+            //System.out.println("list::::>"+rpta);
             
             //query.setParameter("clave", pass);
             //INSERT INTO inventory.purchase_order( id_supplier, amount, username, date_creation,registration_date) VALUES (4, 50, 'dasamo', now()::date, now() ) RETURNING id_purchase_order;
@@ -1095,7 +1096,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 queryd.setParameter("cost_price", p.getCostPrice());
                 queryd.setParameter("date_creation",merchandiseIncomeBean.getDateCreation());            
                 rsd=queryd.executeUpdate();   
-                System.out.println("res:::"+rsd);
+                //System.out.println("res:::"+rsd);
                 
                 //update inventory.products set stock=? where product_id=0
                 String sqls="update inventory.products set stock=(stock + :pamount) where product_id=:product_id ;";
@@ -1103,7 +1104,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 querys.setParameter("pamount", p.getAmount());
                 querys.setParameter("product_id", p.getProduct().getId());
                 rss=querys.executeUpdate();
-                System.out.println("rss:::"+rss);
+                //System.out.println("rss:::"+rss);
             }
             rpta=0;
         } catch (HibernateException e) {
@@ -1135,7 +1136,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -1175,7 +1176,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         Transaction tx = null;
       MerchandiseIncomeBean merchandiseIncomeBean=new MerchandiseIncomeBean();
       
-        System.out.println("get_MerchandiseIncomeBean:"+id_merchandise_income);
+        //System.out.println("get_MerchandiseIncomeBean:"+id_merchandise_income);
       try{
          tx = session.beginTransaction();
          String sql = "SELECT id_merchandise_income, id_supplier, amount, username, date_creation,registration_date, nro_document, reason FROM inventory.merchandise_income where id_merchandise_income = :id_merchandise_income ;";
@@ -1226,7 +1227,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
            queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
            List dataList = queryd.list();
            
-           System.out.println("List data::"+dataList.size());
+           //System.out.println("List data::"+dataList.size());
            
            for (Object object : dataList) {
                Map row = (Map)object;
@@ -1274,7 +1275,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_merchandise_income");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -1297,7 +1298,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             tx = session.beginTransaction();
             
             String sql = "INSERT INTO inventory.transfer( id_location, amount, username, date_creation) VALUES ( :id_location, :amount, :username, :date_creation) RETURNING id_transfer;";
-            System.out.println("sql::" + sql);
+            //System.out.println("sql::" + sql);
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("id_location", transferBean.getLocation().getId_location());
             query.setParameter("amount", transferBean.getAmount());
@@ -1307,7 +1308,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             List data = query.list();
 
             int id_transfer=(Integer) ((HashMap)data.get(0)).get("id_transfer");       
-            System.out.println("list::::>"+rpta);
+            //System.out.println("list::::>"+rpta);
   
             List<TransferDetailBean> detail=transferBean.getDetails();
             int rsd;
@@ -1322,7 +1323,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 queryd.setParameter("sell_price", p.getSell_price());
                 queryd.setParameter("date_creation",transferBean.getDateCreation());            
                 rsd=queryd.executeUpdate();   
-                System.out.println("res:::"+rsd);
+                //System.out.println("res:::"+rsd);
                 
                 //update inventory.products set stock=? where product_id=0
                 String sqls="update inventory.products set stock=(stock - :pamount) where product_id=:product_id ;";
@@ -1330,7 +1331,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
                 querys.setParameter("pamount", p.getAmount());
                 querys.setParameter("product_id", p.getProduct().getId());
                 rss=querys.executeUpdate();
-                System.out.println("rss:::"+rss);
+                //System.out.println("rss:::"+rss);
             }
             rpta=0;
         } catch (HibernateException e) {
@@ -1359,7 +1360,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data = query.list();
             
-            System.out.println("List data::"+data.size());
+            //System.out.println("List data::"+data.size());
             
           for(Object object : data)
          {
@@ -1397,7 +1398,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
         Transaction tx = null;
       TransferBean transferBean=new TransferBean();
       
-        System.out.println("get_TransferBean:"+id_transfer);
+        //System.out.println("get_TransferBean:"+id_transfer);
       try{
          tx = session.beginTransaction();
          String sql = "SELECT id_transfer, id_location, amount, username, date_creation, registration_date, id_company FROM inventory.transfer where id_transfer = :id ;";
@@ -1446,7 +1447,7 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
            queryd.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
            List dataList = queryd.list();
            
-           System.out.println("List data::"+dataList.size());
+           //System.out.println("List data::"+dataList.size());
            
            for (Object object : dataList) {
                Map row = (Map)object;
@@ -1494,7 +1495,37 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_transfer");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
+          
+      }catch (HibernateException e) {
+         if (tx!=null){
+             tx.rollback();
+         }
+         //rpta=1;
+         e.printStackTrace(); 
+      }finally {
+         //session.close(); 
+          tx.commit();
+      }
+        return rpta;
+    }
+
+    @Override
+    public int validateIncomePO(String nro_document) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "SELECT CAST( count(*) AS int)  FROM inventory.merchandise_income where nro_document= :pnro_document ;";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("pnro_document", nro_document);
+         //query.setParameter("clave", pass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("count");       
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){

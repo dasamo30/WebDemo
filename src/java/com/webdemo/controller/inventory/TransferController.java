@@ -104,7 +104,7 @@ public class TransferController {
     @ResponseBody
     public int ActSaveMerchandiseIncome(@ModelAttribute("data") String data,HttpServletRequest request) throws IOException   {
         HttpSession sesion = request.getSession();
-        System.out.println("data:"+data);
+        //System.out.println("data:"+data);
         //PurchaseOrderBean purchaseOrderBean=new PurchaseOrderBean();
          DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         ObjectMapper a=new ObjectMapper();
@@ -115,13 +115,13 @@ public class TransferController {
         
         transferBean.setUsername(sesion.getAttribute("usuario").toString());
         
-        System.out.println("transferBean:"+transferBean.toString());
+        //System.out.println("transferBean:"+transferBean.toString());
         
         
 
        
         String fecha = df.format(transferBean.getDateCreation());
-        System.out.println("fecha:"+fecha);
+        //System.out.println("fecha:"+fecha);
 
         return serviceInventory.saveTransfer(transferBean);
     }
@@ -186,7 +186,7 @@ public class TransferController {
       ajaxResponseBE.setDescription("The transfer has been successfully finded.");
       ajaxResponseBE.setData(transferBean);
       
-      System.out.println("id_transfer:"+id_transfer);
+      //System.out.println("id_transfer:"+id_transfer);
       
  
        return ajaxResponseBE;  
@@ -197,7 +197,7 @@ public class TransferController {
     @ResponseBody
     public int ActDeleteTransfer(@RequestParam("id_transfer") int id_transfer){
         
-        System.out.println("ActDeleteTransfer:::"+id_transfer);
+        //System.out.println("ActDeleteTransfer:::"+id_transfer);
         int rpta=serviceInventory.deleteTransferBean(id_transfer);
      
         return rpta;

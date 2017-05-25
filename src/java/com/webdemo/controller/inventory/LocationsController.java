@@ -78,7 +78,7 @@ public class LocationsController {
         
         java.util.Date fecha = new java.util.Date(); 
         location.setDate_creation(fecha);
-        System.out.println("location:"+location.toString());
+        //System.out.println("location:"+location.toString());
         return serviceInventory.registerLocation(location);
     }
     
@@ -117,7 +117,7 @@ public class LocationsController {
     @ResponseBody
     public int ActDeleteLocation(@RequestParam("idLocation") int idLocation){
         
-        System.out.println(":::"+idLocation);
+        //System.out.println(":::"+idLocation);
         int rpta=serviceInventory.deleteLocation(idLocation);
         //int rpta=serviceAccesos.registraUsuarios(usuarios);
      
@@ -132,7 +132,7 @@ public class LocationsController {
       //String baseurl = request.getContextPath();
       LocationBean l=serviceInventory.get_Location(location_id);
       
-      System.out.println("location:"+l.toString());
+      //System.out.println("location:"+l.toString());
       mav.setViewName("view_new_location");
       mav.addObject("formLocation", "frmModifLocation");
       mav.addObject("LocationBean", l);
@@ -146,7 +146,7 @@ public class LocationsController {
         
         java.util.Date fecha = new java.util.Date(); 
         location.setDate_modification(fecha);
-        System.out.println("location:"+location.toString());
+        //System.out.println("location:"+location.toString());
         return serviceInventory.modifyLocation(location);
         
     }

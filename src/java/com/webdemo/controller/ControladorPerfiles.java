@@ -113,7 +113,7 @@ public class ControladorPerfiles {
         perfilbean.setEstado(1);
         perfilbean.setTiempo_sesion(1200);
         
-        System.out.println("ActRegistraPerfil:"+perfilbean.toString());
+        //System.out.println("ActRegistraPerfil:"+perfilbean.toString());
         return serviceAccesos.registraPerfil(perfilbean);
     }
     
@@ -139,7 +139,7 @@ public class ControladorPerfiles {
 
         perfilbean.setTiempo_sesion(1200);
         
-        System.out.println("ActModificaPerfil:"+perfilbean.toString());
+        //System.out.println("ActModificaPerfil:"+perfilbean.toString());
         return serviceAccesos.modificarPerfil(perfilbean);
         
     }

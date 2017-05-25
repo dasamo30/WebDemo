@@ -25,13 +25,13 @@ public class ServiceAccesos {
     private IAccesosDAO accesoDao=fabrica.getAccesosDAO();
     
     public int ValidaLogin(InfoUserBean usuarioBean){
-        System.out.println("ServiceAccesos.ValidaLogin");
+        //System.out.println("ServiceAccesos.ValidaLogin");
         //return "sssss";
         return accesoDao.validadUsuario(usuarioBean);
     }
     
     public InfoUserBean getUserInfo(String usuario){
-        System.out.println("ServiceAccesos.getUserInfo");
+        //System.out.println("ServiceAccesos.getUserInfo");
         //return "sssss";
         return accesoDao.getUserInfo(usuario);
     }

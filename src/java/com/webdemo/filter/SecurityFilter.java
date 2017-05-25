@@ -82,10 +82,10 @@ public class SecurityFilter implements Filter {
             return;
          }
 
-        System.out.println("SecurityFilter");
+        //System.out.println("SecurityFilter");
         
         if (servletPath.equals("/login") || servletPath.equals("/index.html") || servletPath.equals("/validatelogin")) {
-            System.out.println("if:validatelogin");
+            ////System.out.println("if:validatelogin");
             if (session.getAttribute("err") != null) {
                 String temp[] = session.getAttribute("err").toString().split(";");
                 if (temp[0].equals("error_logeo")) {
@@ -101,14 +101,14 @@ public class SecurityFilter implements Filter {
                 }
             }
         } else {
-            System.out.println("else");
+            //System.out.println("else");
            if (expiryTime == 0) {
                 
                 if (session.getAttribute("usuario") != null) {
-                    System.out.println("usuario != null");
+                    //System.out.println("usuario != null");
                     expiryTime = currTime + session.getMaxInactiveInterval();
                 } else {
-                    System.out.println("Usted no ha iniciado sesion");
+                    //System.out.println("Usted no ha iniciado sesion");
                     session.setAttribute("err", "Usted no ha iniciado sesion");
                     // Request is not authorized.
                     resp.sendRedirect("/WebDemo/login");
@@ -125,7 +125,7 @@ public class SecurityFilter implements Filter {
                 } else {
                     if (session.getAttribute("usuario") != null) {
                         expiryTime = currTime + session.getMaxInactiveInterval();
-                        System.out.println("existe");
+                        //System.out.println("existe");
                         /*
                         if((Integer)session.getAttribute("pestado")==0){
                             request.getRequestDispatcher("/WebDemo/panel/home").forward(request, response);
@@ -179,7 +179,7 @@ public class SecurityFilter implements Filter {
         this.filterConfig = filterConfig;
 
         if (filterConfig != null) {
-            System.out.println("=======> " + filterConfig.getInitParameter("parametro1"));
+            //System.out.println("=======> " + filterConfig.getInitParameter("parametro1"));
             if (debug) {
                 log("SecurityFilter:Initializing filter");
             }

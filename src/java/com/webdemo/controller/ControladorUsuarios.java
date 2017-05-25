@@ -150,7 +150,7 @@ public class ControladorUsuarios {
     
 
         
-        System.out.println("ActModificaUsuario:"+usuario.toString());
+        //System.out.println("ActModificaUsuario:"+usuario.toString());
         return serviceAccesos.modificarUsuario(usuario);
         
         
@@ -160,7 +160,7 @@ public class ControladorUsuarios {
     @ResponseBody
     public int ActEliminaUsuario(@RequestParam("idUsuario") int idUsuario){
         
-        System.out.println(":::"+idUsuario);
+        //System.out.println(":::"+idUsuario);
         int rpta=serviceAccesos.eliminaUsuario(idUsuario);
         //int rpta=serviceAccesos.registraUsuarios(usuarios);
      

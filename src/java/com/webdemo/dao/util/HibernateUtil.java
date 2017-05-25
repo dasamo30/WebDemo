@@ -27,7 +27,7 @@ public class HibernateUtil {
         try {
             sessionFactory = new Configuration().configure(new File("/opt/apps/etc/hibernate.cfg.xml")).buildSessionFactory();
             stats = sessionFactory.getStatistics();
-            stats.setStatisticsEnabled(true);
+            stats.setStatisticsEnabled(false);
             
         } catch (Throwable e) {
             System.err.println("Initial SessionFactory creation failed." + e);

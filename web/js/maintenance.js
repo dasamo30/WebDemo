@@ -1701,6 +1701,7 @@ jQuery(document).ready( function () {
         console.log("buscar orde de compra");
         $("#tblProducts tbody").empty();
         var id_order=$('#nroDocument').val();
+        $("#lblTotalSale").text("");
         
         $.ajax({
             type: "POST",
@@ -1709,48 +1710,53 @@ jQuery(document).ready( function () {
             data:{ id_order:id_order},
             success: function(response){
                 
-                
-               if(response.data){ 
-                    console.log("id_supplier:"+response.data.supplier.id_supplier);
-                    $("#cboSupplier").select2("val", response.data.supplier.id_supplier);
-                    response.data.details.forEach(function(detail) {
-                        // var subtotal =  detail.amount * detail.sell_price;
-                        console.log(detail);
-                        /***********************************************************/
-                        var idProduct=detail.product.id;
-                        var sellPrice=detail.costPrice;
-                        var amount=detail.amount;
-                        var stock=0;
-                        var product=detail.product.name;
-                        var data = {'idProduct' : idProduct, 'sellPrice': sellPrice, 'amount' : amount, 'stock' : stock};
-                         $("#tblProducts").append(
-                             "<tr id='item-" + idProduct + "' data-item='" + JSON.stringify(data) + "'>" +
-                             "	<td>" + product + "</td>" +
-                             "	<td class='text-xs-right'><span id='lblSellItem" + idProduct + "'>" + (sellPrice * 1) + "</span><input id='txtSelltItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
-                             "	<td class='text-xs-right'><span id='lblAmountItem" + idProduct + "'>" + (amount * 1) + "</span><input id='txtAmountItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
-                             "	<td class='text-xs-right'><span id='lblSaleItem" + idProduct + "'>" + (amount * sellPrice * 1)  + "</span></td>" +
-                             /*"	<td class='text-xs-right'>" +
-                             "		<button id='btnEditItem" + idProduct + "' class='btn btn-info btn-xs btnEditItem' role='button' data-id='"+idProduct+"' > " +
-                             "			<span class='glyphicon glyphicon-pencil'></span> " +
-                             "		 </button> " +
-                             "		<button id='btnSaveItem" + idProduct + "' class='btn btn-inverse btn-xs btnSaveItem' role='button' data-id='"+idProduct+"' style='display: none;'> " +
-                             "			<span class='glyphicon glyphicon-ok'></span> " +
-                             "		 </button> " +
-                             "	</td>" +*/
-                             "	<td class='text-xs-right'>" + 
-                             "		<button id='btnDeleteItem" + idProduct + "' class='btn btn-danger btn-xs btnDeleteItem' role='button' data-id='"+idProduct+"' > " +
-                             "			<span class='glyphicon glyphicon-trash'></span> " +
-                             "		 </button> " +
-                             "	</td>" +
-                             "</tr>");
-                        /***********************************************************/
+               if(response.state=="600"){
+                   ezBSAlert({ headerText:"Info",messageText: response.description , alertType: "info"});
+                   
+               }else{ 
+                //alert("ssss");
+                if(response.data){ 
+                     console.log("id_supplier:"+response.data.supplier.id_supplier);
+                     $("#cboSupplier").select2("val", response.data.supplier.id_supplier);
+                     response.data.details.forEach(function(detail) {
+                         // var subtotal =  detail.amount * detail.sell_price;
+                         console.log(detail);
+                         /***********************************************************/
+                         var idProduct=detail.product.id;
+                         var sellPrice=detail.costPrice;
+                         var amount=detail.amount;
+                         var stock=0;
+                         var product=detail.product.name;
+                         var data = {'idProduct' : idProduct, 'sellPrice': sellPrice, 'amount' : amount, 'stock' : stock};
+                          $("#tblProducts").append(
+                              "<tr id='item-" + idProduct + "' data-item='" + JSON.stringify(data) + "'>" +
+                              "	<td>" + product + "</td>" +
+                              "	<td class='text-xs-right'><span id='lblSellItem" + idProduct + "'>" + (sellPrice * 1) + "</span><input id='txtSelltItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+                              "	<td class='text-xs-right'><span id='lblAmountItem" + idProduct + "'>" + (amount * 1) + "</span><input id='txtAmountItem" + idProduct + "' class='form-control numbersOnly' size='10' style='display: none;' type='text'></td>" +
+                              "	<td class='text-xs-right'><span id='lblSaleItem" + idProduct + "'>" + (amount * sellPrice * 1)  + "</span></td>" +
+                              /*"	<td class='text-xs-right'>" +
+                              "		<button id='btnEditItem" + idProduct + "' class='btn btn-info btn-xs btnEditItem' role='button' data-id='"+idProduct+"' > " +
+                              "			<span class='glyphicon glyphicon-pencil'></span> " +
+                              "		 </button> " +
+                              "		<button id='btnSaveItem" + idProduct + "' class='btn btn-inverse btn-xs btnSaveItem' role='button' data-id='"+idProduct+"' style='display: none;'> " +
+                              "			<span class='glyphicon glyphicon-ok'></span> " +
+                              "		 </button> " +
+                              "	</td>" +*/
+                              "	<td class='text-xs-right'>" + 
+                              "		<button id='btnDeleteItem" + idProduct + "' class='btn btn-danger btn-xs btnDeleteItem' role='button' data-id='"+idProduct+"' > " +
+                              "			<span class='glyphicon glyphicon-trash'></span> " +
+                              "		 </button> " +
+                              "	</td>" +
+                              "</tr>");
+                         /***********************************************************/
 
-                 });
-                     calculateTotalTransfer();
-                
-                }else{
-                    ezBSAlert({ headerText:"Info",messageText: "No results found", alertType: "info"});
-                }    
+                  });
+                      calculateTotalTransfer();
+
+                 }else{
+                     ezBSAlert({ headerText:"Info",messageText: "No results found", alertType: "info"});
+                 }
+                }
             },
             error: function() {
                 ezBSAlert({ headerText:"Error",messageText: "An internal error has occurred !!!", alertType: "danger"});

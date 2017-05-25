@@ -57,7 +57,7 @@ public class ControladorLogin {
         
         
         HttpSession sesionOk = request.getSession();    
-            System.out.println("carga la vista del login");
+            //System.out.println("carga la vista del login");
 
         ModelAndView mv = null;
         
@@ -77,7 +77,7 @@ public class ControladorLogin {
     @RequestMapping(value = "/validatelogin", method = RequestMethod.POST)
     public ModelAndView validatelogin(@ModelAttribute("usuarioBean") InfoUserBean usuarioBean ,HttpServletRequest request,HttpServletResponse res, RedirectAttributes redir) {
         HttpSession sesion = request.getSession();
-        System.out.println("XXXXXXXXXXXX:"+usuarioBean.toString());
+        //System.out.println("XXXXXXXXXXXX:"+usuarioBean.toString());
 
         ModelAndView mv=null;
 
@@ -85,7 +85,7 @@ public class ControladorLogin {
         if(rpta==0){
             
             InfoUserBean bean=serviceAccesos.getUserInfo(usuarioBean.getLogin());
-            System.out.println("getUserInfo"+bean.toString());
+            //System.out.println("getUserInfo"+bean.toString());
             
             sesion.setAttribute("usuario",bean.getLogin());
             sesion.setMaxInactiveInterval(1000);

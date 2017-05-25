@@ -94,7 +94,7 @@ public class ProductController {
       String baseurl = request.getContextPath();
       ProductBean p=serviceInventory.get_Product(product_id);
       
-      System.out.println("producto:"+p.toString());
+      //System.out.println("producto:"+p.toString());
       
       ArrayList<TableCategoryBean> listCategories=serviceInventory.get_list_Categories();
       
@@ -147,7 +147,7 @@ public class ProductController {
                         FileItem imagen = null;  
 			for (FileItem item : multiparts) {
                          if(item.isFormField()){
-                                 System.out.println("getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getString());
+                                 //System.out.println("getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getString());
                                  
                                  if(item.getFieldName().equals("code")){
                                      p.setCode(item.getString());
@@ -177,7 +177,7 @@ public class ProductController {
                                 
                          }else if (!item.isFormField()) {
                             if(item.getFieldName().equals("imageProd")){
-                                 System.out.println("iamgen::getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getContentType());
+                                 //System.out.println("iamgen::getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getContentType());
                                  /*String name = new File(p.getImage_name()).getName();
                                  item.write(new File(UPLOAD_DIRECTORY + File.separator + name));*/
                                  imagen=item;
@@ -186,12 +186,12 @@ public class ProductController {
 
                         }
                       }
-                        System.out.println("iamgen: "+imagen.getName()+" leng:"+imagen.getName().length());
+                        //System.out.println("iamgen: "+imagen.getName()+" leng:"+imagen.getName().length());
                         if((imagen.getName() != null) && (!imagen.getName().equals(""))){
-                            System.out.println("cumple el if");
+                            //System.out.println("cumple el if");
                             String fileName=imagen.getName();
                             String extension=fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
-                            System.out.println("*******:"+extension);   
+                            //System.out.println("*******:"+extension);   
                             p.setImage_name(p.getCode()+"."+extension);
                         }
                         
@@ -199,7 +199,7 @@ public class ProductController {
                         rpta=serviceInventory.RegisterProduct(p);   
                      
                      if(rpta==0 && p.getImage_name()!=null){
-                         System.out.println("graba imagen");
+                         //System.out.println("graba imagen");
                         String name = new File(p.getImage_name()).getName();
 
 
@@ -211,12 +211,12 @@ public class ProductController {
 		{
                   rpta=3;
 		  e.printStackTrace();
-                    System.out.println("ActRegisterProduct:"+e.getMessage());
+                    //System.out.println("ActRegisterProduct:"+e.getMessage());
 		}
 	}
 
 
-            System.out.println("archivo:"+p.toString());
+            //System.out.println("archivo:"+p.toString());
        // InputStream stream = multipartFile.getInputStream();
         //@RequestBody ProductBean product
         //System.out.println(":::"+product.toString());
@@ -246,7 +246,7 @@ public class ProductController {
                         FileItem imagen = null;  
 			for (FileItem item : multiparts) {
                          if(item.isFormField()){
-                                 System.out.println("getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getString());
+                                // System.out.println("getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getString());
                                  
                                  
                                  if(item.getFieldName().equals("id")){
@@ -277,7 +277,7 @@ public class ProductController {
                                 
                          }else if (!item.isFormField()) {
                             if(item.getFieldName().equals("imageProd")){
-                                 System.out.println("iamgen::getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getContentType());
+                                // System.out.println("iamgen::getFieldName"+item.getFieldName()+"---"+item.getName()+"---"+item.getContentType());
                                  /*String name = new File(p.getImage_name()).getName();
                                  item.write(new File(UPLOAD_DIRECTORY + File.separator + name));*/
                                  imagen=item;
@@ -286,20 +286,20 @@ public class ProductController {
 
                         }
                       }
-                        System.out.println("iamgen: "+imagen.getName()+" leng:"+imagen.getName().length());
+                        //System.out.println("iamgen: "+imagen.getName()+" leng:"+imagen.getName().length());
                         if((imagen.getName() != null) && (!imagen.getName().equals(""))){
-                            System.out.println("cumple el if");
+                            //System.out.println("cumple el if");
                             String fileName=imagen.getName();
                             String extension=fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
-                            System.out.println("*******:"+extension);   
+                            //System.out.println("*******:"+extension);   
                             p.setImage_name(p.getCode()+"."+extension);
                         }
                         
-                        System.out.println(":::"+p.toString());
+                        //System.out.println(":::"+p.toString());
                         rpta=serviceInventory.ModifyProduct(p);   
                      
                      if(rpta==0 && p.getImage_name()!=null){
-                         System.out.println("graba imagen");
+                         //System.out.println("graba imagen");
                         String name = new File(p.getImage_name()).getName();
 
 
@@ -311,7 +311,7 @@ public class ProductController {
 		{
                   rpta=3;
 		  e.printStackTrace();
-                    System.out.println("ActRegisterProduct:"+e.getMessage());
+                    //System.out.println("ActRegisterProduct:"+e.getMessage());
 		}
 	}
         //rpta=serviceInventory.ModifyProduct(p);
@@ -380,7 +380,7 @@ public class ProductController {
     @ResponseBody
     public int ActDeleteProduct(@RequestParam("idProduct") int idProduct){
         
-        System.out.println(":::"+idProduct);
+        //System.out.println(":::"+idProduct);
         int rpta=serviceInventory.deleteProduct(idProduct);
         //int rpta=serviceAccesos.registraUsuarios(usuarios);
      

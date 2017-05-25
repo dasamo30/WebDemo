@@ -187,4 +187,8 @@ public class ServiceInventory {
     public int deleteTransferBean(int id_transfer){
         return inventoryDAO.deleteTransferBean(id_transfer);
     }
+    
+    public int validateIncomePO(String nro_document){
+        return inventoryDAO.validateIncomePO(nro_document);
+    }
 }

@@ -44,13 +44,13 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("valida_usuario");       
-          System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
          /*for(Object object : data)
          {
             Map row = (Map)object;
-            System.out.println("valida_usuario: " + row.get("valida_usuario")); 
-            //System.out.println(", Salary: " + row.get("salary")); 
+            //System.out.println("valida_usuario: " + row.get("valida_usuario")); 
+            ////System.out.println(", Salary: " + row.get("salary")); 
          }*/
          //tx.commit();
       }catch (HibernateException e) {
@@ -66,12 +66,12 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
         /*
         List data = consultaFuncion("select valida_usuario from  accesos.valida_usuario(?,");
        
-        System.out.println("gson.toJson:::"+gson.toJson(data));
+        //System.out.println("gson.toJson:::"+gson.toJson(data));
         
         for (Object object : data) {
             //Map row = (Map)object;
-            System.out.println("valida_usuario: "+object.toString()); 
-            //System.out.println(", Salary: " + row.get("salary")); 
+            //System.out.println("valida_usuario: "+object.toString()); 
+            ////System.out.println(", Salary: " + row.get("salary")); 
         }*/
        
         
@@ -303,7 +303,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
         usuario.setSesion_activa(1);
         usuario.setFoto("user.png");
         
-        System.out.println("DAO:"+usuario.toString());
+        //System.out.println("DAO:"+usuario.toString());
         int rpta =-1;  
       Transaction tx = null;
       try{
@@ -329,7 +329,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("inserta_usuario");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -397,7 +397,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
       try{
          tx = session.beginTransaction();
          String sql = "select inserta_perfil from accesos.inserta_perfil( :nombre, :estado, :fecha, :tiempo_sesion);";
-          System.out.println("sql::"+sql);
+          //System.out.println("sql::"+sql);
          SQLQuery query = session.createSQLQuery(sql);
          query.setParameter("nombre", perfil.getNombre());
          query.setParameter("estado", perfil.getEstado());
@@ -409,7 +409,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("inserta_perfil");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -444,7 +444,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
           perfilBean.setEstado((Integer)data.get("estado"));
           perfilBean.setFecha((Date)data.get("fecha"));
           perfilBean.setTiempo_sesion((Integer)data.get("tiempo_sesion"));
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -478,7 +478,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modifica_perfil");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -508,7 +508,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("delete_usuario");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -530,7 +530,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
         usuario.setSesion_activa(1);
         usuario.setFoto("user.png");
         
-        System.out.println("DAO:"+usuario.toString());
+        //System.out.println("DAO:"+usuario.toString());
         int rpta =-1;  
       Transaction tx = null;
       try{
@@ -556,7 +556,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
          List data = query.list();
 
           rpta=(Integer) ((HashMap)data.get(0)).get("modifica_usuario");       
-          System.out.println("list::::>"+rpta);
+          //System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){
@@ -607,7 +607,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
             userBean.setGenero((String) data.get("genero"));
             userBean.setDni((String) data.get("dni"));
             userBean.setCorreo((String) data.get("correo"));
-          //System.out.println("list::::>"+rpta);
+          ////System.out.println("list::::>"+rpta);
           
       }catch (HibernateException e) {
          if (tx!=null){

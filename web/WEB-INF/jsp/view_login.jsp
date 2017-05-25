@@ -35,9 +35,9 @@
     <div class="login-box animated fadeInUp">
       <div>
           <h3 class="widget-login-logo">
-                    <i class="fa fa-circle text-black"></i>
+                    <i class="fa fa-circle text-blue"></i>
                     Inventory CTAC
-                    <i class="fa fa-circle text-warning"></i>
+                    <i class="fa fa-circle text-navy"></i>
                 </h3>
       </div><!-- /.login-logo -->
       <div class="login-box-body">

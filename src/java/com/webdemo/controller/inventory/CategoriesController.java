@@ -79,7 +79,7 @@ public class CategoriesController {
         
         java.util.Date fecha = new java.util.Date(); 
         category.setDate_creation(fecha);
-        System.out.println("category:"+category.toString());
+        //System.out.println("category:"+category.toString());
         return serviceInventory.registerCategory(category);
     }
     
@@ -118,7 +118,7 @@ public class CategoriesController {
     @ResponseBody
     public int ActDeleteCategory(@RequestParam("idCategory") int idCategory){
         
-        System.out.println(":::"+idCategory);
+        //System.out.println(":::"+idCategory);
         int rpta=serviceInventory.deleteCategory(idCategory);
         //int rpta=serviceAccesos.registraUsuarios(usuarios);
      
@@ -134,7 +134,7 @@ public class CategoriesController {
       //String baseurl = request.getContextPath();
       CategoryBean c=serviceInventory.get_Category(idCategory);
       
-      System.out.println("categoryBean:"+c.toString());
+      //System.out.println("categoryBean:"+c.toString());
       mav.setViewName("view_new_category");
       mav.addObject("formCategory", "frmModifCategory");
       mav.addObject("CategoryBean", c);
@@ -149,7 +149,7 @@ public class CategoriesController {
         
         java.util.Date fecha = new java.util.Date(); 
         category.setDate_modification(fecha);
-        System.out.println("category:"+category.toString());
+        //System.out.println("category:"+category.toString());
         return serviceInventory.modifyCategory(category);
     }
     

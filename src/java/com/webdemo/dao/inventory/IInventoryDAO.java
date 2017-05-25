@@ -74,4 +74,6 @@ public interface IInventoryDAO {
     public ArrayList<TransferDetailBean> get_list_transferDetailBean(int id_transfer);
     public int deleteTransferBean(int id_transfer);
     
+    public int validateIncomePO(String nro_document); 
+    
 }
