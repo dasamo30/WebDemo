@@ -32,8 +32,8 @@ jQuery(document).ready( function () {
     
     //alert(baseurl);
     var dataTable = $('#tbusuario').DataTable({
-           processing: true,
-            //"serverSide": true,
+            processing: true,
+            serverSide: true,
             responsive: true,
             autoWidth: false,
             ajax:{

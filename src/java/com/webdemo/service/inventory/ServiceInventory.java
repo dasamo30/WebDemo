@@ -26,6 +26,7 @@ import com.webdemo.beans.inventory.TransferDetailBean;
 import com.webdemo.dao.DAOFactory;
 import com.webdemo.dao.inventory.IInventoryDAO;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  *
@@ -45,6 +46,11 @@ public class ServiceInventory {
     
         return  inventoryDAO.get_list_Product();
     }
+    
+    public Map<String, Object> get_list_dataTable_Product(int offset, int limit) {
+        return  inventoryDAO.get_list_dataTable_Product(offset, limit);
+    }
+    
     
     public int deleteProduct(int product_id){
         return  inventoryDAO.DeleteProduct(product_id);

@@ -181,16 +181,23 @@ jQuery(document).ready( function () {
       
     });
     
-    
+    var columfilter="";
     var dataTablep = $('#tbProducts').DataTable({
-           processing: true,
-            //"serverSide": true,
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
             responsive: true,
             autoWidth: false,
-            order: [],
+            ordering:false,
+            //searching: false,
+            //order:[0,"asc"],
+           /* preCallback: function( settings ) {
+                alert("bbbb");
+            },*/
             ajax:{
                 url :baseurl+"/ProductController/ActListProduct", // json datasource
                 type: "post",  // method  , by default get
+                //data: { columfilter:columfilter},
                 complete: function(){
                    table=$('#tbProducts');
                   //alert(dataTable);
@@ -215,13 +222,43 @@ jQuery(document).ready( function () {
             { "mData": "ico_delete","sClass": "text-center"}
             //{ "sClass": "a-right", "aTargets": [ 4 ] }
             
-            ]/*,
-            "columnDefs": [
-            { className: "text-center", "targets": [4,5] }
-            //{ className: "text-nowrap", "targets": [0,1] }
-          ]*/
+            ],
+            initComplete : function() {  
+            var input = $('.dataTables_filter input').unbind(),
+            self = this.api(),
+            
+           $searchOption=$('<select id="columfilter" class="form-control input-sm">\n\
+                           <option value="code" >code</option>\n\
+                           <option value="name">name</option>\n\
+                            </select>'),
+            
+            $searchButton = $('<button type="button" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>')
+                       //.text('search')
+                       .click(function() {
+                           console.log("filter:"+$("#columfilter").val());
+                           //columfilter=$("#columfilter").val();
+                          console.log(self);
+                           
+                          self.search(input.val()).draw();
+                          
+                       }),
+            $clearButton = $('<button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></button>')
+                       //.text('clear')
+                       .click(function() {
+                          input.val('');
+                          $searchButton.click(); 
+                       })
+            
+            $('.dataTables_filter').append("\n");
+            $('.dataTables_filter').append($searchOption);
+            $('.dataTables_filter').append("\n");
+            $('.dataTables_filter').append($searchButton);
+            $('.dataTables_filter').append("\n");
+            $('.dataTables_filter').append($clearButton);
+    } 
     });
     
+    //$('#tbProducts').dataTable().fnSetFilteringEnterPress();
    /* $(document).on( "click", ".btndelProduct", function(e) {     
         e.preventDefault();
         alert("eliminar");

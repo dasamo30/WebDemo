@@ -1539,5 +1539,69 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
       }
         return rpta;
     }
+
+    @Override
+    public Map<String, Object> get_list_dataTable_Product(int offset, int limit) {
+        
+        //has
+         Map<String, Object> dataTable = new HashMap<String, Object>();
+        int count=0;
+         
+        Transaction tx = null;
+        ArrayList<TableProductBean> litsProductBean =new ArrayList<TableProductBean>();
+        try{
+            tx = session.beginTransaction();
+            
+            String sql2 = "SELECT CAST( count(*) AS int) FROM inventory.view_products;";
+            SQLQuery query2 = session.createSQLQuery(sql2);
+            query2.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data2 = query2.list();
+            count=(Integer) ((HashMap)data2.get(0)).get("count");            
+
+            String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name,stock,alert_stock, id_category FROM inventory.view_products OFFSET :poffset LIMIT :plimit ;";
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("poffset", offset);
+            query.setParameter("plimit", limit);
+            //SELECT count(*) FROM inventory.products;
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            //System.out.println("List data::"+data.size());
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            
+            TableProductBean productBean= new TableProductBean();
+            productBean.setId((Integer)row.get("product_id"));
+            productBean.setCode((String) row.get("code"));
+            productBean.setName((String)row.get("name"));
+            productBean.setDescription((String)row.get("description"));
+            productBean.setUnit_cost(((BigDecimal)row.get("unit_cost")).doubleValue());
+            productBean.setRegistration_date((Date) row.get("registration_date"));
+            productBean.setImage_name((String)row.get("image_name"));
+            productBean.setStock((Integer)row.get("stock"));
+            productBean.setAlert_stock((Integer)row.get("alert_stock"));
+            productBean.setId_category((Integer)row.get("id_category"));
+            
+            litsProductBean.add(productBean);
+         }
+            
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            litsProductBean=null;
+            e.printStackTrace(); 
+        }finally {
+         //session.close();
+            tx.commit();
+        }
+        
+        dataTable.put("result",litsProductBean );
+        dataTable.put("count",count );
+        
+        return dataTable;
+    }
     
 }

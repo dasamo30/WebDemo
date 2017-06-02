@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -321,11 +322,19 @@ public class ProductController {
     
     @RequestMapping(value="/ActListProduct",method = RequestMethod.POST)
     @ResponseBody 
-    public String ActListProduct(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException {
+    public String ActListProduct(
+            @RequestParam("length") int length,
+            @RequestParam("start") int start,
+            HttpServletRequest request, 
+            HttpServletResponse response) throws FileNotFoundException, IOException {
         String baseurl = request.getContextPath();
     
-        ArrayList<TableProductBean> listProduct=serviceInventory.get_list_Product();
+        Map<String, Object> dataTable=serviceInventory.get_list_dataTable_Product( start, length);
         DataTableObject dataTableObject = new DataTableObject();
+        ArrayList<TableProductBean> listProduct=(ArrayList<TableProductBean>) dataTable.get("result");
+        int records=(Integer)dataTable.get("count");
+        
+        System.out.println("length:"+length+" start:"+start);
         
         for (TableProductBean p : listProduct) {
             
@@ -364,8 +373,8 @@ public class ProductController {
         }
      
         dataTableObject.setAaData(listProduct);
-        dataTableObject.setiTotalDisplayRecords(listProduct.size());
-        dataTableObject.setiTotalRecords(listProduct.size());
+        dataTableObject.setiTotalDisplayRecords(records);
+        dataTableObject.setiTotalRecords(records);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
         String json = gson.toJson(dataTableObject);
