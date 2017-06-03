@@ -1541,24 +1541,32 @@ public class InventoryDAOImplements extends GenericDAO implements IInventoryDAO{
     }
 
     @Override
-    public Map<String, Object> get_list_dataTable_Product(int offset, int limit) {
+    public Map<String, Object> get_list_dataTable_Product(int offset, int limit, String searchColumn, String searchValue ) {
         
         //has
          Map<String, Object> dataTable = new HashMap<String, Object>();
         int count=0;
-         
+        String filtro = "";
+        if(!"".equals(searchValue)){
+            filtro="Where "+searchColumn+" LIKE '%"+searchValue+"%'";
+        }
+        
         Transaction tx = null;
         ArrayList<TableProductBean> litsProductBean =new ArrayList<TableProductBean>();
         try{
             tx = session.beginTransaction();
             
-            String sql2 = "SELECT CAST( count(*) AS int) FROM inventory.view_products;";
+            String sql2 = "SELECT CAST( count(*) AS int) FROM inventory.view_products "+filtro;
             SQLQuery query2 = session.createSQLQuery(sql2);
             query2.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List data2 = query2.list();
             count=(Integer) ((HashMap)data2.get(0)).get("count");            
-
-            String sql = "SELECT product_id, code, name, description, unit_cost,registration_date,image_name,stock,alert_stock, id_category FROM inventory.view_products OFFSET :poffset LIMIT :plimit ;";
+            
+            String sql = "SELECT product_id, code, name, description, unit_cost,"
+                    + "registration_date,image_name,stock,alert_stock, id_category "
+                    + "FROM inventory.view_products "
+                    + filtro
+                    + " OFFSET :poffset LIMIT :plimit ;";
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("poffset", offset);
             query.setParameter("plimit", limit);

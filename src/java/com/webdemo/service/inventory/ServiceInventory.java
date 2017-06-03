@@ -47,8 +47,8 @@ public class ServiceInventory {
         return  inventoryDAO.get_list_Product();
     }
     
-    public Map<String, Object> get_list_dataTable_Product(int offset, int limit) {
-        return  inventoryDAO.get_list_dataTable_Product(offset, limit);
+    public Map<String, Object> get_list_dataTable_Product(int offset, int limit, String searchColumn, String searchValue) {
+        return  inventoryDAO.get_list_dataTable_Product(offset, limit, searchColumn, searchValue);
     }
     
     

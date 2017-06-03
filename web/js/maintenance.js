@@ -181,7 +181,7 @@ jQuery(document).ready( function () {
       
     });
     
-    var columfilter="";
+    //var columfilter="";
     var dataTablep = $('#tbProducts').DataTable({
             processing: true,
             serverSide: true,
@@ -197,7 +197,17 @@ jQuery(document).ready( function () {
             ajax:{
                 url :baseurl+"/ProductController/ActListProduct", // json datasource
                 type: "post",  // method  , by default get
-                //data: { columfilter:columfilter},
+                /*data: {
+                    cmd : "refresh",
+                    from: $("#from-date")+" "+$("#from-time").val(),
+                    to  : $("#columfilter").val()
+                },*/
+                data: function ( d ) {
+                    console.log(d);
+                    console.log(d.search.value)
+                    d.searchColumn = $("#columfilter").val();
+                    d.searchValue=d.search.value;
+                },
                 complete: function(){
                    table=$('#tbProducts');
                   //alert(dataTable);

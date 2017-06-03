@@ -325,11 +325,23 @@ public class ProductController {
     public String ActListProduct(
             @RequestParam("length") int length,
             @RequestParam("start") int start,
+            @RequestParam(value="searchColumn", required=false) String searchColumn,
+            @RequestParam(value="searchValue", required=false) String searchValue,
             HttpServletRequest request, 
             HttpServletResponse response) throws FileNotFoundException, IOException {
+        
+        
+        System.out.println("xxxxxx:"+searchColumn);
+        /*if(searchValue==null){
+            searchValue="";
+            System.out.println("si null:"+searchValue);
+        }else{
+            searchValue="";
+            System.out.println("no null:"+searchValue);
+        }*/
         String baseurl = request.getContextPath();
     
-        Map<String, Object> dataTable=serviceInventory.get_list_dataTable_Product( start, length);
+        Map<String, Object> dataTable=serviceInventory.get_list_dataTable_Product( start, length, searchColumn, searchValue);
         DataTableObject dataTableObject = new DataTableObject();
         ArrayList<TableProductBean> listProduct=(ArrayList<TableProductBean>) dataTable.get("result");
         int records=(Integer)dataTable.get("count");
