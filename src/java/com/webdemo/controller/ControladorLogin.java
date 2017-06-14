@@ -134,6 +134,7 @@ public class ControladorLogin {
             sesion.setAttribute("nombre",bean.getNombres()+" "+bean.getApellidos());
             sesion.setAttribute("perfil",bean.getPerfil());
             sesion.setAttribute("pestado",bean.getPestado());
+            sesion.setAttribute("idusuario",bean.getId_usuario());
             
             Date fecha = new Date();
             DateFormat df=DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale("ES"));

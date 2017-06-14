@@ -1,5 +1,7 @@
 package com.webdemo.beans;
 
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -163,7 +165,6 @@ public class MenuPerfil {
     public String toString() {
         return "MenuPerfil{" + "idPerfil=" + idPerfil + ", idMenu=" + idMenu + ", padre=" + padre + ", nivel=" + nivel + ", nombreMenu=" + nombreMenu + ", url=" + url + ", estado=" + estado + ", nroh=" + nroh + ", icono=" + icono + ", orden=" + orden + '}';
     }
-    
-   
+
     
 }

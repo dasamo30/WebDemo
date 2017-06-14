@@ -17,7 +17,7 @@
           <b>Version</b> 2.3.0
         </div>
         <strong>Copyright &copy; <%=currentDate%> 
-            <!--<a href="#">DASAMO</a>-->
+            <a href="#">DASAMO</a>
             .</strong> Todos los derechos reservados.
       </footer>
 
@@ -236,6 +236,8 @@
     <script src="${contextPath}/plugins/select2/select2.full.min.js"></script>
     <!-- serializejson -->
     <script src="${contextPath}/plugins/json/jquery.serializejson.js"></script>
+    <!-- bootstrap-treeview -->
+    <script src="${contextPath}/plugins/treeview/bootstrap-treeview.js"></script>
     <!-- blockUI -->
     <script src="${contextPath}/plugins/blockUI/jquery.blockUI.js"></script>
     <!-- funcion general -->

@@ -204,8 +204,22 @@ jQuery(document).ready( function () {
  //-----------------------------------------------------------------------------
 $.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) { 
     console.warn(message);
-};   
+}; 
+
+   $(document).on("submit","#frmActualizarPassword",function(e){    
+      // alert("sssss");
+       
+        if (e.isDefaultPrevented()) {
+            return false;
+        }
+        e.preventDefault();
+   }); 
+   
+   $('#myModalViewPassword').on('show.bs.modal', function (e) {
+       $("#frmActualizarPassword").trigger('reset');
+   });
     
+    //alert("cccccccccc");
 });
 
 /*

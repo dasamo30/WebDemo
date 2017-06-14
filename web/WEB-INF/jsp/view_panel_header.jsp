@@ -301,12 +301,14 @@
                   <li class="user-footer">
                     <div class="pull-left">
                       <!--<a href="#" class="btn btn-default btn-flat"></a>-->
+                      <a data-toggle="modal" data-target="#myModalViewPassword" data-remote="false" href="${contextPath}/usuarios/ActModalViewPassword" class="btn btn-default btn-flat">Contraseña</a>
                     </div>
                     <div class="pull-right">
                       <a href="${contextPath}/panel/cerrar" class="btn btn-default btn-flat">Cerrar Sesion</a>
                     </div>
                   </li>
                 </ul>
+                      <input type="hidden" id="idusuario" data-id="<%=sesion.getAttribute("idusuario").toString()%>">
               </li>
               <!-- Control Sidebar Toggle Button href="#" data-toggle="control-sidebar" -->
               <li>
@@ -399,4 +401,36 @@
                 <li>${r.value}</li> 
             </c:forEach>
           </ol>
-        </section>
+        </section> 
+        <!-- cambio paswword -->
+            <div class="modal fade" id="myModalViewPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Cambiar Contraseña</h4>
+                  </div>
+                   <form  data-toggle="validator" id="frmActualizarPassword" role="form" autocomplete="off">
+                 <div class="modal-body" id="modal-body2">
+                    <div class="box-body">
+                            <div class="form-group">
+                                <label for="txtpassword">Contraseña actual</label>
+                                <input type="password" class="form-control" id="txtpassword" name="clave" placeholder="Password" required >
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtpassword">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="txtpassword" name="clave" placeholder="Password" required >
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </div>
+                 </form>
+                </div>
+              </div>
+            </div>     

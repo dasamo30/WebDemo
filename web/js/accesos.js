@@ -239,8 +239,8 @@ $('#tbperfil')
             { "mData": "fecha"},
             //{ "mData": "tiempo_sesion"},
             { "mData": "ico_estado","sClass": "text-center"},
-            { "mData": "ico_editar","sClass": "text-center"}
-            //{ "mData": "ico_permiso","sClass": "text-center"}
+            { "mData": "ico_editar","sClass": "text-center"},
+            { "mData": "ico_permiso","sClass": "text-center"}
             //{ "sClass": "a-right", "aTargets": [ 4 ] }
             
             ]/*,
@@ -447,6 +447,83 @@ $('#tbperfil')
         });
       //  alert("ajax");
     });
+        
+    $('#myModalViewPermisos').on('show.bs.modal', function (e) { 
+
+         console.log("myModalViewPermisos");
+
+         var btn = $(e.relatedTarget);
+         var idPerfil=btn.data('id');
+         var data={"idPerfil":idPerfil};
+        //var title="Registrar usuario";
+        //var frm='#frmrRegistraUsuario';
+        /*
+        if(btn.attr("id")==="btnViewEditUsuario"){ 
+            console.log("btnViewEditPerfil");
+             data={"idUsuario":idUsuario};
+             title="Modificar usuario";
+             frm='#frmrModificaUsuario';
+        }*/
+         $.post(btn.attr("href"),data, function( result ) { 
+             //$('#myModalLabel').html(title);
+             //$('#modal-body').html(result);
+             $('#treeview-checkable').treeview({
+                    data: result,
+                    showIcon: false,
+                    showCheckbox: true,
+                    levels: 99
+                });
+             $("#frmActualizarPassword").validator();
+         }); 
+     });
+    
+    $('#permisos-box').slimScroll({
+        height: '450px'
+    });
+       /*
+        $.ajax({ 
+            url: baseurl+"/perfiles/ActMenusAccesos",
+            method:"POST",
+            dataType: "json",       
+            success: function(data)  
+            {
+                $('#treeview-checkable').treeview({
+                    data: data,
+                    showIcon: false,
+                    showCheckbox: true,
+                    levels: 99
+                   / ,
+                    onNodeChecked: function(event, node) {
+                      $('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
+                    },
+                    onNodeUnchecked: function (event, node) {
+                      $('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+                    }  /
+                });
+            }   
+        });*/
+        
+       /* var $checkableTree = $('#treeview-checkable').treeview({
+          data: baseurl+"/perfiles/ActMenusAccesos",
+          showIcon: false,
+          showCheckbox: true,
+          levels: 99,
+          onNodeChecked: function(event, node) {
+            $('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
+          },
+          onNodeUnchecked: function (event, node) {
+            $('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+          }
+        });*/
+        
+        
+        
+        
+         $('#btn-expand-all').on('click', function (e) {
+          var levels = $('#select-expand-all-levels').val();
+          $expandibleTree.treeview('expandAll', { levels: levels, silent: $('#chk-expand-silent').is(':checked') });
+        });
+
 });
 
   

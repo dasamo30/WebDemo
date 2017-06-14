@@ -345,7 +345,7 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
     }
 
     @Override
-    public ArrayList<PerfilBean> get_list_perfiles() {
+    synchronized public ArrayList<PerfilBean> get_list_perfiles() {
         Transaction tx = null;
         ArrayList<PerfilBean> litsPerfilBean =new ArrayList<PerfilBean>();
         try{
@@ -620,5 +620,50 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
           tx.commit();
       }
         return userBean;
+    }
+
+    @Override
+    synchronized public  ArrayList<MenuPerfil> get_menus_accesos_perfil(int idPerfil) {
+        Transaction tx = null;
+        
+        ArrayList<MenuPerfil> lmenus =new ArrayList<MenuPerfil>();
+        try{
+            tx = session.beginTransaction();
+
+            String sql = "select coalesce(a.id_perfil,0) as id_perfil,b.id_menu,b.padre,b.nivel,b.nombre_menu,b.url,b.estado,cast((select count(m.*) from accesos.menu m where m.padre=b.id_menu) as int) as hijos ,b.icono,b.orden \n" +
+"from accesos.permisos a right join accesos.menu b on b.id_menu=a.id_menu and id_perfil= :idPerfil order by b.nivel,b.orden";
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("idPerfil", idPerfil);
+
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            List data = query.list();
+            
+            
+            
+          for(Object object : data)
+         {
+            Map row = (Map)object;
+            MenuPerfil prf=new MenuPerfil();
+            prf.setIdPerfil((Integer)row.get("id_perfil"));
+            prf.setIdMenu((Integer)row.get("id_menu"));
+            prf.setPadre((Integer)row.get("padre"));
+            prf.setNivel((Integer)row.get("nivel"));
+            prf.setNombreMenu((String) row.get("nombre_menu"));
+            prf.setUrl((String) row.get("url"));
+            prf.setEstado((Integer)row.get("estado"));
+            prf.setNroh((Integer)row.get("hijos"));
+            prf.setIcono((String) row.get("icono"));
+            prf.setOrden((Short)row.get("orden"));
+            lmenus.add(prf);
+         }
+          tx.commit();   
+        }catch (HibernateException e) {
+            if (tx!=null){
+                tx.rollback();
+            }
+            e.printStackTrace(); 
+        }
+        
+        return lmenus;
     }
 }

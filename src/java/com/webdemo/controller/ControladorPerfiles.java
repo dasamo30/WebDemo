@@ -9,6 +9,11 @@ package com.webdemo.controller;
 import DataTableObject.DataTableObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.webdemo.beans.MenuBean;
+import com.webdemo.beans.MenuCompuestoBean;
+import com.webdemo.beans.MenuEstado;
+import com.webdemo.beans.MenuPerfil;
+import com.webdemo.beans.MenuSimpleBean;
 import com.webdemo.beans.PerfilBean;
 import com.webdemo.service.ServiceAccesos;
 import java.util.ArrayList;
@@ -74,8 +79,7 @@ public class ControladorPerfiles {
             String icono =(p.getEstado()==1)? "<span class=\"label label-success\">A</span>":"<span class=\"label label-danger\">D</span>";
             p.setIco_estado(icono);
             p.setIco_editar("<button data-toggle=\"modal\" data-target=\"#myModalViewPerfil\" data-remote=\"false\" type=\"button\" data-id=\""+p.getId_perfil()+"\" id=\"btnViewEditPerfil\" class=\"btn btn-info btn-xs\" href=\""+baseurl+"/perfiles/ActViewModifPerfil\" ><i style=\"font-size: 18px;\" class=\"fa fa-edit\"></i></button>");
-            
-            //p.setIco_permiso("<a id=\""+p.getId_perfil()+"|"+p.getNombre()+"\" class=\"view_conf_prf\" href=\"\"><i style=\"font-size: 18px;\" class=\"fa fa-unlock-alt\"></i></a>");
+            p.setIco_permiso("<button data-toggle=\"modal\" data-target=\"#myModalViewPermisos\" data-remote=\"false\" type=\"button\" data-id=\""+p.getId_perfil()+"\" id=\"btnViewEditPermiso\" class=\"btn btn-warning btn-xs\" href=\""+baseurl+"/perfiles/ActViewPermisos\" ><i style=\"font-size: 18px;\" class=\"fa fa-lock\"></i></button>");
         }
         
         dataTableObject.setAaData(listPerfiles);
@@ -144,5 +148,105 @@ public class ControladorPerfiles {
         
     }
     
+    
+    @RequestMapping(value="ActViewPermisos", method = RequestMethod.POST)
+    @ResponseBody
+    public String ActMenusAccesos( @RequestParam("idPerfil") int idPerfil,HttpServletRequest request)   {
+         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+         
+         listMenu =serviceAccesos.get_menus_accesos_perfil(idPerfil);
+         ArrayList<MenuBean> listaMenus=new ArrayList<MenuBean>();
+          
+         
+         for (MenuPerfil m : listMenu) {
+           if(m.getNivel()==0){  
+             MenuBean menu=null;
+             //System.out.println("objeto:"+m.toString());
+            if(m.getNroh()>0){
+                //System.out.println("entra if"+m.getNroh());
+                menu=new MenuCompuestoBean();
+                menu.setId(m.getIdMenu());
+                menu.setHref("#");
+                menu.setName(m.getNombreMenu());
+                menu.setParentId(""+m.getNivel());
+                menu.setText(m.getNombreMenu());
+                llenarMenu(menu);
+                
+            }else{
+                menu=new MenuSimpleBean();
+                menu.setId(m.getIdMenu());
+                menu.setHref("#");
+                menu.setName(m.getNombreMenu());
+                menu.setParentId(""+m.getNivel());
+                menu.setText(m.getNombreMenu());    
+            }
+               System.out.println(":::::::::::::::"+m.toString());
+            boolean cheked=(m.getIdPerfil()==0)? false : true;
+            menu.setState(new MenuEstado(cheked,false,true,false));
+            
+            listaMenus.add(menu);
+           }
+        }
+        return  gson.toJson(listaMenus);
+    }
+    
+    private ArrayList<MenuPerfil> listMenu;
+    
+    
+        
+   private ArrayList<MenuPerfil> findHijos(int idpadre){
+       
+       ArrayList<MenuPerfil> mp=new ArrayList<MenuPerfil>();
+       
+       for (MenuPerfil lm : listMenu) {
+           
+           if(lm.getPadre()==idpadre){
+               //System.out.println("llenar hijos"+lm.toString());
+               mp.add(lm);
+           }
+       }
+       
+       return mp;
+   }
+    
+    private void llenarMenu(MenuBean menuPadre){
+        
+        
+        ArrayList<MenuPerfil> llmenu =findHijos(menuPadre.getId());
+         
+        System.out.println("llenarMenu"+llmenu.size());
+         
+          MenuBean menu;
+         for (MenuPerfil m : llmenu) {
+            
+            // System.out.println("boolean  ::: "+m.getNroh()+"---"+ (m.getNroh()>0));
+            if(m.getNroh()>0){
+                menu=new MenuCompuestoBean();
+                menu.setId(m.getIdMenu());
+                menu.setHref("#");
+                menu.setName(m.getNombreMenu());
+                menu.setParentId(""+m.getNivel());
+                menu.setText(m.getNombreMenu());
+                menuPadre.agregarMenuHijo(menu);
+                llenarMenu(menu);
+                //System.out.println("cantidad de hijos :::: " +  menu.getMenu().size());
+            }else{
+                
+                menu=new MenuSimpleBean();
+                menu.setId(m.getIdMenu());
+                menu.setHref("#");
+                menu.setName(m.getNombreMenu());
+                menu.setParentId(""+m.getNivel());
+                menu.setText(m.getNombreMenu());
+                menuPadre.agregarMenuHijo(menu);
+                //System.out.println("padreeee:::"+menuPadre.getMenu().size());
+            }
+            boolean cheked=(m.getIdPerfil()==0)? false : true;
+           // menu.setState(new MenuEstado(cheked,false,true,false));
+            menu.setState(new MenuEstado(cheked,false,true,false));
+         //listaMenus.add(menu);
+        }
+         
+    }       
     
 }

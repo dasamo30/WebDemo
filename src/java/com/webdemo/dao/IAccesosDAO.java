@@ -27,6 +27,9 @@ public interface IAccesosDAO {
     public ArrayList<MenuPerfil> get_menus_accesos_perfiles(int padre,int idPerfil);
     public ArrayList<MenuPerfil> get_permisos_menus_accesos(int padre,int idPerfil);
     
+    public ArrayList<MenuPerfil> get_menus_accesos_perfil(int idPerfil);
+    
+    
     public ArrayList<TableUsuarioBean> get_list_usuarios();
     public int registraUsuarios(InfoUserBean usuario);
      public int eliminaUsuario(int idUsuario);

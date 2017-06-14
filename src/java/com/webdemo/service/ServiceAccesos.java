@@ -82,4 +82,8 @@ public class ServiceAccesos {
     public int modificarPerfil(PerfilBean perfil){
         return accesoDao.modificarPerfil(perfil);
     }
+    
+    public ArrayList<MenuPerfil> get_menus_accesos_perfil(int idPerfil){
+        return accesoDao.get_menus_accesos_perfil(idPerfil);
+    }
 }
