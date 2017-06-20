@@ -148,6 +148,20 @@ public class ControladorPerfiles {
         
     }
     
+    @RequestMapping(value="ActAsignaPermiso", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActAsignaPermiso(
+        @RequestParam("opcion")  boolean opcion,
+        @RequestParam("id_perfil") int id_perfil,
+        @RequestParam("id_menu") int id_menu
+    ){
+ 
+        //perfilbean.setTiempo_sesion(1200);       
+        //System.out.println("ActModificaPerfil:"+perfilbean.toString());
+        return serviceAccesos.asignaPermiso(opcion, id_perfil, id_menu);
+        
+    }
+    
     
     @RequestMapping(value="ActViewPermisos", method = RequestMethod.POST)
     @ResponseBody

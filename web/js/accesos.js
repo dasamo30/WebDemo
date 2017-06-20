@@ -455,6 +455,11 @@ $('#tbperfil')
          var btn = $(e.relatedTarget);
          var idPerfil=btn.data('id');
          var data={"idPerfil":idPerfil};
+         
+         $('#treeview-checkable').attr("data-id",idPerfil);
+         //$.data($('#treeview-checkable'), 'id', idPerfil);
+         //$('#treeview-checkable').data('id', idPerfil);
+        // console.log
         //var title="Registrar usuario";
         //var frm='#frmrRegistraUsuario';
         /*
@@ -471,11 +476,41 @@ $('#tbperfil')
                     data: result,
                     showIcon: false,
                     showCheckbox: true,
-                    levels: 99
+                    levels: 99,
+                    onNodeChecked: function(event, node) {
+                      
+                       var rpta=asignaPermiso(true,$(this)[0].dataset.id,node.id);
+                       console.log(rpta);
+                    },
+                    onNodeUnchecked: function (event, node) {
+                      //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+                      //asignaPermiso(false,1,node.id);
+                      var rpta=asignaPermiso(false,$(this)[0].dataset.id,node.id);
+                      console.log(rpta);
+                    } 
                 });
              $("#frmActualizarPassword").validator();
          }); 
      });
+     
+       function asignaPermiso(opcion, id_perfil, id_menu){
+           //var estado;
+           //console.log("ssssssssssssssssssssss");
+          return $.post(baseurl+"/perfiles/ActAsignaPermiso",
+            {
+                opcion: opcion,
+                id_perfil:id_perfil,
+                id_menu:id_menu
+            },
+            function(data, status){
+                console.log(data);
+                //estado=data;
+                //alert("Data: " + data + "\nStatus: " + status);
+            });
+           // alert(estado);
+           // console.log("saaaaaaaaaaaaaaaaaaa");
+          //return estado;           
+       };
     
     $('#permisos-box').slimScroll({
         height: '450px'

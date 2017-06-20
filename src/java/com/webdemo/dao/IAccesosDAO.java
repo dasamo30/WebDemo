@@ -41,6 +41,10 @@ public interface IAccesosDAO {
     public PerfilBean get_perfil(int idPerfil);
     public int modificarPerfil(PerfilBean perfil);
     
+    public int cambioPassword(int idUsuario, String passact, String newpass);
+    
+    public int asignaPermiso(boolean opcion, int id_perfil, int id_menu);
+    
   /* public Map<String, String> getUserInfo(String login);
    
    public ArrayList<MenuPerfil> get_menus_accesos_perfiles(int padre,int idPerfil);

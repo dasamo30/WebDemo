@@ -15,6 +15,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="${contextPath}/images/ctasitelogo.png" rel="shortcut icon">
     <title>Web Demo | Dashboard</title>
@@ -414,13 +415,13 @@
                  <div class="modal-body" id="modal-body2">
                     <div class="box-body">
                             <div class="form-group">
-                                <label for="txtpassword">Contraseña actual</label>
-                                <input type="password" class="form-control" id="txtpassword" name="clave" placeholder="Password" required >
+                                <label for="txtpassact">Contraseña actual</label>
+                                <input type="password" class="form-control" id="txtpassact" name="passact" placeholder="Ingrese su contraseña actual" required >
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                                <label for="txtpassword">Nueva contraseña</label>
-                                <input type="password" class="form-control" id="txtpassword" name="clave" placeholder="Password" required >
+                                <label for="txtnewpass">Nueva contraseña</label>
+                                <input type="password" class="form-control" id="txtnewpass" name="newpass" placeholder="Ingrese su nueva contraseña" required  >
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -431,6 +432,7 @@
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                   </div>
                  </form>
+                    <div id="msjcmbclave" ></div>
                 </div>
               </div>
             </div>     

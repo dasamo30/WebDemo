@@ -86,4 +86,12 @@ public class ServiceAccesos {
     public ArrayList<MenuPerfil> get_menus_accesos_perfil(int idPerfil){
         return accesoDao.get_menus_accesos_perfil(idPerfil);
     }
+    
+    public int cambioPassword(int idUsuario, String passact, String newpass){
+         return accesoDao.cambioPassword(idUsuario, passact, newpass);
+    }
+    
+    public int asignaPermiso(boolean opcion, int id_perfil, int id_menu) {
+        return accesoDao.asignaPermiso(opcion, id_perfil, id_menu);
+    }
 }

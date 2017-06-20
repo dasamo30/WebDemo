@@ -166,4 +166,24 @@ public class ControladorUsuarios {
      
         return rpta;
     }
+    
+    @RequestMapping(value = "ActCambioPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public int ActCambioPassword(
+        @RequestParam("id_usuario") int id_usuario,
+        @RequestParam("passact") String passact,
+        @RequestParam("newpass") String newpass
+    ){
+     
+        int rpta =serviceAccesos.cambioPassword(id_usuario, passact, newpass);
+        /*Tab_Usuarios u=adminservice.obtieneUsuario(id_usuario);
+        if(u.getClave() == null ? passact == null : u.getClave().equals(passact)){
+            rpta=adminservice.ChangePassword(id_usuario, newpass);
+        }else{
+            rpta=2;
+        }*/
+        
+        return rpta;//adminservice.modificarUsuario(usuario);
+  
+    }
 }

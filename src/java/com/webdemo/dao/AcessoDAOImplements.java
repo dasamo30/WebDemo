@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Transaction;
@@ -665,5 +666,63 @@ public class AcessoDAOImplements extends GenericDAO implements IAccesosDAO  {
         }
         
         return lmenus;
+    }
+
+    @Override
+    public int cambioPassword(int idUsuario, String passact, String newpass) {
+      int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select cambio_password from accesos.cambio_password( :idUsuario , :passact , :newpass )";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("idUsuario", idUsuario);
+         query.setParameter("passact", passact);
+         query.setParameter("newpass", newpass);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("cambio_password");       
+          ////System.out.println("list::::>"+rpta);
+          
+         tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null){
+             tx.rollback();
+            }
+            rpta=1;
+            e.printStackTrace(); 
+      }
+      return rpta; 
+    }
+
+    @Override
+    public int asignaPermiso(boolean opcion, int id_perfil, int id_menu) {
+        int rpta =-1;  
+      Transaction tx = null;
+      try{
+         tx = session.beginTransaction();
+         String sql = "select asigna_permiso from accesos.asigna_permiso( :opcion , :id_perfil, :id_menu)";
+         SQLQuery query = session.createSQLQuery(sql);
+         query.setParameter("opcion", opcion, Hibernate.BOOLEAN);
+         query.setParameter("id_perfil", id_perfil);
+         query.setParameter("id_menu", id_menu);
+         
+         query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+         List data = query.list();
+
+          rpta=(Integer) ((HashMap)data.get(0)).get("asigna_permiso");       
+          ////System.out.println("list::::>"+rpta);
+          
+         tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null){
+             tx.rollback();
+            }
+            rpta=1;
+            e.printStackTrace(); 
+      }
+      return rpta; 
     }
 }

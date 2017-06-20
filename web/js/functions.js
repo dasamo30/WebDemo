@@ -38,8 +38,9 @@ jQuery(document).ready( function () {
             default:
                 clase="alert alert-danger alert-dismissable";
         } 
+        //console.log(decodeURIComponent(escape(msj)));
         obj.addClass(clase);
-        obj.html("<button type=\"button\" class=\"close\" data-hide-closest=\"alert\"  aria-hidden=\"true\"> &#215;</button><p>"+msj+"</p>");
+        obj.html("<button type=\"button\" class=\"close\" data-hide-closest=\"alert\"  aria-hidden=\"true\"> &#215;</button><p>"+decodeURIComponent(escape(msj))+"</p>");
         obj.show();
     };
     
@@ -202,22 +203,80 @@ jQuery(document).ready( function () {
 
     
  //-----------------------------------------------------------------------------
-$.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) { 
-    console.warn(message);
-}; 
+    $.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) { 
+        console.warn(message);
+    }; 
+
+    $('#myModalViewPassword').on('show.bs.modal', function (e) {
+       $("#frmActualizarPassword").trigger('reset');
+       var msj=$("#msjcmbclave");
+           msj.removeAttr('class');
+           msj.html("");
+   });
 
    $(document).on("submit","#frmActualizarPassword",function(e){    
-      // alert("sssss");
+     //alert("sssss");
        
         if (e.isDefaultPrevented()) {
             return false;
         }
         e.preventDefault();
+        
+       // frm=$(this);        
+        var frm = $(this);
+        var formData = frm.serializeArray();
+        formData.push({
+            name:"id_usuario",
+            value: $("#idusuario").data('id')
+        });
+
+        //console.log(formData);
+       /* $.each(formData, function(key, obj)
+        {
+            if (obj.name == "numero")
+                obj.value = "51" + obj.value;
+        });*/
+       
+       var msj=$("#msjcmbclave");
+           msj.removeAttr('class');
+           msj.html("");
+           
+        
+        //console.log(":::frmActualizarPassword");
+        //return;
+       $.ajax({
+            type: "POST",
+            url: baseurl+"/usuarios/ActCambioPassword",
+            //contentType: 'application/json',
+            data:formData,
+            success: function(result){
+              //  alert(result);
+            //  chatWith('9','name');
+                if(result==0){
+                    alerts(0,msj,"La contraseña se cambio correctamente");   
+                    frm.trigger('reset');
+                }else{
+                    alerts(2,msj,"La contraseña actual no es valida");
+                }
+            },
+            error: function() {
+                //estableceAlerta("#msj_urs","errors","A ocurrido un error interno !!!");
+                
+                alerts(3,msj,"A ocurrido un error interno !!!");
+            } 
+        });
+        
    }); 
    
-   $('#myModalViewPassword').on('show.bs.modal', function (e) {
-       $("#frmActualizarPassword").trigger('reset');
-   });
+   /*Encode:*/
+    function encode_utf8(s) { 
+     return unescape(encodeURIComponent(s)); 
+    } 
+    
+    /*Decode:*/
+      function decode_utf8(s) { 
+         return decodeURIComponent(escape(s)); 
+     }
     
     //alert("cccccccccc");
 });
